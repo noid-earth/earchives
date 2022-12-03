@@ -15,13 +15,24 @@ router.post('/', async (req, res) => {
 
     const uid = () => `${Date.now().toString().slice(8, 14)}`;
 
+    let id = `${uid()}`;
+
     let post = await Feed.schema.create({
-        id: `${uid()}`,
+        id: id,
         data: {
+            id: id,
+
+            thumbnailURL: req.body.thumbnailURL,
+            categories: req.body.categories,
             title: req.body.title,
+            shortDescription: req.body.shortDescription,
             author: req.body.author,
-            postedAt: new Date(),
+            authorID: req.body.authorID,
+            createdAt: new Date(),
+
+            description: req.body.description,
             body: req.body.body,
+
         }
     });
 

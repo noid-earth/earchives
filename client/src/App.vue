@@ -1,30 +1,30 @@
+<script setup lang="ts">
+  import { RouterLink, RouterView } from 'vue-router';
+  //@ts-ignore
+  import Sidebar from './components/Sidebar.vue';
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+
+    <header>
+      <!-- NAVBAR -->
+    </header>
+
+    <main class="container mx-auto flex flex-wrap py-6">
+
+      <Sidebar></Sidebar>
+      
+      <RouterView/>
+    </main>
+
+    <footer>
+      <!-- FOOTER -->
+    </footer>
+
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<style scoped>
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>
