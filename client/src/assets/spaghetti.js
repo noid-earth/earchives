@@ -33,9 +33,11 @@ function changeTheme(theme) {
     }
 
     if (getCookie('theme') === 'dark' || (getCookie('theme') !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
+        document.documentElement.classList.add('dark');
+        document.getElementById('THEME_SWITCH').checked = false;
     } else {
-        document.documentElement.classList.remove('dark')
+        document.documentElement.classList.remove('dark');
+        document.getElementById('THEME_SWITCH').checked = true;
     }
 }
 
@@ -44,4 +46,12 @@ changeTheme('default');
 document.onkeydown = (keyDownEvent) => { 
 
   if (keyDownEvent.key === 't') changeTheme();
+}
+
+function toggleTheme() {
+  if(document.getElementById('THEME_SWITCH').checked) {
+    changeTheme('light');
+  } else {
+    changeTheme('dark');
+  }
 }

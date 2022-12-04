@@ -33,6 +33,8 @@ router.post('/', async (req, res) => {
             description: req.body.description,
             body: req.body.body,
 
+            isPrivate: req.body.isPrivate || false,
+            showThumbnailOnFeed: req.body.showThumbnailOnFeed || false,
         }
     });
 
