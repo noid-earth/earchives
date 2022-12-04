@@ -45,7 +45,7 @@ changeTheme('default');
 
 document.onkeydown = (keyDownEvent) => { 
 
-  if (keyDownEvent.key === 't') changeTheme();
+  if (keyDownEvent.key === 'Escape') changeTheme();
 }
 
 function toggleTheme() {

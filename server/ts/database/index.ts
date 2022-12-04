@@ -1,5 +1,5 @@
 import { Connection, createConnection, Model } from "mongoose";
-import { Post } from "./schemas/Post";
+import { Base } from "./schemas/Base";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -16,7 +16,7 @@ export class Database<T> {
     constructor(options: {collection: string, database: string }) {
         this.database = options.database;
         this.connection = this.__connect();
-        this.schema = this.connection.model(options.collection, Post)
+        this.schema = this.connection.model(options.collection, Base)
     }
 
     private __connect(): Connection {

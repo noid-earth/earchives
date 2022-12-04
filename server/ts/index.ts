@@ -11,9 +11,12 @@ app.use(cors());
 
 // Routes
 import Feed from "./routes/api/Feed";
+import Article from "./routes/api/Article";
+import User from "./routes/api/User";
 
 app.use("/api/feed", Feed);
-
+app.use("/api/article", Article);
+app.use("/api/user", User);
 
 const port = dotenv.config().parsed?.PORT || 5000;
 

@@ -2,10 +2,12 @@
   import { RouterLink, RouterView } from 'vue-router';
   //@ts-ignore
   import Sidebar from './components/Sidebar.vue';
+
 </script>
 
 <template>
   <div>
+  
     <main class="container mx-auto flex flex-wrap my-6 mt-4">
 
       <Sidebar class="w-full md:w-1/4 flex flex-col pr-5"/>

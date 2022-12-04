@@ -1,6 +1,7 @@
 import axios from "axios";
+import config from "./services.config";
 
-const url = `http://localhost:5000/api/feed`;
+const url = config.url + '/feed';
 
 export class FeedService {
     static getPosts() {

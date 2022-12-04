@@ -30,7 +30,7 @@
   <section>
 
     <!-- ERROR -->
-    <div v-if="error" class="bg-[#f6f6f6] dark:bg-[#292929] rounded-xl p-6">
+    <div v-if="(error && !(posts.length > 0))" class="bg-[#f6f6f6] dark:bg-[#292929] rounded-xl p-6">
       {{ error }}
     </div>
 
@@ -84,6 +84,6 @@
       </div>
     </article>
 
-    <article v-if="!(posts.length > 4)" class="h-96 outline-dashed rounded-xl outline-2 outline-[#f6f6f6] dark:outline-[#292929]" :class="(posts.length > 0) ? 'mt-6' : 'mt-0.5'"></article>
+    <article v-if="!(posts.length > 4)" class="h-96 outline-dashed rounded-xl outline-2 outline-[#f6f6f6] dark:outline-[#292929]" :class="(posts.length > 0 || error) ? 'mt-6' : 'mt-0.5'"></article>
   </section>
 </template>

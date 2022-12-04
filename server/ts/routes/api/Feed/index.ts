@@ -1,17 +1,24 @@
 import express from "express";
-import { Database } from "../../database";
+import { Database } from "../../../database";
 
 const router = express.Router();
 const Feed = new Database({ collection: 'posts', database: 'Feed' });
 
-// Get posts
+/**
+ * List of all posts
+ * GET - /api/feed
+ */
 router.get('/', async (req, res) => {
     const data = await Feed.schema.find({ });
     return res.send(data);
 });
 
-// Add posts
-router.post('/', async (req, res) => {
+/**
+ * Make a new post
+ * POST - /api/feed/new
+ */
+
+router.post('/post', async (req, res) => {
 
     const uid = () => `${Date.now().toString().slice(8, 14)}`;
 
@@ -41,7 +48,10 @@ router.post('/', async (req, res) => {
     return res.send(post);
 });
 
-// Delete posts
+/**
+ * Delete a post
+ * DELETE - /api/feed/delete
+ */
 router.delete('/:id', async (req, res) => {
 
     if (!req.params.id) return res.status(300);
