@@ -4,7 +4,7 @@
   "description": "A project made to help students find useful archives to study for tests ",
   "main": "index.js",
   "scripts": {
-    "start": "node server/src/js/index.js",
+    "start": "node server/lib/index.js",
     "dev": "nodemon",
     "tsc": "tsc",
     "vue": "vue"
