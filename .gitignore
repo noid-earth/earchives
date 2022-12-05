@@ -1,7 +1,7 @@
-website/node_modules
-website/dist
-website/.env
+frontend/node_modules
+frontend/dist
+frontend/.env
 
+server/lib
 server/.env
 server/node_modules
-server/src
