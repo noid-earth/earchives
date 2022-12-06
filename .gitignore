@@ -1,6 +1,6 @@
-frontend/node_modules
-frontend/dist
-frontend/.env
+front/node_modules
+front/dist
+front/.env
 
 server/lib
 server/.env
