@@ -1,0 +1,39 @@
+<!-- PARAMETERS: post, feed, showNewestTag -->
+
+<article class="bg-[#1d1d1d] rounded-lg">
+
+    <!-- IMAGE -->
+    <% if(post.thumbnailURL?.length > 5) { %>
+        <img 
+        src="<%= post.thumbnailURL %>" alt="Post thumbnail"
+        class="w-full h-40 md:h-48 object-cover rounded-lg shadow">
+    <% } %>
+    <!-- TEXT BOX -->
+    <div class="p-4">
+        <!-- tags -->
+        <div class="mt-2 hidden md:block">
+            <% post.tags.forEach((tag) => { %>
+                <span class="w-auto text-accent py-1 px-4 bg-[#292929] mr-2 rounded-full text-xs font-semibold">
+                    <%= tag %>
+                </span>
+            <% }); %>
+        </div>
+        <!-- TITLE AND INFO -->
+        <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150 h-36 cursor-pointer" onclick="location.href='/post/<%= post.id %>'"><%= post.title %></h1>
+        <div class="mt-2 text-sm">
+            <span class="opacity-50">
+                <% let POST_CREATED_AT = new Date(post.createdAt);  %>
+                <%= POST_CREATED_AT.toLocaleDateString() %> às <%= POST_CREATED_AT.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) %>
+            </span>
+            <span class="opacity-50">
+                <span class="hidden md:inline-block">-</span>
+                <span><%= post.author %></span>
+            </span>
+            <% if(showNewestTag && feed[0].id === post.id) { %>
+                <span class="opacity-50 hidden md:inline-block">-</span>
+                <span class="bg-accent px-2 rounded-lg hidden md:inline-block">MAIS RECENTE</span>
+            <% } %>
+        </div>
+        
+    </div>
+</article>

@@ -28,7 +28,7 @@ router.post('/new', access, async (req, res) => {
             id: id,
 
             thumbnailURL: req.body.thumbnailURL,
-            categories: req.body.categories,
+            tags: req.body.tags,
             title: req.body.title,
             shortDescription: req.body.shortDescription,
             author: req.body.author,
@@ -36,7 +36,8 @@ router.post('/new', access, async (req, res) => {
             createdAt: new Date(),
 
             description: req.body.description,
-            body: req.body.body,
+            markdown: req.body.markdown,
+            htmlBody: req.body.htmlBody,
 
             isPrivate: req.body.isPrivate || false,
             showThumbnailOnFeed: req.body.showThumbnailOnFeed || false,
