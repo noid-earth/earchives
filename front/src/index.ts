@@ -5,9 +5,10 @@ import dotenv from "dotenv";
 import ejs from "ejs";
 import path from "path";
 
+dotenv.config();
 const app = express();
 
-// Configs
+// Settings
 app.set('view engine', ejs);
 app.set('views', path.join(__dirname, '../views'))
 
@@ -17,7 +18,55 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 app.use('/static', express.static(path.join(__dirname, '../static')))
-app.use('/branding', express.static(path.join(__dirname, '../../branding')))
+app.use('/branding', express.static(path.join(__dirname, '../../branding')));
+
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.user;
+    next();
+});
+
+// Authentication
+import session from "express-session";
+import passport from "passport";
+import Auth0Strategy from "passport-auth0";
+
+// Session configuration
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET as string,
+    cookie: {},
+    resave: false,
+    saveUninitialized: false
+};
+    
+if (app.get("env") === "production") {
+    // Serve secure cookies, requires HTTPS
+    sessionConfig.cookie = {secure: true};
+}
+
+// Passport configuration
+const strategy = new Auth0Strategy({
+    domain: 'dev-ju1e3m81p07xg8ze.us.auth0.com',
+    clientID: process.env.AUTH0_CLIENT_ID as string,
+    clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
+    callbackURL: process.env.AUTH0_CALLBACK_URL as string,
+},
+function(accessToken, refreshToken, extraParams, profile, done) {
+    return done(null, profile);
+}
+);
+
+app.use(session(sessionConfig));
+passport.use(strategy);
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+  
+passport.deserializeUser((user: any, done) => {
+    done(null, user);
+});
 
 // Routes
 import Main from "./routes/Main";

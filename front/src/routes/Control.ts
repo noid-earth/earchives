@@ -4,19 +4,21 @@ import { API } from "../services/API";
 import { marked } from "marked";
 import createDomPurify from "dompurify";
 import { JSDOM } from "jsdom";
+import Middlewares from "../services/Middlewares";
 
 const dompurify = createDomPurify(new JSDOM().window as any);
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', Middlewares.secured, async (req, res) => {
     let feed: any[] = await API.get('/feed/list') as any;
 
     res.render('pages/Control.ejs', {
+        user: req.user,
         feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     });
 });
 
-router.post('/feed/new', async (req, res) => {
+router.post('/feed/new', Middlewares.secured, async (req, res) => {
     const data = req.body;
 
     const send = {

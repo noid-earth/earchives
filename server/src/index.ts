@@ -9,6 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+
 // Routes
 import Feed from "./routes/api/Feed";
 import Article from "./routes/api/Article";

@@ -11,6 +11,7 @@ router.get('/:postId', async (req, res) => {
     res.render('pages/ViewPost.ejs', {
         post: post,
         feed: shuffle(feed),
+        user: req.user,
     });
 });
 

@@ -20,7 +20,11 @@
                 <a href="/library" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Biblioteca</a>
               </li>
               <li>
-                <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
+                <% if(user) { %>
+                  <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
+                <% } else { %>
+                    <a href="/login" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Login</a>
+                <% } %>
               </li>
             </ul>
           </div>
