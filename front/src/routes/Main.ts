@@ -14,6 +14,13 @@ router.get('/', async (req, res) => {
     });
 });
 
+router.get('/posts', async (req, res) => {
+    let feed: any[] = await API.get('/feed/list') as any[];
+    res.render('pages/Feed.ejs', {
+        user: req.user,
+        feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    })
+});
 
 // Authentication
 router.get("/login", passport.authenticate("auth0", {

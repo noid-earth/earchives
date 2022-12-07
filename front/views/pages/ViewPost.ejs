@@ -67,7 +67,7 @@
                         Sugestões
                     </h1>
                     <div class="mx-auto container grid grid-cols-1 md:grid-cols-4 gap-2">
-                        <% feed.filter((p) => post.id !== p.id).forEach((post) => { %>
+                        <% feed.filter((p) => post.id !== p.id).slice(0,4).forEach((post) => { %>
                             <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
                         <% }); %>
                     </div>

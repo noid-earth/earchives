@@ -9,7 +9,7 @@ import Middlewares from "../services/Middlewares";
 const dompurify = createDomPurify(new JSDOM().window as any);
 const router = express.Router();
 
-router.get('/', Middlewares.secured, async (req, res) => {
+router.get('/', Middlewares.secured({perms: ['administrator']}), async (req, res) => {
     let feed: any[] = await API.get('/feed/list') as any;
 
     res.render('pages/Control.ejs', {
@@ -18,7 +18,7 @@ router.get('/', Middlewares.secured, async (req, res) => {
     });
 });
 
-router.post('/feed/new', Middlewares.secured, async (req, res) => {
+router.post('/feed/new', Middlewares.secured({perms: ['feedWriter']}), async (req, res) => {
     const data = req.body;
 
     const send = {

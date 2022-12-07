@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import ejs from "ejs";
 import path from "path";
+import { API } from "./services/API";
 
 dotenv.config();
 const app = express();
@@ -49,9 +50,14 @@ const strategy = new Auth0Strategy({
     clientID: process.env.AUTH0_CLIENT_ID as string,
     clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
     callbackURL: process.env.AUTH0_CALLBACK_URL as string,
-},
-function(accessToken, refreshToken, extraParams, profile, done) {
-    return done(null, profile);
+}, async function(accessToken, refreshToken, extraParams, profile, done) {
+    const user = await API.post(`/user/ensure/` + profile.id, {
+        provider: profile.provider ?? 'auth0',
+        providerId: profile.id,
+        email: profile.emails?.[0].value,
+    });
+    
+    return done(null, user);
 }
 );
 
@@ -72,10 +78,12 @@ passport.deserializeUser((user: any, done) => {
 import Main from "./routes/Main";
 import Control from "./routes/Control";
 import Feed from "./routes/Feed";
+import Library from "./routes/Library";
 
 app.use("/", Main);
 app.use("/control", Control);
 app.use("/post", Feed);
+app.use('/library', Library);
 
 // Host
 const port = dotenv.config().parsed?.PORT || 80;

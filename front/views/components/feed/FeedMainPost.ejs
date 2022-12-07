@@ -1,6 +1,6 @@
 <!-- PARAMETERS: post -->
 
-<article class="bg-[#1d1d1d] rounded-lg mt-[-50px] md:mt-[-75px]">
+<article class="bg-[#1d1d1d] rounded-lg mt-[-50px] md:mt-[-75px] cursor-pointer" onclick="location.href='/post/<%= post.id %>'">
     <!-- IMAGE -->
     <% if(post.thumbnailURL?.length > 5) { %>
         <img 
@@ -18,7 +18,7 @@
             <% }); %>
         </div>
         <!-- TITLE AND INFO -->
-        <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150 cursor-pointer" onclick="location.href='/post/<%= post.id %>'"><%= post.title %></h1>
+        <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150"><%= post.title %></h1>
         <div class="mt-2 text-sm md:text-base">
             <span class="opacity-50">
                 <% let POST_CREATED_AT = new Date(post.createdAt);  %>

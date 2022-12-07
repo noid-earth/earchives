@@ -1,6 +1,6 @@
 <!-- PARAMETERS: post, feed, showNewestTag -->
 
-<article class="bg-[#1d1d1d] rounded-lg">
+<article class="bg-[#1d1d1d] rounded-lg cursor-pointer hover:opacity-75 duration-150" onclick="location.href='/post/<%= post.id %>'">
 
     <!-- IMAGE -->
     <% if(post.thumbnailURL?.length > 5) { %>
@@ -19,7 +19,7 @@
             <% }); %>
         </div>
         <!-- TITLE AND INFO -->
-        <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150 h-36 cursor-pointer" onclick="location.href='/post/<%= post.id %>'"><%= post.title %></h1>
+        <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150 h-36"><%= post.title %></h1>
         <div class="mt-2 text-sm">
             <span class="opacity-50">
                 <% let POST_CREATED_AT = new Date(post.createdAt);  %>
