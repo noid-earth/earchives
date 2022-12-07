@@ -646,6 +646,14 @@ video {
   margin-top: 4rem;
 }
 
+.mt-1{
+  margin-top: 0.25rem;
+}
+
+.mt-auto{
+  margin-top: auto;
+}
+
 .block{
   display: block;
 }
@@ -694,6 +702,14 @@ video {
   height: 10rem;
 }
 
+.h-6{
+  height: 1.5rem;
+}
+
+.h-12{
+  height: 3rem;
+}
+
 .w-full{
   width: 100%;
 }
@@ -712,6 +728,14 @@ video {
 
 .w-auto{
   width: auto;
+}
+
+.w-6{
+  width: 1.5rem;
+}
+
+.w-12{
+  width: 3rem;
 }
 
 .cursor-pointer{
@@ -825,6 +849,10 @@ video {
   padding: 0.1px;
 }
 
+.p-12{
+  padding: 3rem;
+}
+
 .py-2\.5{
   padding-top: 0.625rem;
   padding-bottom: 0.625rem;
@@ -873,6 +901,21 @@ video {
 .px-2{
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.py-5{
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.py-32{
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
+.py-40{
+  padding-top: 10rem;
+  padding-bottom: 10rem;
 }
 
 .pl-3{
@@ -950,6 +993,10 @@ video {
 
 .opacity-50{
   opacity: 0.5;
+}
+
+.opacity-75{
+  opacity: 0.75;
 }
 
 .shadow{
@@ -1033,6 +1080,7 @@ code {
 #MARKDOWN_BODY h4, #MARKDOWN_BODY h5, #MARKDOWN_BODY h6 {
   font-weight: 600;
   padding-top: 1.2rem;
+  margin-top: 1rem;
 }
 
 .checked\:bg-\[\#42b883\]:checked{
@@ -1159,5 +1207,12 @@ code {
 
   .md\:hover\:opacity-75:hover{
     opacity: 0.75;
+  }
+}
+
+@media (min-width: 1024px){
+  .lg\:px-0{
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }

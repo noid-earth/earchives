@@ -59,4 +59,5 @@ code {
 #MARKDOWN_BODY h4, #MARKDOWN_BODY h5, #MARKDOWN_BODY h6 {
     font-weight: 600;
     padding-top: 1.2rem;
+    margin-top: 1rem;
 }
