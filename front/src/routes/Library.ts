@@ -7,6 +7,8 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     let articles = await API.get('/article/list') as any[];
     let search: any[] = [];
+    let searchedYear: string | undefined = undefined;
+    let searchedSubject: string | undefined = undefined;
     
     if(req.query.q) {
         let query = req.query.q as string;
@@ -14,28 +16,28 @@ router.get('/', async (req, res) => {
 
         search = await API.get(`/article/search?q=${cleanQuery}`) as any[];
 
-        let anoQuery = query.match(/ano\:(\d{1,2})/gm);
-        let ano = anoQuery?.[0].replace(/ano:/g, '');
+        let yearQuery = query.match(/ano\:(\d{1,2})/gm);
+        searchedYear = yearQuery?.[0].replace(/ano:/g, '');
 
         search = search.filter((s) => {
             let resultYears = s.year.map((y: number | string) => String(y));
 
-            if(ano && resultYears.includes(ano)) {
+            if(searchedYear && resultYears.includes(searchedYear)) {
                 return s;
-            } else if(!ano) {
+            } else if(!searchedYear) {
                 return s;
             }
         });
 
         let subjectQuery = query.trim().toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o').match(/disciplina\:(\w+)/gm);
-        let subject = subjectQuery?.[0].replace(/disciplina:/g, '');
+        searchedSubject = subjectQuery?.[0].replace(/disciplina:/g, '');
 
         search = search.filter((s) => {
             let resultSubjects = s.subjects.map((y: string) => y.trim().trim().toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o'));
             
-            if(subject && resultSubjects.includes(subject)) {
+            if(searchedSubject && resultSubjects.includes(searchedSubject)) {
                 return s;
-            } else if(!subject) {
+            } else if(!searchedSubject) {
                 return s;
             }
         });
@@ -46,6 +48,8 @@ router.get('/', async (req, res) => {
         articles: articles,
         searchQuery: req.query.q,
         search: search,
+        searchedYear: searchedYear,
+        searchedSubject: searchedSubject,
     });
 });
 

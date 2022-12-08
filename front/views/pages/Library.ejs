@@ -46,14 +46,27 @@
                                 <button onclick="location.href='?q='" class="text-white focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 bg-accent hover:opacity-75 duration-300">Limpar busca</button>
                                 <span class="opacity-50 px-4 hidden md:inline-block"> | </span>
                             <% } %>
-                            
+                                
+                            <!-- SEARCH KEYS -->
                             <div class="hidden md:inline-block">
-                                <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-white/50">
-                                    ano:12 - Busca por artigos do 12º ano
-                                </kbd>
-                                <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-white/50 ml-2">
-                                    disciplina:História - Busca por artigos de história
-                                </kbd>
+                                <% if (searchedYear) { %>
+                                    <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-accent">
+                                        Buscando artigos do <%= searchedYear %>º Ano
+                                    </kbd>
+                                <% } else { %>
+                                    <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-white/50">
+                                        ano:12 - Busca por artigos do 12º ano
+                                    </kbd>
+                                <% } %>
+                                <% if(searchedSubject) { %>
+                                    <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-accent ml-2">
+                                        Buscando artigos de <%= searchedSubject %>
+                                    </kbd>
+                                <% } else {%>
+                                    <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-white/50 ml-2">
+                                        disciplina:História - Busca por artigos de história
+                                    </kbd>
+                                <% } %>
                             </div>
                         </div>
 
