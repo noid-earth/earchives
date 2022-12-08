@@ -16,8 +16,9 @@ router.post('/new', access, async (req, res) => {
 
     let article: Article = {
         id: id,
+        title: req.body.title,
         createdAt: new Date(),
-        author: undefined,
+        author: null,
         authorId: req.body.authorId,
         subject: req.body.subject,
         categories: req.body.categories,
@@ -43,6 +44,19 @@ router.post('/new', access, async (req, res) => {
 router.get('/list', async (req, res) => {
     const data = await Articles.schema.find({ });
     return res.send(data.map((a: any) => a.data));
+});
+
+/**
+ * GET /api/article/search
+ */
+router.get('/search', async (req, res) => {
+    if(!req.query.q) {
+        const data = await Articles.schema.find({ });
+        return res.send(data.map((a: any) => a.data));
+    }
+    
+    let results = await Articles.schema.find({ $text: { $search: req.query.q as string }});
+    return res.send(results.map((a: any) => a.data));
 });
 
 /**

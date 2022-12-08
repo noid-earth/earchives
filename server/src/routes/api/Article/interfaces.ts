@@ -1,5 +1,6 @@
 export interface Article {
     id: string,
+    title: string,
     createdAt: Date,
     author: User | undefined,
     authorId: string,

@@ -7,7 +7,40 @@
         <%- include('../components/Header', {PAGE_TITLE: 'BIBLIOTECA'}) %>
 
         <section class="bg-[#292929]">
-            <div class="h-96"></div>
+            <div class="mx-20">
+                <div class="grid grid-cols-5 gap-4 p-4">
+                    <div class="bg-[#1d1d1d] rounded-lg p-4 shadow">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet porro incidunt dicta unde excepturi repellendus, minima accusamus veritatis fugit quo cumque tempore enim et. Repellat omnis voluptatem dolor qui nesciunt delectus, accusantium neque similique ea perferendis sit soluta.
+                    </div>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4 shadow col-span-3">
+                        <!-- SEARCH BOX -->
+                        <form autocomplete="off">   
+                            <label for="article-search" class="mb-2 text-sm font-medium sr-only text-white">Buscar</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                </div>
+                                <input type="search" name="q" id="article-search" value="<%= searchQuery %>" class="block w-full p-4 pl-10 text-sm border rounded-lg bg-[#292929]" placeholder="Busque artigos por título, disciplinas, etc...">
+                                <button type="submit" class="text-white absolute right-2.5 bottom-2.5 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-accent hover:opacity-75 duration-300">Buscar</button>
+                            </div>
+                        </form>
+                        <% if(searchQuery.length > 0) { %>
+                            <button onclick="location.href='?q='" class="text-white focus:outline-none font-medium rounded-lg mt-4 text-sm px-4 py-2 bg-accent hover:opacity-75 duration-300">Limpar busca</button>
+                        <% } %>
+
+                        <!-- LIST -->
+                        <div class="mt-4 rounded-lg">
+                            <%  var displayArticles = search.length > 0 ? search : articles;
+                                displayArticles.forEach((article) => { %>
+                                <%- include('../components/library/ArticlePreview', { article: article }) %>
+                            <% }) %>
+                        </div>
+                    </div>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4 shadow">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex repellat adipisci dolorum esse recusandae labore unde omnis quaerat et dolor! Qui voluptatem nemo, aspernatur quod temporibus dolorem neque, cupiditate ad enim porro, nihil cumque.
+                    </div>
+                </div>
+            </div>
         </section>
     </body>
 </html>

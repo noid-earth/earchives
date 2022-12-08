@@ -1,0 +1,29 @@
+<article 
+onclick="location.href='/library/article/<%= article.id %>'"
+class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transition-transform duration-400 cursor-pointer h-32"
+>   
+    <div class="flex">
+        <% if(article.categories.length > 0) { %>
+            <% article.categories.forEach((cat) => { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm"><%= cat %></span>
+            <% }) %>
+        <% } else { %>
+                <span class="h-4"></span>
+        <% } %>
+    </div>
+    <h4>
+        <%= article.title %>
+    </h4>
+    <div class="text-sm">
+        <span class="opacity-75">
+            Publicado por <%= article.author %>
+        </span>
+        <span>
+            -
+        </span>
+        <span class="opacity-75">
+            <% let ARTICLE_CREATED_AT = new Date(article.createdAt);  %>
+            <%= ARTICLE_CREATED_AT.toLocaleDateString() %>
+        </span>
+    </div>
+</article>
