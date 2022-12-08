@@ -4,13 +4,18 @@
     <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
 
     <%
-
+        let subjects = [
+            "Filosofia", "Geografia",
+            "História", "Português", "Inglês", 
+            "Aplicações Informáticas", "Educação Física"
+        ]
     %>
 
     <body class="bg-[#1d1d1d] text-white">
         <%- include('../components/Header', {PAGE_TITLE: 'BIBLIOTECA'}) %>
 
-        <section class="bg-[#292929]">
+        <!-- REMOVE h-[90rem] -->
+        <section class="bg-[#292929] h-[90rem]">
             <div class="mx-20">
                 <div class="grid grid-cols-5 gap-4 p-4">
                     <div class="bg-[#1d1d1d] rounded-lg p-4 shadow">
@@ -18,15 +23,13 @@
                             Disciplinas
                         </h4>
                         <ul>
-                            <li>
-                                História
-                            </li>
-                            <li>
-                                Português
-                            </li>
-                            <li>
-                                História
-                            </li>
+                            <% subjects.forEach((subject) => { %>
+                                <li class="text-lg hover:opacity-75 py-1">
+                                    <a href="?q=disciplina:<%= subject %>">
+                                        <%= subject %>
+                                    </a>
+                                </li>
+                            <% }); %>
                         </ul>
                     </div>
                     <div class="bg-[#1d1d1d] rounded-lg p-4 shadow col-span-3">
@@ -37,8 +40,15 @@
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                     <svg aria-hidden="true" class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                 </div>
-                                <input type="search" name="q" id="article-search" value="<%= searchQuery %>" class="block w-full p-4 pl-10 text-sm border rounded-lg bg-[#292929]" placeholder="Busque artigos por título, disciplinas, etc...">
-                                <button type="submit" class="text-white absolute right-2.5 bottom-2.5 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 bg-accent hover:opacity-75 duration-300">Buscar</button>
+                                <input type="search" name="q" id="article-search" value="<%= searchQuery %>" class="block w-full p-4 pl-10 text-sm border rounded-lg bg-[#292929]" placeholder="Busque artigos por título, disciplinas, etc..." required>
+
+                                <button 
+                                type="submit" 
+                                class="
+                                text-white absolute right-2.5 bottom-2.5 focus:outline-none font-medium rounded-lg 
+                                text-sm px-4 py-2 bg-accent hover:opacity-75 duration-300">
+                                    Buscar
+                                </button>
                             </div>
                         </form>
                         <div class="mt-4">
@@ -51,7 +61,7 @@
                             <div class="hidden md:inline-block">
                                 <% if (searchedYear) { %>
                                     <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-accent">
-                                        Buscando artigos do <%= searchedYear %>º Ano
+                                        A buscar artigos do <%= searchedYear %>º Ano
                                     </kbd>
                                 <% } else { %>
                                     <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-white/50">
@@ -60,7 +70,7 @@
                                 <% } %>
                                 <% if(searchedSubject) { %>
                                     <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-accent ml-2">
-                                        Buscando artigos de <%= searchedSubject %>
+                                        A buscar artigos de <%= searchedSubject %>
                                     </kbd>
                                 <% } else {%>
                                     <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-white/50 ml-2">
@@ -83,7 +93,7 @@
                         </div>
                     </div>
                     <div class="bg-[#1d1d1d] rounded-lg p-4 shadow">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex repellat adipisci dolorum esse recusandae labore unde omnis quaerat et dolor! Qui voluptatem nemo, aspernatur quod temporibus dolorem neque, cupiditate ad enim porro, nihil cumque.
+                        
                     </div>
                 </div>
             </div>

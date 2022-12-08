@@ -2,8 +2,9 @@ import express from "express";
 import { Database } from "../../../database";
 import { newId } from "../../../database/utils/id";
 import { access } from "../../utils/access";
-import { Article } from "./interfaces";
+import { Article, ArticleHistory, ArticleHistoryType } from "./interfaces";
 import { Util } from "../../utils/data";
+import { Users } from "../User";
 
 const router = express.Router();
 const Articles = new Database({ collection: 'articles', database: 'Library' });
@@ -13,19 +14,29 @@ const Articles = new Database({ collection: 'articles', database: 'Library' });
  */
 router.post('/new', access, async (req, res) => {
     let id = newId();
+    let raw = req.body;
+
+    let author = await Users.schema.findOne({ 'id': raw.authorId });
 
     let article: Article = {
         id: id,
-        title: req.body.title,
+        title: raw.title,
         createdAt: new Date(),
-        author: null,
-        authorId: req.body.authorId,
-        subjects: req.body.subjects,
-        body: req.body.body,
-        bannerURL: req.body.bannerURL,
-        private: req.body.private,
-        year: req.body.year,
+        author: author.data || null,
+        authorId: raw.authorId,
+        body: {
+            markdown: raw.body.markdown,
+            html: raw.body.html,
+        },
         history: [],
+        subjects: [...raw.subjects],
+        years: [...raw.years],
+        attachments: [...raw.attachments],
+        details: {
+            showAfter: typeof raw.details.showAfter === 'object' ? raw.details.showAfter : null,
+            private: raw.details.private,
+            outdated: raw.details.outdated,
+        }
     }
 
     await Articles.schema.create({
@@ -61,7 +72,7 @@ router.get('/search', async (req, res) => {
  * DELETE /api/article/delete/:id
  */
 router.delete('/delete/:id', access, async (req, res) => {
-    let r = await Articles.schema.findOneAndRemove({ 'id': req.params.id });
+    let r: any = await Articles.schema.findOneAndRemove({ 'id': req.params.id });
     if(r) {
         return res.send(r.data).status(200);
     } else {
@@ -70,75 +81,43 @@ router.delete('/delete/:id', access, async (req, res) => {
 });
 
 /**
- * POST /api/article/upvote/:articleId/:userId
+ * POST /api/article/upvote/:articleId
  */
-router.post('/upvote/:id/:userId', access, async (req, res) => {
-    let old = await Articles.schema.findOne({ 'id': req.params.id });
-    if(!old) return res.send('Post not found!').status(300);
-
-    let array = [...old.data.history];
-
-    if(array.find((h) => h.userId === req.params.userId)) return res.send(old);
-
-    array.push({
-        date: new Date(),
-        id: newId,
-        articleId: req.params.id,
-        type: 'Upvote',
-        userId: req.params.userId ?? undefined,
+router.post('/upvote/:id', access, async (req, res) => {
+    let update = await newHistoryObj({
+        articledId: req.params.id,
+        refId: req.body.refId,
+        type: 'UPVOTE',
     });
 
-    let n = await Util.set(Articles,  `${req.params.id}.history`, array);
-
-    return res.send(n.data).status(200);
+    return res.send(update).status(200);
 });
 
 /**
- * POST /api/article/downvote/:articleId/:userId
+ * POST /api/article/downvote/:articleId
  */
-router.post('/downvote/:id/:userId', access, async (req, res) => {
-    let old = await Articles.schema.findOne({ 'id': req.params.id });
-    if(!old) return res.send('Post not found!').status(300);
-
-    let array = [...old.data.history];
-
-    if(array.find((h) => h.userId === req.params.userId)) return res.send(old);
-
-    array.push({
-        date: new Date(),
-        id: newId,
-        articleId: req.params.id,
-        type: 'Downvote',
-        userId: req.params.userId ?? undefined,
+router.post('/downvote/:id', access, async (req, res) => {
+    let update = await newHistoryObj({
+        articledId: req.params.id,
+        refId: req.body.refId,
+        type: 'DOWNVOTE',
     });
 
-    let n = await Util.set(Articles,  `${req.params.id}.history`, array);
-
-    return res.send(n.data).status(200);
+    return res.send(update).status(200);
 });
 
 /**
- * POST /api/article/favorite/:articleId/:userId
+ * POST /api/article/favorite/:articleId
  */
-router.post('/favorite/:id/:userId', access, async (req, res) => {
-    let old = await Articles.schema.findOne({ 'id': req.params.id });
-    if(!old) return res.send('Post not found!').status(300);
+router.post('/favorite/:id/', access, async (req, res) => {
 
-    let array = [...old.data.history];
-
-    if(array.find((h) => h.userId === req.params.userId)) return res.send(old);
-
-    array.push({
-        date: new Date(),
-        id: newId,
-        articleId: req.params.id,
-        type: 'Favorite',
-        userId: req.params.userId ?? undefined,
+    let update = await newHistoryObj({
+        articledId: req.params.id,
+        refId: req.body.refId,
+        type: 'FAVORITE',
     });
 
-    let n = await Util.set(Articles,  `${req.params.id}.history`, array);
-
-    return res.send(n.data).status(200);
+    return res.send(update).status(200);
 });
 
 /**
@@ -149,5 +128,30 @@ router.get('/view/:id', async (req, res) => {
     let post = await Articles.schema.findOne({ 'id': articleId });
     return res.send(post.data ? post.data : undefined);
 });
+
+async function newHistoryObj(data: {
+    articledId: string,
+    refId: string,
+    type: ArticleHistoryType,
+}) {
+    let old = await Articles.schema.findOne({ 'id': data.articledId });
+
+    if(!old) return null;
+    let array: ArticleHistory[] = [...old.data.history];
+
+    if(array.find((article) => article.refId == data.refId && article.type == data.type)) {
+        return null;
+    }
+
+    array.push({
+        date: new Date(),
+        articleId: data.articledId as string,
+        refId: data.refId as string,
+        type: data.type,
+    });
+
+    let req = await Util.set(Articles, `${data.articledId}.history`, array);
+    return req.data;
+}
 
 export default router;

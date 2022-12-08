@@ -1,23 +1,41 @@
+import { User } from "../User/interfaces";
+
 export interface Article {
     id: string,
     title: string,
     createdAt: Date,
-    author: User | undefined,
+    author: User | null,
     authorId: string,
-    subjects: string[],
-    year: number[],
-    body: string,
-    bannerURL: string,
-    private: boolean,
+    body: ArticleBody,
     history: ArticleHistory[],
+    subjects: string[],
+    years: number[],
+    attachments: ArticleAttachments[],
+    details: ArticleDetails,
+}
+
+interface ArticleBody {
+    markdown: string,
+    html: string,
+}
+
+interface ArticleDetails {
+    showAfter: Date | null,
+    private: boolean,
+    outdated: boolean,
+}
+
+interface ArticleAttachments {
+    type: string,
+    url: string,
+    refId: string,
 }
 
 export interface ArticleHistory {
     date: Date,
-    id: string,
     articleId: string,
+    refId: string,
     type: ArticleHistoryType,
-    userId: string
 }
 
-export type ArticleHistoryType = 'View' | 'Upvote' | 'Downvote' | 'Favorite' | undefined;
+export type ArticleHistoryType = 'VIEW' | 'UPVOTE' | 'DOWNVOTE' | 'FAVORITE' | 'EDIT' | null;

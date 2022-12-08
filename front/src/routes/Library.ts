@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import { API } from "../services/API";
+import axios from "axios";
 
 const router = express.Router();
 
@@ -9,10 +10,17 @@ router.get('/', async (req, res) => {
     let search: any[] = [];
     let searchedYear: string | undefined = undefined;
     let searchedSubject: string | undefined = undefined;
+
+    let clearQuery = (str: string | number) => {
+        return String(str).toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o')
+        .replace(/á/g, 'a').replace(/ç/g, 'c').replace(/ã/g, 'a')
+        .replace(/õ/g, 'o').replace(/ /g, '_')
+        .trim();
+    }
     
     if(req.query.q) {
         let query = req.query.q as string;
-        let cleanQuery = query.toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o').replace(/ano\:(\d{1,2})/g, '').replace(/disciplina\:(\w+)/g, '')
+        let cleanQuery = clearQuery(query).replace(/ano\:(\d{1,2})/g, '').replace(/disciplina\:(\w+)/g, '')
 
         search = await API.get(`/article/search?q=${cleanQuery}`) as any[];
 
@@ -20,7 +28,7 @@ router.get('/', async (req, res) => {
         searchedYear = yearQuery?.[0].replace(/ano:/g, '');
 
         search = search.filter((s) => {
-            let resultYears = s.year.map((y: number | string) => String(y));
+            let resultYears = s.years.map((y: number | string) => clearQuery(y));
 
             if(searchedYear && resultYears.includes(searchedYear)) {
                 return s;
@@ -29,11 +37,11 @@ router.get('/', async (req, res) => {
             }
         });
 
-        let subjectQuery = query.trim().toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o').match(/disciplina\:(\w+)/gm);
+        let subjectQuery = clearQuery(query).match(/disciplina\:(\w+)/gm);
         searchedSubject = subjectQuery?.[0].replace(/disciplina:/g, '');
 
         search = search.filter((s) => {
-            let resultSubjects = s.subjects.map((y: string) => y.trim().trim().toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o'));
+            let resultSubjects = s.subjects.map((y: string) => clearQuery(y));
             
             if(searchedSubject && resultSubjects.includes(searchedSubject)) {
                 return s;
