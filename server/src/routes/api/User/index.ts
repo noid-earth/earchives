@@ -4,7 +4,7 @@ import { access } from "../../utils/access";
 import { User } from "./interfaces";
 
 const router = express.Router();
-const Users = new Database({ collection: 'users', database: 'Users' });
+export const Users = new Database({ collection: 'users', database: 'Users' });
 
 /**
  * GET /api/user/list

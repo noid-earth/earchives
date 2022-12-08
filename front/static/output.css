@@ -749,6 +749,14 @@ video {
   height: 8rem;
 }
 
+.h-\[\]{
+  height: ;
+}
+
+.h-\[90rem\]{
+  height: 90rem;
+}
+
 .w-full{
   width: 100%;
 }
@@ -1012,6 +1020,11 @@ video {
   line-height: 1;
 }
 
+.text-lg{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
 .font-semibold{
   font-weight: 600;
 }
@@ -1178,6 +1191,10 @@ code {
 
 .hover\:opacity-75:hover{
   opacity: 0.75;
+}
+
+.focus\:border-none:focus{
+  border-style: none;
 }
 
 .focus\:outline-none:focus{
