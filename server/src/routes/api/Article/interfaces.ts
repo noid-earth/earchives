@@ -4,13 +4,11 @@ export interface Article {
     createdAt: Date,
     author: User | undefined,
     authorId: string,
-    subject: string[],
-    categories: string[],
+    subjects: string[],
+    year: number[],
     body: string,
     bannerURL: string,
     private: boolean,
-    sensitive: boolean,
-    premium: boolean,
     history: ArticleHistory[],
 }
 

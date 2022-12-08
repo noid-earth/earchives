@@ -2,21 +2,37 @@
 onclick="location.href='/library/article/<%= article.id %>'"
 class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transition-transform duration-400 cursor-pointer h-32"
 >   
-    <div class="flex">
-        <% if(article.categories.length > 0) { %>
-            <% article.categories.forEach((cat) => { %>
-                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm"><%= cat %></span>
-            <% }) %>
-        <% } else { %>
-                <span class="h-4"></span>
-        <% } %>
+    <div class="grid grid-cols-2 py-1">
+        <!-- SUBJECT -->
+        <div>
+            <% if(article.subjects.length > 0) { %>
+                <% article.subjects.forEach((sub) => { %>
+                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold"><%= sub %></span>
+                <% }) %>
+            <% } else { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold">Geral</span>
+            <% } %>
+        </div>
+
+        <!-- YEAR -->
+        <div class="text-right">
+            <% if(article.year.length > 0) { %>
+                <% article.year.forEach((y) => { %>
+                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold"><%= y %>º Ano</span>
+                <% }) %>
+            <% } else { %>
+                <% if(article.subjects.length > 0) { %>
+                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold">Geral</span>
+                <% } %>
+            <% } %>
+        </div>
     </div>
     <h4>
         <%= article.title %>
     </h4>
     <div class="text-sm">
         <span class="opacity-75">
-            Publicado por <%= article.author %>
+            Publicado por <%= (article.author && article.author.length > 0) ? article.author : 'biblioteca' %>
         </span>
         <span>
             -

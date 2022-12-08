@@ -20,13 +20,11 @@ router.post('/new', access, async (req, res) => {
         createdAt: new Date(),
         author: null,
         authorId: req.body.authorId,
-        subject: req.body.subject,
-        categories: req.body.categories,
+        subjects: req.body.subjects,
         body: req.body.body,
         bannerURL: req.body.bannerURL,
         private: req.body.private,
-        sensitive: req.body.sensitive,
-        premium: req.body.premium,
+        year: req.body.year,
         history: [],
     }
 
