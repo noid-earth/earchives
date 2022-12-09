@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     let feed: any[] = await API.get('/feed/list') as any;
 
     res.render('pages/Home.ejs', {
-        user: req.user,
+        user: await API.get('/user/get/' + (req.user as any)?.id),
         feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     });
 });
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 router.get('/posts', async (req, res) => {
     let feed: any[] = await API.get('/feed/list') as any[];
     res.render('pages/Feed.ejs', {
-        user: req.user,
+        user: await API.get('/user/get/' + (req.user as any)?.id),
         feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     })
 });

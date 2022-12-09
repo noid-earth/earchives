@@ -13,7 +13,7 @@ router.get('/', Middlewares.secured({perms: ['administrator']}), async (req, res
     let feed: any[] = await API.get('/feed/list') as any;
 
     res.render('pages/Control.ejs', {
-        user: req.user,
+        user: await API.get('/user/get/' + (req.user as any)?.id),
         feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     });
 });

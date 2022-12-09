@@ -737,6 +737,10 @@ video {
   height: 24rem;
 }
 
+.h-\[90rem\]{
+  height: 90rem;
+}
+
 .h-1{
   height: 0.25rem;
 }
@@ -747,14 +751,6 @@ video {
 
 .h-32{
   height: 8rem;
-}
-
-.h-\[\]{
-  height: ;
-}
-
-.h-\[90rem\]{
-  height: 90rem;
 }
 
 .w-full{
@@ -1015,14 +1011,14 @@ video {
   line-height: 2.25rem;
 }
 
-.text-5xl{
-  font-size: 3rem;
-  line-height: 1;
-}
-
 .text-lg{
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+.text-5xl{
+  font-size: 3rem;
+  line-height: 1;
 }
 
 .font-semibold{
@@ -1191,10 +1187,6 @@ code {
 
 .hover\:opacity-75:hover{
   opacity: 0.75;
-}
-
-.focus\:border-none:focus{
-  border-style: none;
 }
 
 .focus\:outline-none:focus{

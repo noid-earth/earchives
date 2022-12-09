@@ -7,58 +7,58 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     let articles = await API.get('/article/list') as any[];
-    let search: any[] = [];
-    let searchedYear: string | undefined = undefined;
-    let searchedSubject: string | undefined = undefined;
+    let results: any[] = [];
+    let searchRaw: string | undefined = req.query.q as string;
+    let searchQuery: string | undefined = undefined;
+    let searchYear: string | undefined = undefined;
+    let searchSubject: string | undefined = undefined;
 
-    let clearQuery = (str: string | number) => {
-        return String(str).toLowerCase().replace(/ê/g, 'e').replace(/ó/g, 'o')
-        .replace(/á/g, 'a').replace(/ç/g, 'c').replace(/ã/g, 'a')
-        .replace(/õ/g, 'o').replace(/ /g, '_')
-        .trim();
-    }
-    
+    let yearRegex = /ano\:(\d{1,2})/gm;
+    let subjectRegex = /disciplina\:([a-zA-Z\u00C0-\u00FF_]+)/gm;
+
     if(req.query.q) {
-        let query = req.query.q as string;
-        let cleanQuery = clearQuery(query).replace(/ano\:(\d{1,2})/g, '').replace(/disciplina\:(\w+)/g, '')
+        searchYear = searchRaw.match(yearRegex)?.[0]?.replace(/ano:/g, '');
 
-        search = await API.get(`/article/search?q=${cleanQuery}`) as any[];
+        searchSubject = searchRaw.match(subjectRegex)?.[0]?.replace(/disciplina:/g, '')
 
-        let yearQuery = query.match(/ano\:(\d{1,2})/gm);
-        searchedYear = yearQuery?.[0].replace(/ano:/g, '');
+        searchQuery = searchRaw.replace(yearRegex, '').replace(subjectRegex, '');
 
-        search = search.filter((s) => {
-            let resultYears = s.years.map((y: number | string) => clearQuery(y));
+        results = await API.get(`/article/search?q=${searchQuery}`) as any[];
 
-            if(searchedYear && resultYears.includes(searchedYear)) {
+        results = results.filter((s) => {
+            if(searchSubject && s.subjects.includes(searchSubject.replace(/_/g, ' '))) {
                 return s;
-            } else if(!searchedYear) {
+            } else if(!searchSubject) {
                 return s;
             }
         });
 
-        let subjectQuery = clearQuery(query).match(/disciplina\:(\w+)/gm);
-        searchedSubject = subjectQuery?.[0].replace(/disciplina:/g, '');
-
-        search = search.filter((s) => {
-            let resultSubjects = s.subjects.map((y: string) => clearQuery(y));
-            
-            if(searchedSubject && resultSubjects.includes(searchedSubject)) {
+        results = results.filter((s) => {
+            if(searchYear && s.years.includes(searchYear)) {
                 return s;
-            } else if(!searchedSubject) {
+            } else if(!searchYear) {
                 return s;
             }
         });
     }
 
     res.render('pages/Library.ejs', {
-        user: req.user,
-        articles: articles,
-        searchQuery: req.query.q,
-        search: search,
-        searchedYear: searchedYear,
-        searchedSubject: searchedSubject,
+        user: await API.get('/user/get/' + (req.user as any)?.id),
+        articles: articles.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+        searchRaw: searchRaw,
+        searchQuery: searchQuery,
+        searchYear: searchYear,
+        searchSubject: searchSubject,
+        results: results,
     });
+});
+
+router.post('/readlater/:articleId/:userId', async (req, res) => {
+    await API.post('/user/readlater/' + req.params.articleId, {
+        userId: req.params.userId,
+        remove: req.query.remove == 'true',
+    });
+    res.redirect(req.query.redirect ? req.query.redirect as string : '/library')
 });
 
 export default router;

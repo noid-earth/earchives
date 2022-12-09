@@ -1,6 +1,5 @@
 <article 
-onclick="location.href='/library/article/<%= article.id %>'"
-class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transition-transform duration-400 cursor-pointer h-32"
+class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transition-transform duration-400 h-32"
 >   
     <div class="grid grid-cols-2 py-1">
         <!-- SUBJECT -->
@@ -27,13 +26,13 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             <% } %>
         </div>
     </div>
-    <h4>
+    <h4 class="cursor-pointer" onclick="location.href='/library/article/<%= article.id %>'">
         <%= article.title %>
     </h4>
     <div class="text-sm grid grid-cols-2">
-        <div>
+        <div class="py-1">
             <span class="opacity-75">
-                <span class="hidden md:inline-block">Publicado por</span> <%= (article.author && article.author.length > 0) ? article.author : 'Biblioteca' %>
+                <span class="hidden md:inline-block">Publicado por</span> <%= (article.author && article.author?.name?.length > 0) ? article.author.name : 'Biblioteca' %>
             </span>
             <span>
                 -
@@ -62,6 +61,19 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             <span class="px-2" title="Favoritos">
                 <i class="fa-solid fa-star opacity-50"></i> <%= numbers.favorite %>
             </span>
+            <% if(user) { %>
+                <% if(user.history.find((h) => h.refId === article.id && h.type === 'READLATER')) { %>
+                    <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>&remove=true" method="post" class="inline-block">
+                        <button type="submit" title="Ler mais tarde" class="bg-[#1d1d1d] px-2 rounded"><i class="fa-solid fa-bookmark"></i></button>
+                    </form>
+                <% } else { %>
+                    <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>" method="post" class="inline-block">
+                        <button type="submit" title="Ler mais tarde" class="bg-[#1d1d1d] px-2 rounded"><i class="fa-regular fa-bookmark"></i></button>
+                    </form>
+                <% } %>
+            <% } else { %>
+                <button class="bg-[#1d1d1d] px-2 rounded py-1" onclick="alert('Você deve estar conectado à uma conta para adiconar um artigo à lista de ler depois.')"><i class="fa-regular fa-bookmark"></i></button>
+            <% } %>
         </div>
     </div>
 </article>

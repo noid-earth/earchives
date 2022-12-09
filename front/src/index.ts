@@ -21,11 +21,6 @@ app.use(cors());
 app.use('/static', express.static(path.join(__dirname, '../static')))
 app.use('/branding', express.static(path.join(__dirname, '../../branding')));
 
-app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.user;
-    next();
-});
-
 // Authentication
 import session from "express-session";
 import passport from "passport";

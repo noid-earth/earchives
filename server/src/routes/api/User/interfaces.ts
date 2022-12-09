@@ -18,14 +18,14 @@ interface UserDetails {
   administrator: boolean,
 }
 
-interface UserHistory {
+export interface UserHistory {
     date: Date,
     id: string,
     refId: string | null,
     type: UserHistoryType,
 }
 
-type UserHistoryType = 'VIEW' | 'UPVOTE' | 'DOWNVOTE' | 'FAVORITE' | null;
+export type UserHistoryType = 'VIEW' | 'UPVOTE' | 'DOWNVOTE' | 'FAVORITE' | 'READLATER' | null;
 
 /* Auth0 Provided
 
