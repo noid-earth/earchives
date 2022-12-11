@@ -6,10 +6,13 @@ export class API {
     static get(path: string) {
         return new Promise(async (resolve, reject) => {
             try {
-                let { data } = await axios.get(baseURL + path);
-                return resolve(data);
+                return await axios.get(baseURL + path).then((response) => {
+                    resolve(response.data);
+                }).catch((err) => {
+                    resolve(null);
+                });
             } catch(err) {
-                return reject(err);
+                return resolve(null);
             }
         });
     }
@@ -17,11 +20,18 @@ export class API {
     static post(path: string, body: any) {
         return new Promise(async (resolve, reject) => {
             try {
-                let { data } = await axios.post(baseURL + path, body);
-                return resolve(data);
+                return await axios.post(baseURL + path, body).then((response) => {
+                    resolve(response.data);
+                }).catch((err) => {
+                    resolve(null);
+                });
             } catch(err) {
-                return reject(err);
+                return resolve(null);
             }
         });
+    }
+
+    static user(id: string) {
+        return API.get('/user/get/' + id);
     }
 }

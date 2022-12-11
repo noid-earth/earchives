@@ -1,6 +1,7 @@
 import express from "express";
 import { Database } from "../../../database";
 import { access } from "../../utils/access";
+import { Users } from "../User";
 
 const router = express.Router();
 const Feed = new Database({ collection: 'posts', database: 'Feed' });
@@ -48,14 +49,14 @@ router.post('/new', access, async (req, res) => {
 });
 
 /**
- * DELETE - /api/feed/delete/:id
+ * DELETE - /api/feed/delete/:postId
  */
-router.delete('/delete/:id', access, async (req, res) => {
+router.delete('/delete/:postId', access, async (req, res) => {
 
-    if (!req.params.id) return res.status(300);
+    if (!req.params.postId) return res.status(300);
 
     await Feed.schema.deleteOne({
-        id: req.params.id
+        id: req.params.postId
     });
 
     return res.status(200);
@@ -67,7 +68,9 @@ router.delete('/delete/:id', access, async (req, res) => {
 router.get('/view/:id', async (req, res) => {
     let postId = req.params.id;
     let post = await Feed.schema.findOne({ 'id': postId });
-    return res.send(post.data ? post.data : undefined);
+    let data = post.data;
+    data.author = (await Users.schema.findOne({ 'data.id': data.authorId })).data;
+    return res.send(data ? data : undefined);
 });
 
 export default router;

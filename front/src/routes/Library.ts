@@ -43,13 +43,25 @@ router.get('/', async (req, res) => {
     }
 
     res.render('pages/Library.ejs', {
-        user: await API.get('/user/get/' + (req.user as any)?.id),
+        user: await API.user((req.user as any)?.id),
         articles: articles.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
         searchRaw: searchRaw,
         searchQuery: searchQuery,
         searchYear: searchYear,
         searchSubject: searchSubject,
         results: results,
+    });
+});
+
+router.get('/read/:articleId', async (req, res) => {
+    let article: any = await API.get(`/article/read/${req.params.articleId}`);
+    if(!article) return res.redirect('/library');
+
+    console.log(article);
+
+    res.render('pages/ReadArticle.ejs', {
+        user: await API.user((req.user as any)?.id),
+        article: article,
     });
 });
 

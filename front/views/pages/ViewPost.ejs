@@ -35,15 +35,14 @@
                         </p>
 
                         <!-- BODY-->
-                        <div class="grid grid-cols-5 grid-flow-row-dense gap-4 mt-16">
+                        <div class="grid grid-cols-5 grid-flow-row-dense gap-4 mt-16 min-h-[90vh]">
 
-                            <div class="col-span-1">
-                                <!-- -->
+                            <div class="col-span-1 border-r-4 border-[#292929]">
                                 <img 
-                                class="rounded-full w-20"
-                                src="https://assets-global.website-files.com/5f9072399b2640f14d6a2bf4/63869bc9074338b2374b52b6_0-p-500.png">
+                                class="rounded-full w-20 h-20 object-cover"
+                                src="<%= post.author?.picture?.length > 0 ? post.author?.picture : '' %>">
                                 <h4>
-                                    Jürgen
+                                    <%= post.author?.name?.length > 0 ? post.author?.name : post.author?.email?.split('@')?.[0] %>
                                 </h4>
                                 <span class="opacity-50 text-sm">
                                     <% let POST_CREATED_AT = new Date(post.createdAt);  %>

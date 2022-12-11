@@ -3,7 +3,7 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
 >   
     <div class="grid grid-cols-2 py-1">
         <!-- SUBJECT -->
-        <div>
+        <div class="">
             <% if(article.subjects.length > 0) { %>
                 <% article.subjects.forEach((sub) => { %>
                     <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold"><%= sub %></span>
@@ -26,17 +26,23 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             <% } %>
         </div>
     </div>
-    <h4 class="cursor-pointer" onclick="location.href='/library/article/<%= article.id %>'">
+
+    <!-- TITLE -->
+    <h4 class="cursor-pointer font-semibold" onclick="location.href='/library/read/<%= article.id %>'">
         <%= article.title %>
     </h4>
+
+    <!-- FOOTER -->
     <div class="text-sm grid grid-cols-2">
         <div class="py-1">
+            <!-- AUTHOR -->
             <span class="opacity-75">
                 <span class="hidden md:inline-block">Publicado por</span> <%= (article.author && article.author?.name?.length > 0) ? article.author.name : 'Biblioteca' %>
             </span>
             <span>
                 -
             </span>
+            <!-- DATE -->
             <span class="opacity-75">
                 <% let ARTICLE_CREATED_AT = new Date(article.createdAt);  %>
                 <%= ARTICLE_CREATED_AT.toLocaleDateString() %>
@@ -50,30 +56,46 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
                 favorite: article.history.filter((h) => h.type === 'FAVORITE').length,
             }
         %>
-
+        
+        <!-- STATS AND READLATER -->
         <div class="text-right">
+            <!-- UPVOTES -->
             <span class="px-2" title="Upvotes">
                 <i class="fa-solid fa-caret-up opacity-50"></i> <%= numbers.upvote %>
             </span>
+
+            <!-- DOWNVOTES -->
             <span class="px-2" title="Downvotes">
                 <i class="fa-solid fa-caret-down opacity-50"></i> <%= numbers.downvote %>
             </span>
+
+            <!-- FAVORITES -->
             <span class="px-2" title="Favoritos">
                 <i class="fa-solid fa-star opacity-50"></i> <%= numbers.favorite %>
             </span>
-            <% if(user) { %>
-                <% if(user.history.find((h) => h.refId === article.id && h.type === 'READLATER')) { %>
-                    <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>&remove=true" method="post" class="inline-block">
-                        <button type="submit" title="Ler mais tarde" class="bg-[#1d1d1d] px-2 rounded"><i class="fa-solid fa-bookmark"></i></button>
-                    </form>
+
+            <!-- READ LATER -->
+            <div class="inline-block font-semibold bg-[#1d1d1d] px-2 py-1 rounded-lg hover:opacity-75 duration-300">
+                <% if(user) { %>
+                    <% if(user.history.find((h) => h.refId === article.id && h.type === 'READLATER')) { %>
+                        <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>&remove=true" method="post" class="inline-block">
+                            <button type="submit" title="Ler mais tarde">
+                                LER DEPOIS <i class="fa-solid fa-bookmark pl-2"></i>
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>" method="post" class="inline-block">
+                            <button type="submit" title="Ler mais tarde" >
+                                LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
+                            </button>
+                        </form>
+                    <% } %>
                 <% } else { %>
-                    <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>" method="post" class="inline-block">
-                        <button type="submit" title="Ler mais tarde" class="bg-[#1d1d1d] px-2 rounded"><i class="fa-regular fa-bookmark"></i></button>
-                    </form>
+                    <button onclick="alert('Você deve estar conectado à uma conta para adiconar um artigo à lista de ler depois.')">
+                        LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
+                    </button>
                 <% } %>
-            <% } else { %>
-                <button class="bg-[#1d1d1d] px-2 rounded py-1" onclick="alert('Você deve estar conectado à uma conta para adiconar um artigo à lista de ler depois.')"><i class="fa-regular fa-bookmark"></i></button>
-            <% } %>
+            </div>
         </div>
     </div>
 </article>

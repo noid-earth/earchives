@@ -14,9 +14,9 @@
                 <% feed.shift(); feed.slice(0, 3).forEach((post) => { %>
                     <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
                 <% }); %>
-                <article class="bg-[#1d1d1d] rounded-lg cursor-pointer hover:opacity-75 duration-150" onclick="location.href='/posts'">
+                <article class="bg-[#1d1d1d] rounded-lg cursor-pointer hover:opacity-50 duration-300" onclick="location.href='/posts'">
                     <div class="grid place-items-center">
-                        <div class="align-middle py-40 opacity-75 text-center">
+                        <div class="align-middle py-40 text-center">
                             <div>
                                 <i class="fa-solid fa-chevron-right bg-[#292929] rounded-full p-12 fa-xl"></i>
                             </div>

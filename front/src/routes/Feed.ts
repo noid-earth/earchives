@@ -1,4 +1,3 @@
-import bodyParser from "body-parser";
 import express from "express";
 import { API } from "../services/API";
 
@@ -11,7 +10,7 @@ router.get('/:postId', async (req, res) => {
     res.render('pages/ViewPost.ejs', {
         post: post,
         feed: shuffle(feed),
-        user: await API.get('/user/get/' + (req.user as any)?.id),
+        user: await API.user((req.user as any)?.id),
     });
 });
 

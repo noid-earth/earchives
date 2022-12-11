@@ -1,6 +1,6 @@
 import express from "express";
 import { Database } from "../../../database";
-import { newId } from "../../../database/utils/id";
+import { newId } from "../../utils/id";
 import { access } from "../../utils/access";
 import { Article, ArticleHistory, ArticleHistoryType } from "./interfaces";
 import { Util } from "../../utils/data";
@@ -123,10 +123,12 @@ router.post('/favorite/:id/', access, async (req, res) => {
 /**
  * GET /api/article/view/:articleId
  */
-router.get('/view/:id', async (req, res) => {
+router.get('/read/:id', async (req, res) => {
     let articleId = req.params.id;
-    let post = await Articles.schema.findOne({ 'id': articleId });
-    return res.send(post.data ? post.data : undefined);
+    let article = await Articles.schema.findOne({ 'id': articleId });
+    let data = article.data;
+    data.author = (await Users.schema.findOne({ 'data.id': data.authorId })).data;
+    return res.send(data ? data : undefined);
 });
 
 async function newHistoryObj(data: {

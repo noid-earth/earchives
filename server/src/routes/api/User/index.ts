@@ -1,6 +1,6 @@
 import express from "express";
 import { Database } from "../../../database";
-import { newId } from "../../../database/utils/id";
+import { newId } from "../../utils/id";
 import { access } from "../../utils/access";
 import { Util } from "../../utils/data";
 import { User, UserHistory, UserHistoryType } from "./interfaces";
@@ -47,7 +47,7 @@ router.post('/ensure/:id', access, async (req, res) => {
             provider: req.body.provider,
             providerId: req.body.providerId,
             name: req.body.name ?? '',
-            picture: req.body.picture,
+            picture: req.body.picture ?? null,
             email: req.body.email,
             details: {
                 emailVerified: false,

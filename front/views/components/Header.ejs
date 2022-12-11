@@ -14,17 +14,25 @@
           <div class="hidden w-full md:block md:w-auto" id="navbar">
             <ul class="flex flex-col p-4 mt-4 border bg-[#292929] rounded-lg md:m-0 m-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
               <li>
-                <a href="/" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Principal</a>
+                <a href="/posts" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Novidades</a>
               </li>
               <li>
                 <a href="/library" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Biblioteca</a>
               </li>
-              <li>
-                <% if(user) { %>
-                  <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
-                <% } else { %>
-                    <a href="/login" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Login</a>
+              <% if(user) { %>
+                <% if(user.details.administrator) { %>
+                  <li>
+                    <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
+                  </li>
                 <% } %>
+                <li>
+                  <a href="/logout" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-[#ED4245]">Logout</a>
+                </li>
+              <% } else { %>
+                <li>
+                  <a href="/login" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Login</a>
+                </li>
+              <% } %>
               </li>
             </ul>
           </div>
