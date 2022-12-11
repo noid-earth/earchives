@@ -5,3 +5,7 @@ front/.env
 server/lib
 server/.env
 server/node_modules
+
+desktop/node_modules
+desktop/.env
+desktop/dist

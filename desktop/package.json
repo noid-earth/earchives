@@ -1,0 +1,41 @@
+{
+  "name": "desktop",
+  "productName": "eArchives",
+  "version": "1.0.0",
+  "description": "A library of study files on a variety of subjects.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "win": "npx electron-builder build --win portable",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "projectDema",
+    "email": "contact@projectdema.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-squirrel": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
+    "electron": "22.0.0"
+  },
+  "build": {
+    "appId": "com.earchives.app",
+    "productName": "eArchives",
+    "copyright": "Copyright © 2022 eArchives",
+    "win": {
+      "icon": "build/icon.ico"
+    }
+  }
+}
