@@ -1,6 +1,6 @@
 <!-- PARAMETERS: post, feed, showNewestTag -->
 
-<article class="bg-[#1d1d1d] rounded-lg cursor-pointer hover:opacity-75 duration-150" onclick="location.href='/post/<%= post.id %>'">
+<article class="bg-[#292929] rounded-lg cursor-pointer hover:opacity-75 duration-300" onclick="location.href='/post/<%= post.id %>'">
 
     <!-- IMAGE -->
     <% if(post.thumbnailURL?.length > 5) { %>
@@ -13,7 +13,7 @@
         <!-- tags -->
         <div class="mt-2 hidden md:block">
             <% post.tags.forEach((tag) => { %>
-                <span class="w-auto text-accent py-1 px-4 bg-[#292929] mr-2 rounded-full text-xs font-semibold">
+                <span class="w-auto text-accent py-1 px-4 bg-[#1d1d1d] mr-2 rounded-full text-xs font-semibold">
                     <%= tag %>
                 </span>
             <% }); %>

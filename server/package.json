@@ -4,9 +4,8 @@
   "description": "A project made to help students find useful archives to study for tests ",
   "main": "index.js",
   "scripts": {
-    "start": "node lib/index.js",
-    "dev": "nodemon",
-    "tsc": "tsc"
+    "start": "tsc && node lib/index.js",
+    "dev": "nodemon"
   },
   "repository": {
     "type": "git",

@@ -36,10 +36,10 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
     <div class="text-sm grid grid-cols-2">
         <div class="py-1">
             <!-- AUTHOR -->
-            <span class="opacity-75">
+            <span class="opacity-75 hidden lg:inline-block">
                 <span class="hidden md:inline-block">Publicado por</span> <%= (article.author && article.author?.name?.length > 0) ? article.author.name : 'Biblioteca' %>
             </span>
-            <span>
+            <span class="hidden lg:inline-block">
                 -
             </span>
             <!-- DATE -->
@@ -75,27 +75,29 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             </span>
 
             <!-- READ LATER -->
-            <div class="inline-block font-semibold bg-[#1d1d1d] px-2 py-1 rounded-lg hover:opacity-75 duration-300">
-                <% if(user) { %>
-                    <% if(user.history.find((h) => h.refId === article.id && h.type === 'READLATER')) { %>
-                        <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>&remove=true" method="post" class="inline-block">
-                            <button type="submit" title="Ler mais tarde">
-                                LER DEPOIS <i class="fa-solid fa-bookmark pl-2"></i>
-                            </button>
-                        </form>
+            <% if(showReadLater) { %>
+                <div class="inline-block font-semibold bg-[#1d1d1d] px-2 py-1 rounded-lg hover:opacity-75 duration-300">
+                    <% if(user) { %>
+                        <% if(user.history.find((h) => h.refId === article.id && h.type === 'READLATER')) { %>
+                            <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>&remove=true" method="post" class="inline-block">
+                                <button type="submit" title="Ler mais tarde">
+                                    LER DEPOIS <i class="fa-solid fa-bookmark pl-2"></i>
+                                </button>
+                            </form>
+                        <% } else { %>
+                            <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>" method="post" class="inline-block">
+                                <button type="submit" title="Ler mais tarde" >
+                                    LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
+                                </button>
+                            </form>
+                        <% } %>
                     <% } else { %>
-                        <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>" method="post" class="inline-block">
-                            <button type="submit" title="Ler mais tarde" >
-                                LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
-                            </button>
-                        </form>
+                        <button onclick="alert('Você deve estar conectado à uma conta para adiconar um artigo à lista de ler depois.')">
+                            LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
+                        </button>
                     <% } %>
-                <% } else { %>
-                    <button onclick="alert('Você deve estar conectado à uma conta para adiconar um artigo à lista de ler depois.')">
-                        LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
-                    </button>
-                <% } %>
-            </div>
+                </div>
+            <% } %>
         </div>
     </div>
 </article>

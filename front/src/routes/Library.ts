@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
 
     res.render('pages/Library.ejs', {
         user: await API.user((req.user as any)?.id),
-        articles: articles.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+        articles: articles?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
         searchRaw: searchRaw,
         searchQuery: searchQuery,
         searchYear: searchYear,

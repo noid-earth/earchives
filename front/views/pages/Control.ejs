@@ -16,7 +16,7 @@
         <section class="bg-[#292929]">
             <div class="container mx-auto py-4 px-4 md:px-0">
                 <h1 class="text-2xl text-accent font-bold mt-6">Feed</h1>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 rounded-lg bg-[#1d1d1d] p-4">
                     <% feed.slice(0, 4).forEach((post) => { %>
                         <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: true }) %>
                     <% }); %>

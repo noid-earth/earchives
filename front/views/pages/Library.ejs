@@ -22,12 +22,12 @@
             <div class="mx-auto container">
                 <div class="grid grid-cols-5 gap-4 p-4 min-h-[90vh]">
                     <div class="bg-[#1d1d1d] rounded-lg px-6 py-2 shadow">
-                        <h4 class="py-2 text-accent opacity-75 font-semibold">
+                        <h4 class="py-2 text-accent opacity-75 font-semibold text-lg lg:text-2xl">
                             Disciplinas
                         </h4>
-                        <ul>
+                        <ul class="pr-2 lg:pr-0">
                             <% subjects.forEach((subject) => { %>
-                                <li class="text-lg hover:opacity-75 py-1">
+                                <li class="text-sm lg:text-lg hover:opacity-75 py-1">
                                     <a href="?q=disciplina:<%= subject.name.replace(/ /g, '_') %>">
                                         <%= subject.name %>
                                     </a>
@@ -68,7 +68,7 @@
                             <% } %>
                                 
                             <!-- SEARCH KEYS -->
-                            <div class="hidden md:inline-block">
+                            <div class="hidden lg:inline-block">
                                 <% if (searchYear) { %>
                                     <kbd class="px-4 py-1.5 text-sm font-semibold rounded-lg bg-[#292929] text-accent">
                                         A buscar artigos do <%= searchYear %>º Ano
@@ -98,7 +98,7 @@
                             <% } %>
                             <%  var displayArticles = results.length > 0 ? results : articles;
                                 displayArticles.forEach((article, index) => { %>
-                                <%- include('../components/library/ArticlePreview', { article: article  }) %>
+                                <%- include('../components/library/ArticlePreview', { article: article, showReadLater: true  }) %>
                             <% }) %>
                         </div>
                     </div>

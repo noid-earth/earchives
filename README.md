@@ -2,5 +2,17 @@
 # eArchives
 earchives.org
 
+> Run
+
+```
+    cd server
+    npm run start
+```
+
+```
+    cd front
+    npm run start
+```
+
 ### Mindmap
 [View](https://mm.tt/map/2515470530?t=HDFMRJiYZn)

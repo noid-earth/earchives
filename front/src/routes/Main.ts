@@ -7,8 +7,9 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     let feed: any[] = await API.get('/feed/list') as any;
-
+    let articles = await API.get('/article/list') as any[];
     res.render('pages/Home.ejs', {
+        articles: articles?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
         user: await API.user((req.user as any)?.id),
         feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     });

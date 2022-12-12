@@ -10,24 +10,39 @@
             <div class="mx-auto container p-[0.1px] px-10">
                 <%- include('../components/feed/FeedMainPost', { post: feed[0], feed, showNewestTag: true, }) %>
             </div>
-            <div class="mx-auto container py-6 px-10 grid grid-cols-1 md:grid-cols-4 gap-2">
-                <% feed.shift(); feed.slice(0, 3).forEach((post) => { %>
-                    <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
-                <% }); %>
-                <article class="bg-[#1d1d1d] rounded-lg cursor-pointer hover:opacity-50 duration-300" onclick="location.href='/posts'">
-                    <div class="grid place-items-center">
-                        <div class="align-middle py-40 text-center">
-                            <div>
-                                <i class="fa-solid fa-chevron-right bg-[#292929] rounded-full p-12 fa-xl"></i>
-                            </div>
-                            Ver mais
+
+            <div class="mx-auto container py-6 px-10">
+                <div class="bg-[#1d1d1d] rounded-lg w-full p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
+                        <% feed.shift(); feed.slice(0, 4).forEach((post) => { %>
+                            <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
+                        <% }); %>
+                    </div>
+                    <!-- SEE MORE -->
+                    <div class="mt-4 text-center">
+                        <div class="mt-4 text-center">
+                            <button onclick="location.href='/posts'" class="text-white focus:outline-none font-medium rounded-lg text-sm px-10 py-2 bg-accent hover:opacity-75 duration-300">
+                                Ver mais
+                            </button>    
                         </div>
                     </div>
-                </article>
+                </div>
             </div>
             <div class="mx-auto container px-10 pb-10">
-                <div class="outline-2 outline-dashed outline-[#1d1d1d] h-96 rounded-lg">
-                    
+                <h1 class="text-2xl text-accent font-bold mt-6">
+                    Artigos mais recentes
+                </h1>
+                <div class="rounded-lg bg-[#1d1d1d] p-4 mt-2">
+                    <div class="-mt-3">
+                        <% articles.splice(0, 3).forEach((article, index) => { %>
+                            <%- include('../components/library/ArticlePreview', { article: article, showReadLater: false  }) %>
+                        <% }) %>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button onclick="location.href='/library'" class="text-white focus:outline-none font-medium rounded-lg text-sm px-10 py-2 bg-accent hover:opacity-75 duration-300">
+                            Ver mais
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

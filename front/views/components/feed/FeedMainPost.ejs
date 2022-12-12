@@ -1,11 +1,11 @@
 <!-- PARAMETERS: post -->
 
-<article class="bg-[#1d1d1d] rounded-lg mt-[-50px] md:mt-[-75px] cursor-pointer" onclick="location.href='/post/<%= post.id %>'">
+<article class="bg-[#1d1d1d] rounded-lg mt-[-50px] lg:mt-[-75px] cursor-pointer" onclick="location.href='/post/<%= post.id %>'">
     <!-- IMAGE -->
     <% if(post.thumbnailURL?.length > 5) { %>
         <img 
         src="<%= post.thumbnailURL %>" alt="Post thumbnail"
-        class="w-full h-40 md:h-96 object-cover rounded-lg shadow">
+        class="w-full h-40 md:h-60 lg:h-96 object-cover rounded-lg shadow">
     <% } %>
     <!-- TEXT BOX -->
     <div class="p-4">

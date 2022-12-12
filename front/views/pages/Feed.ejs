@@ -10,7 +10,7 @@
             <div class="mx-auto container p-[0.1px] px-10">
                 <%- include('../components/feed/FeedMainPost', { post: feed[0], feed, showNewestTag: true, }) %>
             </div>
-            <div class="mx-auto container py-6 px-10 grid grid-cols-1 md:grid-cols-4 gap-2">
+            <div class="mx-auto container py-6 px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                 <% feed.shift(); feed.forEach((post) => { %>
                     <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
                 <% }); %>
