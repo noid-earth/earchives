@@ -6,6 +6,11 @@ import { Article, ArticleHistory, ArticleHistoryType } from "./interfaces";
 import { Util } from "../../utils/data";
 import { Users } from "../User";
 
+import { marked } from "marked";
+import createDomPurify from "dompurify";
+import { JSDOM } from "jsdom";
+const dompurify = createDomPurify(new JSDOM().window as any);
+
 const router = express.Router();
 const Articles = new Database({ collection: 'articles', database: 'Library' });
 
@@ -18,6 +23,10 @@ router.post('/new', access, async (req, res) => {
 
     let author = await Users.schema.findOne({ 'id': raw.authorId });
 
+    let body = {
+        toHtml: dompurify.sanitize(marked(raw.body.markdown))
+    }
+
     let article: Article = {
         id: id,
         title: raw.title,
@@ -26,7 +35,7 @@ router.post('/new', access, async (req, res) => {
         authorId: raw.authorId,
         body: {
             markdown: raw.body.markdown,
-            html: raw.body.html,
+            html: raw.body.html?.length > 0 ? raw.body.html : body.toHtml,
         },
         history: [],
         subjects: [...raw.subjects],
@@ -121,13 +130,23 @@ router.post('/favorite/:id/', access, async (req, res) => {
 });
 
 /**
- * GET /api/article/view/:articleId
+ * POST /api/article/favorite/:articleId
+ */
+router.post('/outdate/:id', access, async (req, res) => {
+    let { data } = await Util.set(Articles, `${req.params.id}.details.outdated`, req.body.value)
+
+    return res.send(data).status(200);
+});
+
+/**
+ * GET /api/article/read/:articleId
  */
 router.get('/read/:id', async (req, res) => {
     let articleId = req.params.id;
     let article = await Articles.schema.findOne({ 'id': articleId });
-    let data = article.data;
-    data.author = (await Users.schema.findOne({ 'data.id': data.authorId })).data;
+    let data = article?.data;
+    if(!data) return res.send(undefined);
+    data.author = (await Users.schema.findOne({ 'data.id': data.authorId }))?.data;
     return res.send(data ? data : undefined);
 });
 

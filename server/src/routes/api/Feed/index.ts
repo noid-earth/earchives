@@ -3,6 +3,11 @@ import { Database } from "../../../database";
 import { access } from "../../utils/access";
 import { Users } from "../User";
 
+import { marked } from "marked";
+import createDomPurify from "dompurify";
+import { JSDOM } from "jsdom";
+const dompurify = createDomPurify(new JSDOM().window as any);
+
 const router = express.Router();
 const Feed = new Database({ collection: 'posts', database: 'Feed' });
 
@@ -23,6 +28,10 @@ router.post('/new', access, async (req, res) => {
 
     let id = `${uid()}`;
 
+    let body = {
+        toHtml: dompurify.sanitize(marked(req.body.markdown))
+    }
+
     let post = await Feed.schema.create({
         id: id,
         data: {
@@ -38,7 +47,7 @@ router.post('/new', access, async (req, res) => {
 
             description: req.body.description,
             markdown: req.body.markdown,
-            htmlBody: req.body.htmlBody,
+            htmlBody: req.body.htmlBody?.length > 0 ? req.body.htmlBody : body.toHtml,
 
             isPrivate: req.body.isPrivate || false,
             showThumbnailOnFeed: req.body.showThumbnailOnFeed || false,
@@ -69,7 +78,7 @@ router.get('/view/:id', async (req, res) => {
     let postId = req.params.id;
     let post = await Feed.schema.findOne({ 'id': postId });
     let data = post.data;
-    data.author = (await Users.schema.findOne({ 'data.id': data.authorId })).data;
+    data.author = (await Users.schema.findOne({ 'data.id': data.authorId }))?.data;
     return res.send(data ? data : undefined);
 });
 
