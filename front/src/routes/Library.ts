@@ -57,9 +57,7 @@ router.get('/read/:articleId', async (req, res) => {
     let article: any = await API.get(`/article/read/${req.params.articleId}`);
     if(!article) return res.redirect('/library');
 
-    console.log(article);
-
-    res.render('pages/ReadArticle.ejs', {
+    res.render('pages/Article.ejs', {
         user: await API.user((req.user as any)?.id),
         article: article,
     });
@@ -70,7 +68,19 @@ router.post('/readlater/:articleId/:userId', async (req, res) => {
         userId: req.params.userId,
         remove: req.query.remove == 'true',
     });
-    res.redirect(req.query.redirect ? req.query.redirect as string : '/library')
+    res.redirect(`/library/read/${req.params.articleId}`)
+});
+
+router.post('/outdated/:articleId/:value', async (req, res) => {
+    await API.post('/article/outdate/' + req.params.articleId, {
+        value: req.params.value === 'true',
+    });
+    res.redirect(`/library/read/${req.params.articleId}`)
+});
+
+router.post('/delete/:articleId', async (req, res) => {
+    await API.delete('/article/delete/' + req.params.articleId);
+    res.redirect(`/library/read/${req.params.articleId}`)
 });
 
 export default router;
