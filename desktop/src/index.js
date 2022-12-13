@@ -1,15 +1,16 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Tray, Menu } = require('electron');
 const path = require('path');
+const DiscordRPC = require('discord-rpc');
 
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+let mainWindow;
+let isQuiting = false;
+
 const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     center: true,
@@ -20,27 +21,61 @@ const createWindow = () => {
     icon: path.resolve(__dirname, '../build/icon.ico'),
   });
 
-  // load the website
   mainWindow.loadURL('http://localhost');
 
-  // and load the index.html of the app.
-  // mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
-
-  // Open fullsized;
   mainWindow.maximize();
+
+  mainWindow.on('close', (event) => {
+    if(!isQuiting){
+      event.preventDefault();
+      mainWindow.hide();
+    }
+  
+    return false;
+  });
+
+  const tray = new Tray(path.resolve(__dirname, '../build/icon.ico'));
+  const trayMenu = [
+    {
+      label: 'eArchives',
+      click: function() {
+        mainWindow.show();
+      }
+    },
+    {
+      label: 'Fechar',
+      click: function() {
+        isQuiting = true;
+        app.quit();
+      }
+    }
+  ];
+
+  const trayCtxMenu = Menu.buildFromTemplate(trayMenu);
+  tray.setContextMenu(trayCtxMenu);
+  tray.setTitle('eArchives');
+
+  tray.on('double-click', () => {
+    mainWindow.show();
+  });
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+
+rpc.login({ clientId: '1052358549558280202' }).catch(console.error);
+
+rpc.on('ready', () => {
+  rpc.setActivity({
+    details: `earchives.org`,
+    startTimestamp: new Date(),
+    largeImageKey: 'icon',
+    largeImageText: `eArchives`,
+    instance: false,
+  }).catch(console.error);
+});
+
 app.on('ready', createWindow);
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -48,12 +83,8 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
