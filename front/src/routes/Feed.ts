@@ -7,7 +7,7 @@ router.get('/:postId', async (req, res) => {
     let post = await API.get('/feed/view/' + req.params.postId) as any;
     let feed = await API.get('/feed/list') as any[];
 
-    res.render('pages/ViewPost.ejs', {
+    res.render('pages/Post.ejs', {
         post: post,
         feed: shuffle(feed),
         user: await API.user((req.user as any)?.id),
@@ -15,7 +15,7 @@ router.get('/:postId', async (req, res) => {
 });
 
 function shuffle(array: any[]) {
-    let currentIndex = array.length,  randomIndex;
+    let currentIndex = array?.length,  randomIndex;
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
