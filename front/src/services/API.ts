@@ -31,6 +31,20 @@ export class API {
         });
     }
 
+    static delete(path: string) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                return await axios.delete(baseURL + path).then((response) => {
+                    resolve(response.data);
+                }).catch((err) => {
+                    resolve(null);
+                });
+            } catch(err) {
+                return resolve(null);
+            }
+        });
+    }
+
     static user(id: string) {
         return API.get('/user/get/' + id);
     }
