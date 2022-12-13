@@ -4,7 +4,10 @@
     <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
 
     <body class="bg-[#1d1d1d] text-white">
-        <%- include('../components/Header', {PAGE_TITLE: ''}) %>
+        <%- include('../components/Header', {
+            PAGE_TITLE: null,
+            EXTRA_DATA: {}
+        }) %>
 
         <section class="bg-[#292929]">
             <div class="mx-auto container p-[0.1px] px-10">

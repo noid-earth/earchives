@@ -9,9 +9,11 @@
 
     <body class="bg-[#1d1d1d] text-white">
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" type="module"></script>
-        <script src="/static/purify.js" type="module"></script>
 
-        <%- include('../components/Header', {PAGE_TITLE: 'PAINEL DE CONTROLE'}) %>
+        <%- include('../components/Header', {
+            PAGE_TITLE: 'PAINEL DE CONTROLE',
+            EXTRA_DATA: {}
+        }) %>
 
         <section class="bg-[#292929]">
             <div class="container mx-auto py-4 px-4 md:px-0">

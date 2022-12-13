@@ -1,9 +1,29 @@
+<%  
+    const now = new Date().getTime();
+    const SHOW_AFTER_TIME = article.details.showAfter ? new Date(article.details.showAfter).getTime() : null;
+    const SHOW_AFTER_DISTANCE = SHOW_AFTER_TIME - now;
+
+    const SHOW_AFTER_DAYS = Math.floor(SHOW_AFTER_DISTANCE / (1000 * 60 * 60 * 24));
+    const SHOW_AFTER_HOURS = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const SHOW_AFTER_MINUTES = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60)) / (1000 * 60));
+
+    const SHOW_AFTER_COUNTDOWN = `
+    ${SHOW_AFTER_DAYS > 0 ? SHOW_AFTER_DAYS + ` dia${SHOW_AFTER_DAYS > 1 ? 's':''}` : ''} 
+    ${SHOW_AFTER_HOURS > 0 ? SHOW_AFTER_HOURS + ` hora${SHOW_AFTER_HOURS > 1 ? 's':''}` : ''}
+    ${SHOW_AFTER_MINUTES > 0 ? SHOW_AFTER_MINUTES + ` min` : ''}
+    `;
+
+    const SHOW_AFTER_ACTIVE = article.details.showAfter && SHOW_AFTER_COUNTDOWN && SHOW_AFTER_DISTANCE > 0;
+
+    const ARTICLE_IS_PRIVATE = article.details.private;
+%>
+
 <article 
-class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transition-transform duration-400 h-32"
+class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-2px] transition-transform duration-500"
 >   
-    <div class="grid grid-cols-2 py-1">
+    <div class="grid grid-cols-1 gap-y-2 2xl:grid-cols-2 py-1">
         <!-- SUBJECT -->
-        <div class="">
+        <div class="ml-2 2xl:ml-0">
             <% if(article.subjects.length > 0) { %>
                 <% article.subjects.forEach((sub) => { %>
                     <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold"><%= sub %></span>
@@ -13,8 +33,27 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             <% } %>
         </div>
 
-        <!-- YEAR -->
-        <div class="text-right">
+        <div class="text-left 2xl:text-right">
+            <!-- SHOW AFTER THIS DATE  -->
+            <% if(SHOW_AFTER_ACTIVE) { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50">
+                    <i class="fa-regular fa-calendar"></i> <span class="pl-1">Publicado em <%- SHOW_AFTER_COUNTDOWN %></span>
+                </span>
+            <% } %>
+
+            <!-- OUTDATED TAG -->
+            <% if(article.details.outdated) { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50 hidden 2xl:inline-block">
+                    <i class="fa-solid fa-hourglass-end"></i> <span class="pl-1">Desatualizado</span>
+                </span>
+            <% } %>
+
+            <!-- PRIVATE TAG -->
+            <% if(article.details.private) { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50">Indisponível</span>
+            <% } %>
+
+            <!-- YEARS -->
             <% if(article.years.length > 0) { %>
                 <% article.years.forEach((y) => { %>
                     <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold"><%= y %>º Ano</span>
@@ -28,22 +67,15 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
     </div>
 
     <!-- TITLE -->
-    <h4 class="cursor-pointer font-semibold" onclick="location.href='/library/read/<%= article.id %>'">
+    <h4 class="<% if(!ARTICLE_IS_PRIVATE && !SHOW_AFTER_ACTIVE) { %> cursor-pointer <% } else { %> cursor-default <% } %> font-semibold mt-2" <% if(!ARTICLE_IS_PRIVATE && !SHOW_AFTER_ACTIVE) { %> onclick="location.href='/library/read/<%= article.id %>'" <% } %>>
         <%= article.title %>
     </h4>
 
     <!-- FOOTER -->
-    <div class="text-sm grid grid-cols-2">
-        <div class="py-1">
-            <!-- AUTHOR -->
-            <span class="opacity-75 hidden lg:inline-block">
-                <span class="hidden md:inline-block">Publicado por</span> <%= (article.author && article.author?.name?.length > 0) ? article.author.name : 'Biblioteca' %>
-            </span>
-            <span class="hidden lg:inline-block">
-                -
-            </span>
+    <div class="text-sm grid grid-cols-2 mt-0">
+        <div class="py-1 text-neutral-500 font-medium">
             <!-- DATE -->
-            <span class="opacity-75">
+            <span class="">
                 <% let ARTICLE_CREATED_AT = new Date(article.createdAt);  %>
                 <%= ARTICLE_CREATED_AT.toLocaleDateString() %>
             </span>
@@ -57,8 +89,8 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             }
         %>
         
-        <!-- STATS AND READLATER -->
-        <div class="text-right">
+        <!-- STATS -->
+        <div class="text-right font-semibold">
             <!-- UPVOTES -->
             <span class="px-2" title="Upvotes">
                 <i class="fa-solid fa-caret-up opacity-50"></i> <%= numbers.upvote %>
@@ -73,31 +105,6 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-4px] transiti
             <span class="px-2" title="Favoritos">
                 <i class="fa-solid fa-star opacity-50"></i> <%= numbers.favorite %>
             </span>
-
-            <!-- READ LATER -->
-            <% if(showReadLater) { %>
-                <div class="inline-block font-semibold bg-[#1d1d1d] px-2 py-1 rounded-lg hover:opacity-75 duration-300">
-                    <% if(user) { %>
-                        <% if(user.history.find((h) => h.refId === article.id && h.type === 'READLATER')) { %>
-                            <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>&remove=true" method="post" class="inline-block">
-                                <button type="submit" title="Ler mais tarde">
-                                    LER DEPOIS <i class="fa-solid fa-bookmark pl-2"></i>
-                                </button>
-                            </form>
-                        <% } else { %>
-                            <form action="/library/readlater/<%= article.id %>/<%= user?.id %>?redirect=/library?q=<%=searchQuery%>" method="post" class="inline-block">
-                                <button type="submit" title="Ler mais tarde" >
-                                    LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
-                                </button>
-                            </form>
-                        <% } %>
-                    <% } else { %>
-                        <button onclick="alert('Você deve estar conectado à uma conta para adiconar um artigo à lista de ler depois.')">
-                            LER DEPOIS <i class="fa-regular fa-bookmark pl-2"></i>
-                        </button>
-                    <% } %>
-                </div>
-            <% } %>
         </div>
     </div>
 </article>

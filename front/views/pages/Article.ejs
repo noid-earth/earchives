@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+    <title>eArchives - <%= article.title %></title>
+
+    <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
+
+    <%
+
+        const STATS = {
+            upvote: article.history.filter((h) => h.type === 'UPVOTE').length,
+            downvote: article.history.filter((h) => h.type === 'DOWNVOTE').length,
+            favorite: article.history.filter((h) => h.type === 'FAVORITE').length,
+        }
+
+        const READLATER_URL = `/library/readlater/${article.id}/${user.id}`;
+        const READLATER_ADDED = user.history?.find((h) => h.refId === article.id && h.type === 'READLATER');
+
+        const OUTDATED_URL = `/library/outdated/${article.id}/${!article.details.outdated}`;
+    %>
+
+    <body class="bg-[#1d1d1d] text-white">
+        <%- include('../components/Header', {
+            PAGE_TITLE: article.title, 
+            EXTRA_DATA: {
+                ARTICLE_AUTHOR: article.author
+            } 
+        }) %>
+
+        <section class="bg-[#292929] min-h-[100vh]">
+            <div class="mx-auto container">
+                <div class="grid grid-cols-5 gap-4 p-4">
+                    <div class="bg-[#1d1d1d] rounded-lg shadow p-4 col-span-4 ">
+                        <!-- CONTENT -->
+                        <div id="ARTICLE_CONTENT" class="px-4">
+                            <%- article.body.html %>
+                        </div>
+
+                        <!-- ATTACHMENTS -->
+                        <hr class="mt-6 h-1 bg-[#292929] rounded border-0">
+
+                        <div class="mt-4 px-4">
+                            <h1 class="text-2xl text-accent font-bold inline">
+                                Documentos
+                            </h1>
+                            <span class="inline opacity-50">
+                                Documentos de suporte para este artigo
+                            </span>
+                        </div>
+                        <div class="bg-[#292929] p-4 mt-2 rounded-lg grid grid-cols-4 gap-4 lg:h-52">
+                            <div class="outline-dashed outline-2 outline-[#1d1d1d] rounded-lg"> </div>
+                            <div class="outline-dashed outline-2 outline-[#1d1d1d] rounded-lg"> </div>
+                            <div class="outline-dashed outline-2 outline-[#1d1d1d] rounded-lg"> </div>
+                            <div class="outline-dashed outline-2 outline-[#1d1d1d] rounded-lg"> </div>
+                        </div>
+                    </div>
+                    <div class="bg-[#1d1d1d] rounded-lg shadow p-4">
+                        <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" onclick="location.href='/library'">
+                            <i class="fa-solid fa-arrow-right-to-bracket fa-flip-both opacity-50"></i> Voltar
+                        </button>
+                        
+                        <% if(user) { %>
+                            <form action="<%= READLATER_URL %><%= (READLATER_ADDED ? '?remove=true' : '') %>" method="post">
+                                <button class="mt-2 w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
+                                    <i class="<%= (READLATER_ADDED ? 'fa-solid' : 'fa-regular') %> fa-bookmark opacity-50"></i> Ler depois
+                                </button>
+                            </form>
+                        <% } else { %>
+                            <button 
+                            class="mt-2 w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300"
+                            onclick="alert('Você deve estar logado para fazer isto!')"
+                            title="Você deve estar logado para fazer isto!"
+                            type="submit">
+                                <i class="fa-regular fa-bookmark opacity-50"></i> Ler depois
+                            </button>
+                        <% } %>
+
+                        <hr class="mt-4 h-1 bg-[#292929] rounded border-0">
+
+                        <div class="text-center font-semibold py-4">
+                            <!-- UPVOTES -->
+                            <span class="px-4" title="Upvotes">
+                                <i class="fa-solid fa-caret-up opacity-50 text-accent"></i> <%= STATS.upvote %>
+                            </span>
+                
+                            <!-- DOWNVOTES -->
+                            <span class="px-4" title="Downvotes">
+                                <i class="fa-solid fa-caret-down opacity-50 text-[#ED4245]"></i> <%= STATS.downvote %>
+                            </span>
+                
+                            <!-- FAVORITES -->
+                            <span class="px-4" title="Favoritos">
+                                <i class="fa-solid fa-star opacity-50 "></i> <%= STATS.favorite %>
+                            </span>
+                        </div>
+
+                        <hr class="h-1 bg-[#292929] rounded border-0">
+
+                        <% if(user && user?.details?.articleWriter) { %>
+                            <form class="mt-4" action="<%= OUTDATED_URL %>" method="post">
+                                <% if(article.details.outdated) { %>
+                                    <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
+                                        Marcar como atualizado
+                                    </button>
+                                <% } else { %>
+                                    <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
+                                        Marcar como desatualizado
+                                    </button>
+                                <% } %>
+                            </form>
+
+                            <form action="/library/delete/<%= article.id %>" method="post">
+                                <button class="mt-2 w-full bg-[#ED4245]/80 rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
+                                    Apagar
+                                </button>
+                            </form>
+                            <hr class="mt-4 h-1 bg-[#292929] rounded border-0">
+                        <% } %>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

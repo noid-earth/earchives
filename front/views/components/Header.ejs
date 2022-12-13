@@ -37,8 +37,15 @@
             </ul>
           </div>
         </div>
-        <div class="h-24 md:h-48 relative text-center">
-          <h1 class="text-4xl font-bold relative md:absolute bottom-0 md:left-0"><%= PAGE_TITLE %></h1>
+        <div class="h-24 md:h-48 relative text-center md:text-left">
+          <div class=" relative md:absolute bottom-0 md:left-4">
+            <h1 class="text-4xl font-bold"><%= PAGE_TITLE %></h1>
+            <% if(EXTRA_DATA?.ARTICLE_AUTHOR) { %>
+              <span class="opacity-50">Escrito por </span>
+              <% if(EXTRA_DATA?.ARTICLE_AUTHOR?.picture) { %> <img src="<%= EXTRA_DATA?.ARTICLE_AUTHOR?.picture %>" alt="" class="h-6 w-6 rounded-full object-cover inline-block ml-1"> <% } %>
+              <%= EXTRA_DATA?.ARTICLE_AUTHOR?.name %>
+            <% } %>
+          </div>
         </div>
     </nav>
 </div>
