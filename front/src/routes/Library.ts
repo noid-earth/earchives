@@ -6,7 +6,8 @@ import axios from "axios";
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    let articles = await API.get('/article/list') as any[];
+    let articles: any[] = await API.get('/article/list');
+
     let results: any[] = [];
     let searchRaw: string | undefined = req.query.q as string;
     let searchQuery: string | undefined = undefined;

@@ -6,20 +6,22 @@ import { API } from "../services/API";
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    let feed: any[] = await API.get('/feed/list') as any;
-    let articles = await API.get('/article/list') as any[];
+    let feed: any[] = await API.get('/feed/list') ?? [];
+    let articles: any[] = await API.get('/article/list') ?? [];
+
     res.render('pages/Home.ejs', {
         articles: articles?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
         user: await API.user((req.user as any)?.id),
-        feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        feed: feed?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     });
 });
 
 router.get('/posts', async (req, res) => {
-    let feed: any[] = await API.get('/feed/list') as any[];
+    let feed: any[] = await API.get('/feed/list') ?? [];
+    
     res.render('pages/Feed.ejs', {
         user: await API.user((req.user as any)?.id),
-        feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        feed: feed?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     })
 });
 

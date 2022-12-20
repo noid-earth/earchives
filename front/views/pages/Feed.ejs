@@ -1,28 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt">
+<%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
 
-    <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
+<body>
+    <%- include('../components/Header', {
+        PAGE_TITLE: null,
+        EXTRA_DATA: {}
+    }) %>
 
-    <body class="bg-[#1d1d1d] text-white">
-        <%- include('../components/Header', {
-            PAGE_TITLE: null,
-            EXTRA_DATA: {}
-        }) %>
+    <section class="bg-[#292929]">
+        <div class="mx-auto container p-[0.1px] px-10">
+            <%- include('../components/feed/FeedMainPost', { post: feed[0], feed, showNewestTag: true, }) %>
+        </div>
 
-        <section class="bg-[#292929]">
-            <div class="mx-auto container p-[0.1px] px-10">
-                <%- include('../components/feed/FeedMainPost', { post: feed[0], feed, showNewestTag: true, }) %>
-            </div>
-
-            <div class="mx-auto container py-6 px-10">
-                <div class="bg-[#1d1d1d] rounded-lg w-full p-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <% feed.shift(); feed.forEach((post) => { %>
-                            <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
-                        <% }); %>
-                    </div>
+        <div class="mx-auto container py-6 px-10">
+            <div class="bg-[#1d1d1d] rounded-lg w-full p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <% feed.shift(); feed.forEach((post) => { %>
+                        <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
+                    <% }); %>
                 </div>
             </div>
-        </section>
-    </body>
-</html>
+        </div>
+    </section>
+</body>

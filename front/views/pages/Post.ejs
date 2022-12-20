@@ -1,80 +1,77 @@
-<!DOCTYPE html>
-<html lang="pt">
 
-    <title>eArchives - <%= post.title %></title>
+<title>eArchives - <%= post.title %></title>
 
-    <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
+<%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
 
-    <body class="bg-[#1d1d1d] text-white">
-        <%- include('../components/Header', {
-            PAGE_TITLE: null,
-            EXTRA_DATA: {}
-        }) %>
+<body>
+    <%- include('../components/Header', {
+        PAGE_TITLE: null,
+        EXTRA_DATA: {}
+    }) %>
 
-        <section class="bg-[#292929]">
-            <div class="mx-auto container p-[0.1px] px-10">
-                <article class="bg-[#1d1d1d] rounded-lg mt-[-50px] md:mt-[-75px] mb-6">
-                    <!-- IMAGE -->
-                    <% if(post.thumbnailURL?.length > 5) { %>
-                        <img 
-                        src="<%= post.thumbnailURL %>" alt="Post thumbnail"
-                        class="w-full h-46 md:h-[30rem] object-cover rounded-lg shadow">
-                    <% } %>
+    <section class="bg-[#292929]">
+        <div class="mx-auto container p-[0.1px] px-10">
+            <article class="bg-[#1d1d1d] rounded-lg mt-[-50px] md:mt-[-75px] mb-6">
+                <!-- IMAGE -->
+                <% if(post.thumbnailURL?.length > 5) { %>
+                    <img 
+                    src="<%= post.thumbnailURL %>" alt="Post thumbnail"
+                    class="w-full h-46 md:h-[30rem] object-cover rounded-lg shadow">
+                <% } %>
 
-                    <!-- TEXT BOX -->
-                    <div class="py-6 px-12">
-                        <!-- CATEGORIES -->
-                        <div class="mt-2">
-                            <% post.tags.forEach((tag) => { %>
-                                <span class="text-accent py-1 px-4 bg-[#292929] mr-2 rounded-full text-sm font-semibold">
-                                    <%= tag %>
-                                </span>
-                            <% }); %>
-                        </div>
-                        <!-- TITLE AND INFO -->
-                        <h1 class="text-5xl font-bold mt-2"><%= post.title %></h1>
-                        <p class="mt-2 opacity-50">
-                            <%= post.shortDescription %>
-                        </p>
-
-                        <!-- BODY-->
-                        <div class="grid grid-cols-5 grid-flow-row-dense gap-4 mt-16 min-h-[90vh]">
-
-                            <div class="col-span-1 border-r-4 border-[#292929]">
-                                <img 
-                                class="rounded-full w-20 h-20 object-cover"
-                                src="<%= post.author?.picture?.length > 0 ? post.author?.picture : '' %>">
-                                <h4>
-                                    <%= post.author?.name?.length > 0 ? post.author?.name : post.author?.email?.split('@')?.[0] %>
-                                </h4>
-                                <span class="opacity-50 text-sm">
-                                    <% let POST_CREATED_AT = new Date(post.createdAt);  %>
-                                    <%= POST_CREATED_AT.toLocaleDateString() %> às <%= POST_CREATED_AT.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) %>
-                                </span>
-                            </div>
-                            <div class="col-span-3">
-                              <div class="text-base" id="MARKDOWN_BODY">
-                                <%- post.htmlBody %>
-                              </div>
-                            </div>
-                            <div class="col-span-1">
-                              03
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <div class="rounded-lg py-6 px-10">
-                    <h1 class="text-2xl text-accent font-bold mb-2">
-                        Sugestões
-                    </h1>
-                    <div class="mx-auto container grid grid-cols-1 md:grid-cols-4 gap-2">
-                        <% feed.filter((p) => post.id !== p.id).slice(0,4).forEach((post) => { %>
-                            <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
+                <!-- TEXT BOX -->
+                <div class="py-6 px-12">
+                    <!-- CATEGORIES -->
+                    <div class="mt-2">
+                        <% post.tags.forEach((tag) => { %>
+                            <span class="text-accent py-1 px-4 bg-[#292929] mr-2 rounded-full text-sm font-semibold">
+                                <%= tag %>
+                            </span>
                         <% }); %>
                     </div>
+                    <!-- TITLE AND INFO -->
+                    <h1 class="text-5xl font-bold mt-2"><%= post.title %></h1>
+                    <p class="mt-2 opacity-50">
+                        <%= post.shortDescription %>
+                    </p>
+
+                    <!-- BODY-->
+                    <div class="grid grid-cols-5 grid-flow-row-dense gap-4 mt-16 min-h-[90vh]">
+
+                        <div class="col-span-1 border-r-4 border-[#292929]">
+                            <img 
+                            class="rounded-full w-20 h-20 object-cover"
+                            src="<%= post.author?.picture?.length > 0 ? post.author?.picture : '' %>">
+                            <h4>
+                                <%= post.author?.name?.length > 0 ? post.author?.name : post.author?.email?.split('@')?.[0] %>
+                            </h4>
+                            <span class="opacity-50 text-sm">
+                                <% let POST_CREATED_AT = new Date(post.createdAt);  %>
+                                <%= POST_CREATED_AT.toLocaleDateString() %> às <%= POST_CREATED_AT.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) %>
+                            </span>
+                        </div>
+                        <div class="col-span-3">
+                            <div class="text-base" id="MARKDOWN_BODY">
+                            <%- post.htmlBody %>
+                            </div>
+                        </div>
+                        <div class="col-span-1">
+                            03
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <div class="rounded-lg py-6 px-10">
+                <h1 class="text-2xl text-accent font-bold mb-2">
+                    Sugestões
+                </h1>
+                <div class="mx-auto container grid grid-cols-1 md:grid-cols-4 gap-2">
+                    <% feed.filter((p) => post.id !== p.id).slice(0,4).forEach((post) => { %>
+                        <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
+                    <% }); %>
                 </div>
             </div>
-        </section>
-    </body>
-</html>
+        </div>
+    </section>
+</body>

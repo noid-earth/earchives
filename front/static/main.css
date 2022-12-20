@@ -10,7 +10,8 @@
 @tailwind utilities;
 
 :root {
-    --accent: #42b883;
+    --old-accent: #42b883;
+    --accent: #008251;
 }
 
 html {

@@ -3,7 +3,7 @@ import axios from "axios";
 const baseURL = 'http://localhost:5000/api';
 
 export class API {
-    static get(path: string) {
+    static get(path: string): Promise<any | any[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 return await axios.get(baseURL + path).then((response) => {

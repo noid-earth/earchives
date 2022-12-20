@@ -12,7 +12,7 @@
     <!-- TEXT BOX -->
     <div class="p-4">
         <!-- tags -->
-        <div class="mt-2 hidden md:block">
+        <div class="mt-2 hidden md:block h-6 overflow-hidden">
             <% post.tags.forEach((tag) => { %>
                 <span class="w-auto text-accent py-1 px-4 bg-[#1d1d1d] mr-0.5 2xl:mr-2 rounded-full text-xs font-semibold">
                     <%= tag %>
@@ -20,7 +20,9 @@
             <% }); %>
         </div>
         <!-- TITLE AND INFO -->
-        <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150 h-36"><%= post.title %></h1>
+        <h1 class="text-3xl font-semibold mt-2 h-36"><%= post.title %></h1>
+
+        <!-- DETAILS -->
         <div class="mt-2 text-sm">
             <span class="opacity-50">
                 <% let POST_CREATED_AT = new Date(post.createdAt);  %>
