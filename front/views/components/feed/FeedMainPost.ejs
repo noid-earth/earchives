@@ -5,7 +5,7 @@
     <% if(post.thumbnailURL?.length > 5) { %>
         <img 
         src="<%= post.thumbnailURL %>" alt="Post thumbnail"
-        class="w-full h-40 md:h-60 lg:h-96 object-cover rounded-lg shadow">
+        class="w-full h-40 md:h-60 lg:h-64 2xl:h-96 object-cover rounded-lg shadow">
     <% } %>
     <!-- TEXT BOX -->
     <div class="p-4">
@@ -32,7 +32,7 @@
             <% } %>
             <% if(showNewestTag && feed[0].id === post.id) { %>
                 <span class="opacity-50 hidden md:inline-block">-</span>
-                <span class="bg-accent px-2 rounded-lg hidden md:inline-block font-semibold">MAIS RECENTE</span>
+                <span class="bg-accent px-2 rounded-lg hidden md:inline-block font-extrabold text-[#292929]">MAIS RECENTE</span>
             <% } %>
         </div>
         

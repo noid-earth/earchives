@@ -6,7 +6,7 @@
     <% if(post.thumbnailURL?.length > 5) { %>
         <img 
         src="<%= post.thumbnailURL %>" alt="Post thumbnail"
-        class="w-full h-40 md:h-48 object-cover rounded-lg shadow"
+        class="w-full h-40 2xl:h-48 object-cover rounded-lg shadow"
         loading="lazy">
     <% } %>
     <!-- TEXT BOX -->
@@ -14,7 +14,7 @@
         <!-- tags -->
         <div class="mt-2 hidden md:block">
             <% post.tags.forEach((tag) => { %>
-                <span class="w-auto text-accent py-1 px-4 bg-[#1d1d1d] mr-2 rounded-full text-xs font-semibold">
+                <span class="w-auto text-accent py-1 px-4 bg-[#1d1d1d] mr-0.5 2xl:mr-2 rounded-full text-xs font-semibold">
                     <%= tag %>
                 </span>
             <% }); %>
