@@ -14,10 +14,7 @@
           <div class="hidden w-full md:block md:w-auto" id="navbar">
             <ul class="flex flex-col p-4 mt-4 border bg-[#292929] rounded-lg md:m-0 m-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm font-medium md:border-0">
               <li>
-                <a href="/posts" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Novidades</a>
-              </li>
-              <li>
-                <a href="/library" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Biblioteca</a>
+                <a href="/posts" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Newsletter</a>
               </li>
               <% if(user) { %>
                 <% if(user.details.administrator) { %>
@@ -38,13 +35,16 @@
           </div>
         </div>
         <div class="h-24 md:h-48 relative text-center md:text-left">
-          <div class=" relative md:absolute bottom-0 md:left-4">
-            <h1 class="text-4xl font-bold"><%= PAGE_TITLE %></h1>
-            <% if(EXTRA_DATA?.ARTICLE_AUTHOR) { %>
-              <span class="opacity-50">Escrito por </span>
-              <% if(EXTRA_DATA?.ARTICLE_AUTHOR?.picture) { %> <img src="<%= EXTRA_DATA?.ARTICLE_AUTHOR?.picture %>" alt="" class="h-6 w-6 rounded-full object-cover inline-block ml-1"> <% } %>
-              <%= EXTRA_DATA?.ARTICLE_AUTHOR?.name %>
-            <% } %>
+          <div class="relative md:absolute bottom-0 md:left-4">
+            <h1 class="text-4xl font-bold mt-12 md:mt-0"><%= PAGE_TITLE %></h1>
+
+            <div class="hidden md:block">
+              <% if(EXTRA_DATA?.ARTICLE_AUTHOR) { %>
+                <span class="opacity-50">Escrito por </span>
+                <% if(EXTRA_DATA?.ARTICLE_AUTHOR?.picture) { %> <img src="<%= EXTRA_DATA?.ARTICLE_AUTHOR?.picture %>" alt="" class="h-6 w-6 rounded-full object-cover inline-block ml-1"> <% } %>
+                <%= EXTRA_DATA?.ARTICLE_AUTHOR?.name %>
+              <% } %>
+            </div>
           </div>
         </div>
     </nav>

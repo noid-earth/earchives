@@ -3,46 +3,52 @@
 
 <body>
     <%- include('../components/Header', {
-        PAGE_TITLE: null,
+        PAGE_TITLE: 'ARTIGOS',
         EXTRA_DATA: {}
     }) %>
 
     <section class="bg-[#292929]">
-        <div class="mx-auto container p-[0.1px] px-10">
-            <%- include('../components/feed/FeedMainPost', { post: feed[0], feed, showNewestTag: true, }) %>
-        </div>
+        <div class="mx-auto container px-10 py-4">
+            <!-- SEARCH -->
+            <form autocomplete="off" class="flex flex-row">   
+                <div class="basis-11/12 lg:basis-4/5">
+                    <input 
+                    type="text" name="q" id="article-search" placeholder="Busque artigos por título, disciplinas, etc..." 
+                    value="<%= searchRaw %>" class="block w-full py-2 px-8 border-transparent border-b-2 border-b-[#1d1d1d] rounded-b focus:ring-transparent focus:border-transparent focus:border-b-[#008251] bg-transparent placeholder-white/50">
+                </div>
 
-        <div class="mx-auto container py-6 px-10">
-            <div class="bg-[#1d1d1d] rounded-lg w-full p-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ">
-                    <% feed.shift(); feed.slice(0, 4).forEach((post) => { %>
-                        <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: false }) %>
-                    <% }); %>
-                </div>
-                <!-- SEE MORE -->
-                <div class="mt-4 text-center">
-                    <div class="mt-4 text-center">
-                        <button onclick="location.href='/posts'" class="text-white focus:outline-none font-medium rounded-lg text-sm px-10 py-2 bg-accent hover:opacity-75 duration-300">
-                            Ver mais
-                        </button>    
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="mx-auto container px-10 pb-10">
-            <h1 class="text-2xl text-accent font-bold mt-6">
-                Artigos mais recentes
-            </h1>
-            <div class="rounded-lg bg-[#1d1d1d] p-4 mt-2">
-                <div class="-mt-3">
-                    <% articles.splice(0, 3).forEach((article, index) => { %>
-                        <%- include('../components/library/ArticlePreview', { article: article }) %>
-                    <% }) %>
-                </div>
-                <div class="mt-4 text-center">
-                    <button onclick="location.href='/library'" class="text-white focus:outline-none font-medium rounded-lg text-sm px-10 py-2 bg-accent hover:opacity-75 duration-300">
-                        Ver mais
+                <div class="basis-1/12 lg:basis-1/5 ml-4">
+                    <button class="block w-full font-medium px-8 py-2 bg-accent hover:opacity-50 duration-300 rounded-lg" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i> <span class="hidden lg:inline-block">Buscar</span>
                     </button>
+                </div>
+            </form>
+
+            <!-- TOOLS AND TIPS -->
+            <div class="rounded-lg outline-dashed outline-red-500 p-4 mt-4">
+
+            </div>
+
+            <!-- RESULTS AND CONTENT -->
+            <div class="rounded-lg bg-[#1d1d1d] px-4 pt-4 pb-1 mt-4">
+                <div class="">
+
+                    <% if(!results.length > 0 && searchQuery?.length > 0) { %>
+                        <div class="text-center">
+                            <span class="opacity-25"><i class="fa-solid fa-ban"></i> Nenhum resultado por esta busca</span>
+                            <div class="inline-flex justify-center items-center w-full">
+                                <hr class="my-8 w-full rounded h-1 bg-[#292929] border-0">
+                                
+                                <span class="text-white/10 absolute left-1/2 px-3 bg-[#1d1d1d] -translate-x-1/2">Outros artigos disponíveis</span>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <%  var displayArticles = results.length > 0 ? results : articles;
+                        displayArticles.forEach((article, index) => { %>
+                        <%- include('../components/library/ArticlePreview', { article: article  }) %>
+                    <% }) %>
+
                 </div>
             </div>
         </div>

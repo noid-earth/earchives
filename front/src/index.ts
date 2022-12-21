@@ -41,7 +41,7 @@ if (app.get("env") === "production") {
 
 // Passport configuration
 const strategy = new Auth0Strategy({
-    domain: 'dev-ju1e3m81p07xg8ze.us.auth0.com',
+    domain: process.env.AUTH0_DOMAIN as string,
     clientID: process.env.AUTH0_CLIENT_ID as string,
     clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
     callbackURL: process.env.AUTH0_CALLBACK_URL as string,

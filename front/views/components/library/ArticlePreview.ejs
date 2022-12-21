@@ -16,45 +16,56 @@
     const SHOW_AFTER_ACTIVE = article.details.showAfter && SHOW_AFTER_COUNTDOWN && SHOW_AFTER_DISTANCE > 0;
 
     const ARTICLE_IS_PRIVATE = article.details.private;
+
+    const OPENABLE_BY_USER = (!SHOW_AFTER_ACTIVE && !ARTICLE_IS_PRIVATE) || (user && (user.details.articleWriter || user.details.administrator))
+
 %>
 
 <article 
-class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-2px] transition-transform duration-500"
->   
-    <div class="grid grid-cols-2 gap-x-4">
-        <div class="">
+class="bg-[#292929] rounded-lg p-4 mb-4 shadow hover:outline-[#008251] outline-none duration-150 <% if(OPENABLE_BY_USER) { %> cursor-pointer <% } %>" 
+<% if(OPENABLE_BY_USER) { %> onclick="location.href='/library/<%= article.id %>'" <% } %>>
+
+    <div class="flex flex-row">
+        <div class="basis-1/4">
             <% if(article.subjects.length > 0) { %>
                 <% article.subjects.forEach((sub) => { %>
-                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold"><%= sub %></span>
+                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold hidden lg:inline-block"><%= sub %></span>
+                    <%  
+                        let MAX_SUB_LENGTH = 13;
+                        sub = sub.length > MAX_SUB_LENGTH ? sub.substring(0, MAX_SUB_LENGTH - 3) + "..." : sub 
+                    %>
+                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold inline-block lg:hidden"><%= sub %></span>
                 <% }) %>
             <% } else { %>
                 <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-center text-sm mr-2 font-semibold">Geral</span>
             <% } %>
         </div>
-        <div class="text-right">
+        <div class="basis-3/4 text-right">
             <!-- SHOW AFTER THIS DATE  -->
             <% if(SHOW_AFTER_ACTIVE) { %>
                 <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50">
-                    <i class="fa-regular fa-calendar"></i> <span class="pl-1">Publicado em <%- SHOW_AFTER_COUNTDOWN %></span>
+                    <i class="fa-regular fa-calendar" title="Não foi publicado ainda"></i><span class="hidden md:inline-block pl-1">Publicado em <%- SHOW_AFTER_COUNTDOWN %></span>
                 </span>
             <% } %>
 
             <!-- OUTDATED TAG -->
-            <% if(article.details.outdated) { %>
-                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50 hidden 2xl:inline-block">
-                    <i class="fa-solid fa-hourglass-end"></i> <span class="pl-1">Desatualizado</span>
+            <% if(article.details.outdated && !SHOW_AFTER_ACTIVE) { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50 hidden md:inline-block">
+                    <i class="fa-solid fa-hourglass-end"></i><span class="pl-1">Desatualizado</span>
                 </span>
             <% } %>
 
             <!-- PRIVATE TAG -->
-            <% if(article.details.private) { %>
-                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50">Indisponível</span>
+            <% if(article.details.private && !SHOW_AFTER_ACTIVE) { %>
+                <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold opacity-50">
+                    <i class="fa-solid fa-ban"></i><span class="hidden md:inline-block pl-1">Indisponível</span>
+                </span>
             <% } %>
 
             <!-- YEARS -->
             <% if(article.years.length > 0) { %>
                 <% article.years.forEach((y) => { %>
-                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold"><%= y %>º Ano</span>
+                    <span class="bg-[#1d1d1d] py-1 px-4 rounded-full text-sm ml-2 text-accent font-semibold"><%= y %>º <span class="hidden md:inline-block">Ano</span></span>
                 <% }) %>
             <% } else { %>
                 <% if(article.subjects.length > 0) { %>
@@ -65,17 +76,18 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-2px] transiti
     </div>
 
     <!-- TITLE -->
-    <h4 class="<% if(!ARTICLE_IS_PRIVATE && !SHOW_AFTER_ACTIVE) { %> cursor-pointer <% } else { %> cursor-default <% } %> font-semibold mt-2" <% if(!ARTICLE_IS_PRIVATE && !SHOW_AFTER_ACTIVE) { %> onclick="location.href='/library/read/<%= article.id %>'" <% } %>>
+
+    <h4 class="font-semibold mt-2">
         <%= article.title %>
     </h4>
 
     <!-- FOOTER -->
     <div class="text-sm grid grid-cols-2 mt-0">
-        <div class="py-1 text-neutral-500 font-medium">
+        <div class="py-1 text-white/10 font-medium">
             <!-- DATE -->
             <span class="">
                 <% let ARTICLE_CREATED_AT = new Date(article.createdAt);  %>
-                <%= ARTICLE_CREATED_AT.toLocaleDateString() %>
+                <i class="fa-solid fa-calendar"></i> <%= ARTICLE_CREATED_AT.toLocaleDateString('en-GB') %>
             </span>
         </div>
 
@@ -90,19 +102,32 @@ class="bg-[#292929] rounded-lg p-4 mt-4 shadow hover:translate-y-[-2px] transiti
         <!-- STATS -->
         <div class="text-right font-semibold">
             <!-- UPVOTES -->
-            <span class="px-2" title="Upvotes">
+            <button data-tooltip-target="article-upvote-tooltip" data-tooltip-placement="bottom" type="button" class="px-2 cursor-default">
                 <i class="fa-solid fa-caret-up opacity-50"></i> <%= numbers.upvote %>
-            </span>
+            </button>
+            <div id="article-upvote-tooltip" role="tooltip" class="hidden md:inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium bg-[#1d1d1d] rounded-lg shadow-sm opacity-0 tooltip">
+                Upvotes
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+            
 
             <!-- DOWNVOTES -->
-            <span class="px-2" title="Downvotes">
-                <i class="fa-solid fa-caret-down opacity-50"></i> <%= numbers.downvote %>
-            </span>
+            <button data-tooltip-target="article-downvote-tooltip" data-tooltip-placement="bottom" type="button" class="px-2 cursor-default">
+                <i class="fa-solid fa-caret-up opacity-50"></i> <%= numbers.downvote %>
+            </button>
+            <div id="article-downvote-tooltip" role="tooltip" class="hidden md:inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium bg-[#1d1d1d] rounded-lg shadow-sm opacity-0 tooltip">
+                Downvotes
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
 
             <!-- FAVORITES -->
-            <span class="px-2" title="Favoritos">
-                <i class="fa-solid fa-star opacity-50"></i> <%= numbers.favorite %>
-            </span>
+            <button data-tooltip-target="article-favorite-tooltip" data-tooltip-placement="bottom" type="button" class="px-2 cursor-default">
+                <i class="fa-solid fa-caret-up opacity-50"></i> <%= numbers.favorite %>
+            </button>
+            <div id="article-favorite-tooltip" role="tooltip" class="hidden md:inline-block absolute invisible z-10 py-2 px-2 text-sm font-medium bg-[#1d1d1d] rounded-lg shadow-sm opacity-0 tooltip">
+                Favoritos
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
         </div>
     </div>
 </article>

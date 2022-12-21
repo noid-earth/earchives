@@ -31,6 +31,11 @@
                 <div class="bg-[#1d1d1d] rounded-lg shadow p-4 col-span-4 ">
                     <!-- CONTENT -->
                     <div id="ARTICLE_CONTENT" class="px-4">
+
+                        <code style="line-height: 2rem;">
+                            <%= JSON.stringify(article, null, 2) %>
+                        </code>
+
                         <%- article.body.html %>
                     </div>
 

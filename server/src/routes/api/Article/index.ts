@@ -27,6 +27,14 @@ router.post('/new', access, async (req, res) => {
         toHtml: dompurify.sanitize(marked(raw.body.markdown))
     }
 
+    let showAfter = raw.details?.showAfter ?? null;
+
+    if(showAfter) {
+        if(['object', 'string'].includes(typeof showAfter)) {
+            showAfter = new Date(showAfter);
+        }
+    }
+
     let article: Article = {
         id: id,
         title: raw.title,
@@ -42,7 +50,7 @@ router.post('/new', access, async (req, res) => {
         years: [...raw.years],
         attachments: [...raw.attachments],
         details: {
-            showAfter: typeof raw.details.showAfter === 'object' ? raw.details.showAfter : null,
+            showAfter: showAfter,
             private: raw.details.private,
             outdated: raw.details.outdated,
         }
