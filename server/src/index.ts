@@ -15,6 +15,10 @@ import Feed from "./routes/api/Feed";
 import Article from "./routes/api/Article";
 import User from "./routes/api/User";
 
+app.get('/api/status', (req, res) => {
+    return res.send(true);
+});
+
 app.use("/api/feed", Feed);
 app.use("/api/article", Article);
 app.use("/api/user", User);
