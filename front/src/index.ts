@@ -4,12 +4,17 @@ import cors from "cors";
 import dotenv from "dotenv";
 import ejs from "ejs";
 import path from "path";
+import morgan from "morgan";
+
 import { API } from "./services/API";
+import { Middleware } from "./services/Middlewares";
 
 dotenv.config();
 const app = express();
 
 // Settings
+app.set('trust proxy', 1);
+
 app.set('view engine', ejs);
 app.set('views', path.join(__dirname, '../views'))
 
@@ -21,6 +26,8 @@ app.use(cors());
 app.use('/static', express.static(path.join(__dirname, '../static')))
 app.use('/branding', express.static(path.join(__dirname, '../../branding')));
 
+app.use(morgan('common'))
+
 // Authentication
 import session from "express-session";
 import passport from "passport";
@@ -29,9 +36,10 @@ import Auth0Strategy from "passport-auth0";
 // Session configuration
 const sessionConfig = {
     secret: process.env.SESSION_SECRET as string,
-    cookie: {},
-    resave: false,
-    saveUninitialized: false
+    cookie: { secure: false },
+    resave: true,
+    saveUninitialized: true,
+    maxAge: 120000,
 };
     
 if (app.get("env") === "production") {
@@ -75,9 +83,17 @@ import Control from "./routes/Control";
 import Feed from "./routes/Feed";
 import Library from "./routes/Library";
 
+
+app.get('/error', (req, res) => {
+    res.send(req.query.message);
+    setTimeout(() => res.redirect('/'), 10000);
+});
+
+app.use(Middleware.Global())
+
 app.use("/", Main);
 app.use("/control", Control);
-app.use("/post", Feed);
+app.use("/newsletter", Feed);
 app.use('/library', Library);
 
 // Host

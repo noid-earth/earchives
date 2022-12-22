@@ -1,19 +1,21 @@
-import bodyParser from "body-parser";
 import express from "express";
 import { API } from "../services/API";
 import { marked } from "marked";
 import createDomPurify from "dompurify";
 import { JSDOM } from "jsdom";
-import Middlewares from "../services/Middlewares";
+
+//import Middlewares from "../services/Middlewares";
 
 const dompurify = createDomPurify(new JSDOM().window as any);
 const router = express.Router();
 
+/*
 router.get('/', Middlewares.secured({perms: ['administrator']}), async (req, res) => {
     let feed: any[] = await API.get('/feed/list') as any;
 
     res.render('pages/Control.ejs', {
-        user: await API.user((req.user as any).id),
+        //@ts-ignore
+        user: req.session?.passport?.user,
         feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     });
 });
@@ -45,5 +47,6 @@ router.post('/feed/new', Middlewares.secured({perms: ['feedWriter']}), async (re
     
     res.redirect('/control');
 });
+*/
 
 export default router;

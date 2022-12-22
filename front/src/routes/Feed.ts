@@ -10,8 +10,19 @@ router.get('/:postId', async (req, res) => {
     res.render('pages/Post.ejs', {
         post: post,
         feed: shuffle(feed),
-        user: await API.user((req.user as any)?.id),
+        //@ts-ignore
+        user: req.session?.passport?.user,
     });
+});
+
+router.get('/', async (req, res) => {
+    let feed: any[] = await API.get('/feed/list') ?? [];
+    
+    res.render('pages/Feed.ejs', {
+        //@ts-ignore
+        user: req.session?.passport?.user,
+        feed: feed?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    })
 });
 
 function shuffle(array: any[]) {

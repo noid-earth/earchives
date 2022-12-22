@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import querystring from "querystring";
-import { API } from "../services/API";
+import { API, Cache } from "../services/API";
 
 const router = express.Router();
 
@@ -45,7 +45,8 @@ router.get('/', async (req, res) => {
     }
 
     res.render('pages/Home.ejs', {
-        user: await API.user((req.user as any)?.id),
+        //@ts-ignore
+        user: req.session?.passport?.user,
         articles: articles?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
         searchRaw: searchRaw,
         searchQuery: searchQuery,
@@ -55,38 +56,30 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.get('/posts', async (req, res) => {
-    let feed: any[] = await API.get('/feed/list') ?? [];
-    
-    res.render('pages/Feed.ejs', {
-        user: await API.user((req.user as any)?.id),
-        feed: feed?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    })
-});
-
 // Authentication
 router.get("/login", passport.authenticate("auth0", {
-      scope: "openid email profile"
+    scope: "openid email profile",
 }), (req, res) => {
-      res.redirect("/");
-    }
-  );
+    res.redirect('/');
+});
 
 router.get("/callback", (req, res, next) => {
     passport.authenticate("auth0", (err, user, info) => {
         if (err) {
             return next(err);
         }
+
         if (!user) {
             return res.redirect("/login");
         }
+
         req.logIn(user, (err) => {
             if (err) {
                 return next(err);
             }
-            const returnTo = (req.session as any).returnTo;
-            delete (req.session as any).returnTo;
-            res.redirect(returnTo || "/");
+
+            const returnTo = Cache.get(req.ip)?.lastSeen?.path;
+            return res.redirect(returnTo || "/");
         });
     })(req, res, next);
 });
