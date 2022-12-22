@@ -63,3 +63,23 @@ code {
     padding-top: 1.2rem;
     margin-top: 1rem;
 }
+
+#HEADER {
+    background-image: url(/branding/header.png);
+    background-position: 0px 0px;
+    background-repeat: repeat-x;
+    animation: animatedBackground 100s linear infinite alternate;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+@keyframes animatedBackground {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 0 100%;
+    }
+  }
+
+  

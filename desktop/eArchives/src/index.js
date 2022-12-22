@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Tray, Menu } = require('electron');
+require('update-electron-app')()
+const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const DiscordRPC = require('discord-rpc');
 
@@ -7,7 +8,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 let mainWindow;
-let isQuiting = false;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -26,37 +26,7 @@ const createWindow = () => {
   mainWindow.maximize();
 
   mainWindow.on('close', (event) => {
-    if(!isQuiting){
-      event.preventDefault();
-      mainWindow.hide();
-    }
-  
-    return false;
-  });
-
-  const tray = new Tray(path.resolve(__dirname, '../build/icon.ico'));
-  const trayMenu = [
-    {
-      label: 'eArchives',
-      click: function() {
-        mainWindow.show();
-      }
-    },
-    {
-      label: 'Fechar',
-      click: function() {
-        isQuiting = true;
-        app.quit();
-      }
-    }
-  ];
-
-  const trayCtxMenu = Menu.buildFromTemplate(trayMenu);
-  tray.setContextMenu(trayCtxMenu);
-  tray.setTitle('eArchives');
-
-  tray.on('double-click', () => {
-    mainWindow.show();
+    app.quit();
   });
 };
 

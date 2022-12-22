@@ -1,4 +1,5 @@
-<div class="container mx-auto">
+<div id="HEADER">
+  <div class="container mx-auto">
     <nav class="py-2.5 rounded-lg px-4 md:px-10 2xl:px-0">
         <div class="flex flex-wrap items-center justify-between">
     
@@ -12,22 +13,22 @@
           </button>
     
           <div class="hidden w-full md:block md:w-auto" id="navbar">
-            <ul class="flex flex-col p-4 mt-4 border bg-[#292929] rounded-lg md:m-0 m-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm font-medium md:border-0">
+            <ul class="flex flex-col p-4 mt-4 border-2 border-[#1a1a1a] bg-[#292929] rounded-lg md:m-0 m-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm font-medium md:border-0">
               <li>
-                <a href="/posts" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Newsletter</a>
+                <a href="/posts" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Newsletter</a>
               </li>
               <% if(user) { %>
                 <% if(user.details.administrator) { %>
                   <li>
-                    <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
+                    <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
                   </li>
                 <% } %>
                 <li>
-                  <a href="/logout" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-[#ED4245]">Logout</a>
+                  <a href="/logout" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-[#ED4245]">Logout</a>
                 </li>
               <% } else { %>
                 <li>
-                  <a href="/login" class="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Login</a>
+                  <a href="/login" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Login</a>
                 </li>
               <% } %>
               </li>
@@ -48,4 +49,5 @@
           </div>
         </div>
     </nav>
+  </div>
 </div>

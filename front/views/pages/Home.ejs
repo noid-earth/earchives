@@ -17,6 +17,8 @@
             {name: "Aplicações Informáticas"}, 
             {name: "Educação Física"}
         ];
+
+        const USER_WRITER = user && user.details.articleWriter;
     %>
 
     <section class="bg-[#292929]">
@@ -26,13 +28,20 @@
                 <div class="basis-11/12 lg:basis-4/5">
                     <input 
                     type="text" name="q" id="article-search" placeholder="Busque artigos por título, disciplinas, etc..." 
-                    value="<%= searchRaw %>" class="block w-full py-2 px-8 border-transparent border-b-2 border-b-[#1d1d1d] rounded-b focus:ring-transparent focus:border-transparent focus:border-b-[#008251] bg-transparent placeholder-white/50">
+                    value="<%= searchRaw %>" class="block w-full py-2 md:px-8 border-transparent border-b-2 border-b-[#1d1d1d] rounded-b focus:ring-transparent focus:border-transparent focus:border-b-[#008251] bg-transparent placeholder-white/50">
                 </div>
 
-                <div class="basis-1/12 lg:basis-1/5 ml-4">
-                    <button class="block w-full font-medium px-8 py-2 bg-accent hover:opacity-50 duration-300 rounded-lg" type="submit">
-                        <i class="fa-solid fa-magnifying-glass"></i> <span class="hidden lg:inline-block">Buscar</span>
+                <div class="basis-1/12 lg:basis-1/5 ml-4 <% if(USER_WRITER) { %> xl:grid grid-cols-1 xl:grid-cols-2 gap-2 <% } %>">
+                    <button class="w-full block font-medium px-4 py-2 bg-accent hover:opacity-50 duration-300 rounded-lg" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i> <span class="hidden xl:inline-block">Buscar</span>
                     </button>
+
+                    <% if(USER_WRITER) { %>
+                        <button onclick="location.href='/control'" type="button"
+                        class="font-medium px-4 py-2 bg-accent hover:opacity-50 duration-300 rounded-lg hidden xl:inline-block">
+                            Novo <i class="fa-solid fa-plus"></i>
+                        </button>
+                    <% } %>
                 </div>
             </form>
 
@@ -61,26 +70,28 @@
                         <% }); %>
                     </ul>
                 </div>
-                <span class="inline-block px-2 text-[#1d1d1d]">
+                <span class="hidden xl:inline-block px-2 text-[#1d1d1d]">
                     |
                 </span>
 
-                <span class="inline-block pr-2 opacity-50">
+                <span class="hidden xl:inline-block pr-2 opacity-50">
                     dicas
                 </span>
-                <span class="rounded-lg inline-block px-4 py-1 bg-[#1d1d1d] border-2 border-[#1a1a1a] text-white/50">
-                    <% if(searchYear) {%>
-                        <span class="text-accent">A buscar artigos do <%= searchYear %>º Ano</span>
-                    <% } else { %>
-                        ano:12 | Busca por artigos do 12º Ano
-                    <% } %>
-                </span>
-                <span class="rounded-lg inline-block px-4 py-1 bg-[#1d1d1d] border-2 border-[#1a1a1a] text-white/50">
-                    <% if(searchSubject) { %>
-                        <span class="text-accent">A buscar artigos de <%= searchSubject %></span>
-                    <% } else { %>
-                        disciplina:Filosofia | Busca por artigos de Filosofia
-                    <% } %>
+                <span class="hidden md:inline-block mt-2">
+                    <span class="rounded-lg inline-block px-4 py-1 bg-[#1d1d1d] border-2 border-[#1a1a1a] text-white/50">
+                        <% if(searchYear) {%>
+                            <span class="text-accent">A buscar artigos do <%= searchYear %>º Ano</span>
+                        <% } else { %>
+                            ano:12 | Busca por artigos do 12º Ano
+                        <% } %>
+                    </span>
+                    <span class="rounded-lg inline-block px-4 py-1 bg-[#1d1d1d] border-2 border-[#1a1a1a] text-white/50">
+                        <% if(searchSubject) { %>
+                            <span class="text-accent">A buscar artigos de <%= searchSubject %></span>
+                        <% } else { %>
+                            disciplina:Filosofia | Busca por artigos de Filosofia
+                        <% } %>
+                    </span>
                 </span>
             </div>
 
@@ -94,7 +105,7 @@
                             <div class="inline-flex justify-center items-center w-full">
                                 <hr class="my-8 w-full rounded h-1 bg-[#292929] border-0">
                                 
-                                <span class="text-white/10 absolute left-1/2 px-3 bg-[#1d1d1d] -translate-x-1/2">Outros artigos disponíveis</span>
+                                <span class="text-white/10 hidden md:block absolute left-1/2 px-3 bg-[#1d1d1d] -translate-x-1/2">Outros artigos disponíveis</span>
                             </div>
                         </div>
                     <% } %>
