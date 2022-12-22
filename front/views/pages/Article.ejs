@@ -4,37 +4,72 @@
 <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
 
 <%
-
     const STATS = {
         upvote: article.history.filter((h) => h.type === 'UPVOTE').length,
         downvote: article.history.filter((h) => h.type === 'DOWNVOTE').length,
         favorite: article.history.filter((h) => h.type === 'FAVORITE').length,
     }
 
-    const READLATER_URL = `/library/readlater/${article.id}/${user.id}`;
-    const READLATER_ADDED = user.history?.find((h) => h.refId === article.id && h.type === 'READLATER');
+    const READLATER_ADDED = user && user?.history?.find((h) => h.refId === article.id && h.type === 'READLATER');
+    const READLATER_URL = user ? `/library/readlater/${article.id}/${user?.id}${(READLATER_ADDED ? '?remove=true' : '')}` : `/login`;
 
     const OUTDATED_URL = `/library/outdated/${article.id}/${!article.details.outdated}`;
+
+    const now = new Date().getTime();
+    const SHOW_AFTER_TIME = article.details.showAfter ? new Date(article.details.showAfter).getTime() : null;
+    const SHOW_AFTER_DISTANCE = SHOW_AFTER_TIME - now;
+
+    const SHOW_AFTER_DAYS = Math.floor(SHOW_AFTER_DISTANCE / (1000 * 60 * 60 * 24));
+    const SHOW_AFTER_HOURS = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const SHOW_AFTER_MINUTES = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60)) / (1000 * 60));
+
+    const SHOW_AFTER_COUNTDOWN = `
+    ${SHOW_AFTER_DAYS > 0 ? SHOW_AFTER_DAYS + ` dia${SHOW_AFTER_DAYS > 1 ? 's':''}` : ''} 
+    ${SHOW_AFTER_HOURS > 0 ? SHOW_AFTER_HOURS + ` hora${SHOW_AFTER_HOURS > 1 ? 's':''}` : ''}
+    ${SHOW_AFTER_MINUTES > 0 ? SHOW_AFTER_MINUTES + ` min` : ''}
+    `;
+
+    const SHOW_AFTER_ACTIVE = article.details.showAfter && SHOW_AFTER_COUNTDOWN && SHOW_AFTER_DISTANCE > 0;
 %>
 
 <body>
     <%- include('../components/Header', {
         PAGE_TITLE: article.title, 
         EXTRA_DATA: {
-            ARTICLE_AUTHOR: article.author
+            ARTICLE_AUTHOR: article.author,
+            NEW_ARTICLE: (SHOW_AFTER_TIME - now) < 10 * 60 * 1000,
         } 
     }) %>
 
+    <% if((SHOW_AFTER_TIME - now) < 10 * 60 * 1000) { %>
+        <script src="/static/confetti.js"></script>
+
+        <script>
+            setTimeout(() => {
+                confetti.start();
+
+                setTimeout(() => {
+                    confetti.stop();
+                }, 2000);
+            }, 1000);
+        </script>
+    <% } %>
+
     <section class="bg-[#292929] min-h-[100vh]">
         <div class="mx-auto container">
-            <div class="grid grid-cols-5 gap-4 p-4">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-y-4 lg:gap-y-0 lg:gap-x-4 p-4">
+                <!-- MAIN CONTENT-->
                 <div class="bg-[#1d1d1d] rounded-lg shadow p-4 col-span-4 ">
                     <!-- CONTENT -->
-                    <div id="ARTICLE_CONTENT" class="px-4">
+                    <div id="ARTICLE_CONTENT" class="px-4 font-normal">
+                        
+                        <p>
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione molestias dolores fuga aliquid nisi aperiam officia doloribus reprehenderit vel soluta amet sint ad reiciendis repellendus et deserunt, nemo voluptas. Ipsam quos magnam aspernatur esse aliquam voluptatum dolore earum perspiciatis expedita quod nesciunt praesentium laborum at sunt deleniti temporibus eaque mollitia dolores, placeat nam ipsa obcaecati ullam libero? Quia omnis placeat numquam sed delectus earum esse aperiam, ex expedita doloremque explicabo molestias facilis eaque ad maxime neque, eius cupiditate, quis mollitia dolorem odit dignissimos! Quisquam nesciunt at minima, perferendis similique rerum. Nisi autem numquam dolorem totam quis eligendi doloribus illo dignissimos excepturi, perferendis alias, nostrum a dolores possimus eum. Obcaecati ab assumenda nulla magnam tenetur animi! Maxime, iste commodi illo modi possimus doloribus similique dolorem!
+                        </p>
 
-                        <code style="line-height: 2rem;">
-                            <%= JSON.stringify(article, null, 2) %>
-                        </code>
+                        <p>
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione molestias dolores fuga aliquid nisi aperiam officia doloribus reprehenderit vel soluta amet sint ad reiciendis repellendus et deserunt, nemo voluptas. Ipsam quos magnam aspernatur esse aliquam voluptatum dolore earum perspiciatis expedita quod nesciunt praesentium laborum at sunt deleniti temporibus eaque mollitia dolores, placeat nam ipsa obcaecati ullam libero? Quia omnis placeat numquam sed delectus earum esse aperiam, ex expedita doloremque explicabo molestias facilis eaque ad maxime neque, eius cupiditate, quis mollitia dolorem odit dignissimos! Quisquam nesciunt at minima, perferendis similique rerum. Nisi autem numquam dolorem totam quis eligendi doloribus illo dignissimos excepturi, perferendis alias, nostrum a dolores possimus eum. Obcaecati ab assumenda nulla magnam tenetur animi! Maxime, iste commodi illo modi possimus doloribus similique dolorem!
+                        </p>
 
                         <%- article.body.html %>
                     </div>
@@ -57,70 +92,95 @@
                         <div class="outline-dashed outline-2 outline-[#1d1d1d] rounded-lg"> </div>
                     </div>
                 </div>
-                <div class="bg-[#1d1d1d] rounded-lg shadow p-4">
-                    <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" onclick="location.href='/library'">
-                        <i class="fa-solid fa-arrow-right-to-bracket fa-flip-both opacity-50"></i> Voltar
+
+                <!-- SIDE BAR -->
+                <div class="bg-[#1d1d1d] rounded-lg shadow p-4 w-full lg:w-auto">
+                    <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" onclick="location.href='<%= READLATER_URL %>'">
+                        <i class="<%= (READLATER_ADDED ? 'fa-solid' : 'fa-regular') %> fa-bookmark opacity-50"></i> Ler depois
                     </button>
-                    
-                    <% if(user) { %>
-                        <form action="<%= READLATER_URL %><%= (READLATER_ADDED ? '?remove=true' : '') %>" method="post">
-                            <button class="mt-2 w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
-                                <i class="<%= (READLATER_ADDED ? 'fa-solid' : 'fa-regular') %> fa-bookmark opacity-50"></i> Ler depois
-                            </button>
-                        </form>
-                    <% } else { %>
-                        <button 
-                        class="mt-2 w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300"
-                        onclick="alert('Você deve estar logado para fazer isto!')"
-                        title="Você deve estar logado para fazer isto!"
-                        type="submit">
-                            <i class="fa-regular fa-bookmark opacity-50"></i> Ler depois
-                        </button>
-                    <% } %>
 
                     <hr class="mt-4 h-1 bg-[#292929] rounded border-0">
 
-                    <div class="text-center font-semibold py-4">
+                    <div class="text-center font-semibold grid grid-cols-3 gap-x-2 py-4">
                         <!-- UPVOTES -->
-                        <span class="px-4" title="Upvotes">
+                        <span class="bg-[#292929] hover:opacity-75 duration-300 py-2 rounded-lg cursor-pointer" title="Upvotes" onclick="location.href='<%= user ? `/library/upvote/${article.id}` : `/login` %>'">
                             <i class="fa-solid fa-caret-up opacity-50 text-accent"></i> <%= STATS.upvote %>
                         </span>
             
                         <!-- DOWNVOTES -->
-                        <span class="px-4" title="Downvotes">
+                        <span class="bg-[#292929] hover:opacity-75 duration-300 py-2 rounded-lg cursor-pointer" title="Downvotes" onclick="location.href='<%= user ? `/library/downvote/${article.id}` : `/login` %>'">
                             <i class="fa-solid fa-caret-down opacity-50 text-[#ED4245]"></i> <%= STATS.downvote %>
                         </span>
             
                         <!-- FAVORITES -->
-                        <span class="px-4" title="Favoritos">
+                        <button class="bg-[#292929] hover:opacity-75 duration-300 py-2 rounded-lg cursor-pointer" title="Favoritos" onclick="location.href='<%= user ? `/library/favorite/${article.id}` : `/login` %>'">
                             <i class="fa-solid fa-star opacity-50 "></i> <%= STATS.favorite %>
-                        </span>
+                        </button>
                     </div>
 
                     <hr class="h-1 bg-[#292929] rounded border-0">
 
-                    <% if(user && user?.details?.articleWriter) { %>
-                        <form class="mt-4" action="<%= OUTDATED_URL %>" method="post">
-                            <% if(article.details.outdated) { %>
-                                <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
-                                    Atualizado
-                                </button>
-                            <% } else { %>
-                                <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
-                                    Desatualizado
-                                </button>
-                            <% } %>
-                        </form>
+                    <div class="my-4 opacity-75 text-sm">
+                        <% if(article.subjects.length > 0) { %>
+                            <% article.subjects.forEach((sub) => { %>
+                                <span class="bg-[#292929] py-1 rounded-full text-center font-semibold mb-2 inline-block w-full"><%= sub %></span>
+                            <% }) %>
+                        <% } else { %>
+                            <span class="bg-[#292929] py-1 rounded-full text-center font-semibold mb-2 inline-block w-full">Geral</span>
+                        <% } %>
 
-                        <form action="/library/delete/<%= article.id %>" method="post">
-                            <button class="mt-2 w-full bg-[#ED4245]/80 rounded-lg py-2 hover:opacity-75 duration-300" type="submit">
-                                Apagar
-                            </button>
-                        </form>
+                        <% if(SHOW_AFTER_ACTIVE) { %>
+                            <span class="bg-[#292929] py-1 rounded-full text-accent font-semibold mb-2 inline-block w-full text-center">
+                                <i class="fa-regular fa-calendar opacity-50"></i> <%- SHOW_AFTER_COUNTDOWN %>
+                            </span>
+                        <% } %>
+
+                        <% if(article.details.outdated) { %>
+                            <span class="bg-[#292929] py-1 rounded-full text-accent font-semibold mb-2 inline-block w-full text-center">
+                                <i class="fa-solid fa-hourglass-end opacity-50"></i> Desatualizado
+                            </span>
+                        <% } %>
+
+                        <% if(article.details.private) { %>
+                            <span class="bg-[#292929] py-1 rounded-full text-accent font-semibold mb-2 inline-block w-full text-center">
+                                <i class="fa-solid fa-ban opacity-50"></i> Indisponível
+                            </span>
+                        <% } %>
+
+                        <% if(article.years.length > 0) { %>
+                            <% article.years.forEach((y) => { %>
+                                <span class="bg-[#292929] py-1 rounded-full font-semibold mb-2 inline-block w-full text-center"><%= y %>º <span class="hidden md:inline-block">Ano</span></span>
+                            <% }) %>
+                        <% } else { %>
+                            <% if(article.subjects.length > 0) { %>
+                                <span class="bg-[#292929] py-1 rounded-full font-semibold mb-2 inline-block w-full text-center">Geral</span>
+                            <% } %>
+                        <% } %>
+                    </div>
+
+                    <hr class="h-1 bg-[#292929] rounded border-0">
+
+                    <button class="w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300 mt-4" onclick="location.href='/'">
+                        <i class="fa-solid fa-arrow-right-to-bracket fa-flip-both opacity-50"></i> Voltar
+                    </button>
+
+                    <% if(user && user?.details?.articleWriter) { %>
+                        <button class="mt-2 w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="button" onclick="location.href='<%= OUTDATED_URL %>'">
+                            <i class="fa-solid fa-clock opacity-50"></i>
+
+                            <% if(article.details.outdated) { %>
+                                Atualizado
+                            <% } else { %>
+                                Desatualizado
+                            <% } %>
+                        </button>
+
+                        <button class="mt-2 w-full bg-[#ED4245]/80 rounded-lg py-2 hover:opacity-75 duration-300" type="button" onclick="location.href='/library/delete/<%= article.id %>'">
+                            <i class="fa-solid fa-trash opacity-50"></i> Apagar
+                        </button>
                         <hr class="mt-4 h-1 bg-[#292929] rounded border-0">
                     <% } %>
                 </div>
-                
             </div>
         </div>
     </section>

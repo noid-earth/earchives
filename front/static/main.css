@@ -14,6 +14,10 @@
     --accent: #008251;
 }
 
+*:focus {
+    outline: none;
+}
+
 html {
     scroll-behavior: smooth;
     font-family: 'Poppins', sans-serif;
@@ -64,13 +68,17 @@ code {
     margin-top: 1rem;
 }
 
+#ARTICLE_CONTENT p {
+    text-indent: 2rem;
+    line-height: 1.8rem;
+}
+
 #HEADER {
     background-image: url(/branding/header.png);
     background-position: 0px 0px;
     background-repeat: repeat-x;
     animation: animatedBackground 100s linear infinite alternate;
     background-size: cover;
-    background-color: rgba(0, 0, 0, 0.4);
 }
 
 @keyframes animatedBackground {

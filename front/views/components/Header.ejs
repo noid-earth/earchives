@@ -15,20 +15,20 @@
           <div class="hidden w-full md:block md:w-auto" id="navbar">
             <ul class="flex flex-col p-4 mt-4 border-2 border-[#1a1a1a] bg-[#292929] rounded-lg md:m-0 m-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm font-medium md:border-0">
               <li>
-                <a href="/posts" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75">Newsletter</a>
+                <a href="/newsletter" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75">Newsletter</a>
               </li>
               <% if(user) { %>
                 <% if(user.details.administrator) { %>
                   <li>
-                    <a href="/control" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
+                    <a href="/control" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
                   </li>
                 <% } %>
                 <li>
-                  <a href="/logout" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-[#ED4245]">Logout</a>
+                  <a href="/logout" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-[#ED4245]">Logout</a>
                 </li>
               <% } else { %>
                 <li>
-                  <a href="/login" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:p-0 md:hover:opacity-75 text-accent">Login</a>
+                  <a href="/login" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">Login</a>
                 </li>
               <% } %>
               </li>
@@ -39,13 +39,17 @@
           <div class="relative md:absolute bottom-0 md:left-4">
             <h1 class="text-4xl font-bold mt-12 md:mt-0"><%= PAGE_TITLE %></h1>
 
-            <div class="hidden md:block">
+            <div class="hidden md:inline-block bg-[#1d1d1d] rounded-full px-2">
               <% if(EXTRA_DATA?.ARTICLE_AUTHOR) { %>
                 <span class="opacity-50">Escrito por </span>
                 <% if(EXTRA_DATA?.ARTICLE_AUTHOR?.picture) { %> <img src="<%= EXTRA_DATA?.ARTICLE_AUTHOR?.picture %>" alt="" class="h-6 w-6 rounded-full object-cover inline-block ml-1"> <% } %>
                 <%= EXTRA_DATA?.ARTICLE_AUTHOR?.name %>
               <% } %>
             </div>
+
+            <% if(EXTRA_DATA?.NEW_ARTICLE) { %>
+              <span class="bg-accent px-2 rounded-full text-sm ml-1 hidden md:inline-block">Novo</span>
+            <% } %>
           </div>
         </div>
     </nav>
