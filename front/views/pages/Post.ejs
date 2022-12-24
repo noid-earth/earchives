@@ -10,13 +10,13 @@
     }) %>
 
     <section class="bg-[#292929]">
-        <div class="mx-auto container p-[0.1px] px-10">
-            <article class="bg-[#1d1d1d] rounded-lg mt-[-50px] md:mt-[-75px] mb-6">
+        <div class="mx-auto container p-[0.1px] px-4">
+            <article class="bg-[#1d1d1d] rounded-lg mt-[-75px] md:mt-[-50px] mb-6">
                 <!-- IMAGE -->
                 <% if(post.thumbnailURL?.length > 5) { %>
                     <img 
                     src="<%= post.thumbnailURL %>" alt="Post thumbnail"
-                    class="w-full h-46 md:h-[30rem] object-cover rounded-lg shadow">
+                    class="w-full h-40 md:h-48 lg:h-64 2xl:h-96 object-cover rounded-lg shadow">
                 <% } %>
 
                 <!-- TEXT BOX -->
@@ -75,3 +75,5 @@
         </div>
     </section>
 </body>
+
+<%- include('../components/Footer') %>

@@ -111,12 +111,19 @@
                     <% } %>
 
                     <%  var displayArticles = results.length > 0 ? results : articles;
-                        displayArticles.forEach((article, index) => { %>
+                        (displayArticles ?? []).forEach((article, index) => { %>
                         <%- include('../components/library/ArticlePreview', { article: article  }) %>
                     <% }) %>
-
+                    
+                    <% if(!displayArticles) { %>
+                        <article class="bg-[#292929] rounded-lg p-4 mb-4 shadow">
+                            <b>API</b> está indisponível.
+                        </article>
+                    <% } %>
                 </div>
             </div>
         </div>
     </section>
 </body>
+
+<%- include('../components/Footer') %>

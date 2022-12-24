@@ -1,0 +1,121 @@
+<%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
+
+<body>
+    <%- include('../components/Header', {
+        PAGE_TITLE: 'Perfil',
+        EXTRA_DATA: {}
+    }) %>
+
+    <% 
+        function trimString(string, length) {
+            return string.length > length ? string.substring(0, length) + '...' : string;
+        };
+    %>
+
+    <section class="bg-[#292929]">
+        <div class="mx-auto container px-4 py-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4">
+                <div class="bg-[#1d1d1d] rounded-lg p-4">
+                    <span class="opacity-50 block">
+                        Ler mais tarde
+                    </span>
+
+                    <% 
+                        let HISTORY_READLATER = user.history.filter((h) => h.type === 'READLATER');
+
+                        library.filter((article) => HISTORY_READLATER.find((h) => h.refId == article.id)).forEach((readlater) => {
+                            let READLATER = HISTORY_READLATER.find((h) => h.refId == readlater.id);
+                    %>
+                        <a href="/library/<%= readlater.id %>">
+                            <div class="bg-[#292929] p-4 rounded-lg mt-2 hover:opacity-75 duration-300">
+                                <span>
+                                    <%
+                                        let MAX_SUB_LENGTH = 20;
+                                        let title = readlater.title;
+                                        title = title.length > MAX_SUB_LENGTH ? title.substring(0, MAX_SUB_LENGTH - 3) + "..." : title;
+                                    %>
+
+                                    <%= title %>
+                                </span>
+                                <span class="block float-none xl:inline-block xl:float-right opacity-5">
+                                    <%= new Date(READLATER.date).toLocaleDateString('en-GB') %> 
+                                    <%= new Date(READLATER.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) %>
+                                </span>
+                            </div>
+                        </a>
+                    <% }) %>    
+                </div>
+
+                <div class="bg-[#1d1d1d] rounded-lg p-4">
+                    <span class="opacity-50">
+                        Favoritos
+                    </span>
+
+                    <% 
+                        let HISTORY_FAVORITE = user.history.filter((h) => h.type === 'FAVORITE');
+
+                        library.filter((article) => HISTORY_FAVORITE.find((h) => h.refId == article.id)).forEach((favorite) => {
+                            let FAVORITE = HISTORY_FAVORITE.find((h) => h.refId == favorite.id);
+                    %>
+                        <a href="/library/<%= favorite.id %>">
+                            <div class="bg-[#292929] p-4 rounded-lg mt-2 hover:opacity-75 duration-300">
+                                <span>
+                                    <%= trimString(favorite.title, 20) %>
+                                </span>
+                                <span class="block float-none xl:inline-block xl:float-right opacity-5">
+                                    <%= new Date(FAVORITE.date).toLocaleDateString('en-GB') %> 
+                                    <%= new Date(FAVORITE.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) %>
+                                </span>
+                            </div>
+                        </a>
+                    <% }); %>
+                </div>
+                
+                <div class="bg-[#1d1d1d] rounded-lg p-4">
+                    <span class="opacity-50 block">
+                        Detalhes
+                    </span>
+
+                    <div class="bg-[#292929] rounded-lg my-2 h-28 p-4">
+                        <img src="<%= user.picture %>" alt="Foto de perfil" class="w-20 h-auto rounded-full float-left object-cover">
+                        <h3 class="float-right text-right w-1/2"><%= user.name.length > 0 ? trimString(user.name, 22) : 'Sem nome' %></h3>
+                    </div>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">Conta criada</span> <span class="float-right"><%= new Date(user.createdAt).toLocaleDateString('en-GB') %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">ID</span> <span class="float-right"><%= user.id %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">AUTH0 ID</span> <span class="float-right"><%= user.providerId.replace('auth0|', '') %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">Email</span> <span class="float-right"><%= user.email %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">Email Verificado</span> <span class="float-right"> <%- user.details.emailVerified ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark pr-1"></i>' %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">Escritor de artigos</span> <span class="float-right"> <%- user.details.articleWriter ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark pr-1"></i>' %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">Escritor da newsletter</span> <span class="float-right"> <%- user.details.feedWriter ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark pr-1"></i>' %></span>
+                    </span>
+
+                    <span class="bg-[#292929] py-1 rounded-full mb-2 inline-block w-full px-4">
+                        <span class="opacity-5">Administrador(a)</span> <span class="float-right"> <%- user.details.administrator ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark pr-1"></i>' %></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+<%- include('../components/Footer') %>
