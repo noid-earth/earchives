@@ -11,7 +11,7 @@ export const Users = new Database({ collection: 'users', database: 'Users' });
 /**
  * GET /api/user/list
  */
- router.get('/list', access, async (req, res) => {
+ router.get('/list', async (req, res) => {
     const data = await Users.schema.find({ });
     return res.send(data.map((a: any) => a.data));
 });
@@ -19,7 +19,7 @@ export const Users = new Database({ collection: 'users', database: 'Users' });
 /**
  * GET /api/user/get/:id
  */
- router.get('/get/:id', access, async (req, res) => {
+ router.get('/get/:id', async (req, res) => {
     let userId = req.params.id;
     let user = await Users.schema.findOne({ 'data.providerId': userId }) || await Users.schema.findOne({ 'data.id': userId });
 
@@ -29,7 +29,7 @@ export const Users = new Database({ collection: 'users', database: 'Users' });
 /**
  * GET /api/user/ensure/:id
  */
-router.post('/ensure/:id', access, async (req, res) => {
+router.post('/ensure/:id', async (req, res) => {
     let userId = req.params.id;
     let user =  await Users.schema.findOne({ 'data.id': userId }) || 
                 await Users.schema.findOne({ 'data.providerId': userId }) ||
@@ -78,27 +78,24 @@ router.post('/ensure/:id', access, async (req, res) => {
 /**
  * POST /api/user/readlater/:articleId
  */
-router.post('/readlater/:articleId', access, async (req, res) => {
-    let update;
+router.post('/readlater/:articleId', async (req, res) => {
+    let update = await newHistoryObj({
+        userId: req.body.userId,
+        refId: req.params.articleId,
+        type: 'READLATER',
+    });
 
-    if(req.body.remove) {
-        let old = await Users.schema.findOne({ 'id': req.body.userId })
-        if(!old) return null;
-        let array: UserHistory[] = [...old.data.history];
+    return res.send(update)
+});
 
-        array = array.filter((h) => h.refId !== req.params.articleId);
+router.post('/favorite', async (req, res) => {
+    let update = await newHistoryObj({
+        userId: req.body.userId,
+        refId: req.body.refId,
+        type: 'FAVORITE'
+    });
 
-        let response = await Util.set(Users, `${req.body.userId}.history`, array);
-        update = response.data;
-    } else {
-        update = await newHistoryObj({
-            userId: req.body.userId,
-            refId: req.params.articleId,
-            type: 'READLATER',
-        });
-    }
-
-    return res.send(update).status(200);
+    return res.send(update)
 });
 
 async function newHistoryObj(data: {
@@ -112,15 +109,16 @@ async function newHistoryObj(data: {
     let array: UserHistory[] = [...old.data.history];
 
     if(array.find((h) => h.refId == data.refId && h.type == data.type)) {
-        return null;
+        let historyIndex = array.findIndex((h) => h.refId == data.refId && h.type == data.type);
+        array.splice(historyIndex, 1);
+    } else {
+        array.push({
+            date: new Date(),
+            id: newId(),
+            refId: data.refId as string,
+            type: data.type,
+        });
     }
-
-    array.push({
-        date: new Date(),
-        id: newId(),
-        refId: data.refId as string,
-        type: data.type,
-    });
 
     let req = await Util.set(Users, `${data.userId}.history`, array);
     return req.data;

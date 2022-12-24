@@ -1,7 +1,6 @@
 import express from "express";
 import { Database } from "../../../database";
 import { newId } from "../../utils/id";
-import { access } from "../../utils/access";
 import { Article, ArticleHistory, ArticleHistoryType } from "./interfaces";
 import { Util } from "../../utils/data";
 import { Users } from "../User";
@@ -17,7 +16,7 @@ const Articles = new Database({ collection: 'articles', database: 'Library' });
 /**
  * GET /api/article/new
  */
-router.post('/new', access, async (req, res) => {
+router.post('/new', async (req, res) => {
     let id = newId();
     let raw = req.body;
 
@@ -61,7 +60,7 @@ router.post('/new', access, async (req, res) => {
         data: article
     });
 
-    return res.send(article).status(200);
+    return res.send(article);
 });
 
 /**
@@ -86,67 +85,6 @@ router.get('/search', async (req, res) => {
 });
 
 /**
- * DELETE /api/article/delete/:id
- */
-router.delete('/delete/:id', access, async (req, res) => {
-    let r: any = await Articles.schema.findOneAndRemove({ 'id': req.params.id });
-    if(r) {
-        return res.send(r.data).status(200);
-    } else {
-        return res.send('Post not found!').status(300);
-    }
-});
-
-/**
- * POST /api/article/upvote/:articleId
- */
-router.post('/upvote/:id', access, async (req, res) => {
-    let update = await newHistoryObj({
-        articledId: req.params.id,
-        refId: req.body.refId,
-        type: 'UPVOTE',
-    });
-
-    return res.send(update).status(200);
-});
-
-/**
- * POST /api/article/downvote/:articleId
- */
-router.post('/downvote/:id', access, async (req, res) => {
-    let update = await newHistoryObj({
-        articledId: req.params.id,
-        refId: req.body.refId,
-        type: 'DOWNVOTE',
-    });
-
-    return res.send(update).status(200);
-});
-
-/**
- * POST /api/article/favorite/:articleId
- */
-router.post('/favorite/:id/', access, async (req, res) => {
-
-    let update = await newHistoryObj({
-        articledId: req.params.id,
-        refId: req.body.refId,
-        type: 'FAVORITE',
-    });
-
-    return res.send(update).status(200);
-});
-
-/**
- * POST /api/article/favorite/:articleId
- */
-router.post('/outdate/:id', access, async (req, res) => {
-    let { data } = await Util.set(Articles, `${req.params.id}.details.outdated`, req.body.value)
-
-    return res.send(data).status(200);
-});
-
-/**
  * GET /api/article/read/:articleId
  */
 router.get('/read/:id', async (req, res) => {
@@ -158,26 +96,93 @@ router.get('/read/:id', async (req, res) => {
     return res.send(data ? data : undefined);
 });
 
+/**
+ * DELETE /api/article/delete/:id
+ */
+router.delete('/delete/:id', async (req, res) => {
+    let r: any = await Articles.schema.findOneAndRemove({ 'id': req.params.id });
+    if(r) {
+        return res.send(r.data)
+    } else {
+        return res.send('Post not found!')
+    }
+});
+
+/**
+ * POST /api/article/upvote/:articleId
+ */
+router.post('/upvote/:id', async (req, res) => {
+    let update = await newHistoryObj({
+        articledId: req.params.id,
+        refId: req.body.refId,
+        type: 'UPVOTE',
+    });
+
+    return res.send(update)
+});
+
+/**
+ * POST /api/article/downvote/:articleId
+ */
+router.post('/downvote/:id', async (req, res) => {
+    let update = await newHistoryObj({
+        articledId: req.params.id,
+        refId: req.body.refId,
+        type: 'DOWNVOTE',
+    });
+
+    return res.send(update)
+});
+
+/**
+ * POST /api/article/favorite/:articleId
+ */
+router.post('/favorite/:id', async (req, res) => {
+
+    let update = await newHistoryObj({
+        articledId: req.params.id,
+        refId: req.body.refId,
+        type: 'FAVORITE',
+    });
+
+    return res.send(update)
+});
+
+/**
+ * POST /api/article/favorite/:articleId
+ */
+router.post('/outdate/:id', async (req, res) => {
+    let { data } = await Util.set(Articles, `${req.params.id}.details.outdated`, req.body.value)
+
+    return res.send(data)
+});
+
+router.post('/private/:id', async (req, res) => {
+    let { data } = await Util.set(Articles, `${req.params.id}.details.private`, req.body.value)
+
+    return res.send(data)
+});
+
 async function newHistoryObj(data: {
     articledId: string,
     refId: string,
     type: ArticleHistoryType,
 }) {
     let old = await Articles.schema.findOne({ 'id': data.articledId });
-
     if(!old) return null;
     let array: ArticleHistory[] = [...old.data.history];
 
     if(array.find((article) => article.refId == data.refId && article.type == data.type)) {
-        return null;
+        let historyIndex = array.findIndex((article) => article.refId == data.refId && article.type == data.type);
+        array.splice(historyIndex, 1);
+    } else {
+        array.push({
+            date: new Date(),
+            articleId: data.articledId as string,
+            refId: data.refId as string,
+            type: data.type,
+        });
     }
-
-    array.push({
-        date: new Date(),
-        articleId: data.articledId as string,
-        refId: data.refId as string,
-        type: data.type,
-    });
 
     let req = await Util.set(Articles, `${data.articledId}.history`, array);
     return req.data;
