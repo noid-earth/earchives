@@ -3,7 +3,8 @@
 
 <%- include('../components/Head', {HIDE_DEFAULT_METATAGS: false}) %>
 
-<%
+<%  
+
     const STATS = {
         upvote: article.history.filter((h) => h.type === 'UPVOTE').length,
         downvote: article.history.filter((h) => h.type === 'DOWNVOTE').length,
@@ -14,6 +15,7 @@
     const READLATER_URL = user ? `/library/readlater/${article.id}/${user?.id}${(READLATER_ADDED ? '?remove=true' : '')}` : `/login`;
 
     const OUTDATED_URL = `/library/outdated/${article.id}/${!article.details.outdated}`;
+    const PRIVATE_URL = `/library/private/${article.id}/${!article.details.private}`;
 
     const now = new Date().getTime();
     const SHOW_AFTER_TIME = article.details.showAfter ? new Date(article.details.showAfter).getTime() : null;
@@ -22,14 +24,17 @@
     const SHOW_AFTER_DAYS = Math.floor(SHOW_AFTER_DISTANCE / (1000 * 60 * 60 * 24));
     const SHOW_AFTER_HOURS = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const SHOW_AFTER_MINUTES = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60)) / (1000 * 60));
+    const SHOW_AFTER_SECONDS = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60)) / 1000);
 
     const SHOW_AFTER_COUNTDOWN = `
-    ${SHOW_AFTER_DAYS > 0 ? SHOW_AFTER_DAYS + ` dia${SHOW_AFTER_DAYS > 1 ? 's':''}` : ''} 
-    ${SHOW_AFTER_HOURS > 0 ? SHOW_AFTER_HOURS + ` hora${SHOW_AFTER_HOURS > 1 ? 's':''}` : ''}
+    ${SHOW_AFTER_DAYS > 0 ? SHOW_AFTER_DAYS + `  dia${SHOW_AFTER_DAYS > 1 ? 's':''}` : ''} 
+    ${SHOW_AFTER_HOURS > 0 ? SHOW_AFTER_HOURS + `  hora${SHOW_AFTER_HOURS > 1 ? 's':''}` : ''}
     ${SHOW_AFTER_MINUTES > 0 ? SHOW_AFTER_MINUTES + ` min` : ''}
+    ${(SHOW_AFTER_DAYS + SHOW_AFTER_HOURS + SHOW_AFTER_MINUTES) == 0 ? SHOW_AFTER_SECONDS + `s` : ''}
     `;
 
     const SHOW_AFTER_ACTIVE = article.details.showAfter && SHOW_AFTER_COUNTDOWN && SHOW_AFTER_DISTANCE > 0;
+    const NEW_ARTICLE = (SHOW_AFTER_TIME - now) < 0 && (SHOW_AFTER_TIME - now) > -10 * 60 * 1000;
 %>
 
 <body>
@@ -37,11 +42,11 @@
         PAGE_TITLE: article.title, 
         EXTRA_DATA: {
             ARTICLE_AUTHOR: article.author,
-            NEW_ARTICLE: (SHOW_AFTER_TIME - now) < 10 * 60 * 1000,
+            NEW_ARTICLE: NEW_ARTICLE,
         } 
     }) %>
 
-    <% if((SHOW_AFTER_TIME - now) < 10 * 60 * 1000) { %>
+    <% if(NEW_ARTICLE) { %>
         <script src="/static/confetti.js"></script>
 
         <script>
@@ -61,7 +66,7 @@
                 <!-- MAIN CONTENT-->
                 <div class="bg-[#1d1d1d] rounded-lg shadow p-4 col-span-4 ">
                     <!-- CONTENT -->
-                    <div id="ARTICLE_CONTENT" class="px-4 font-normal">
+                    <div id="ARTICLE_CONTENT" class="p-4 font-normal">
                         
                         <p>
                             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione molestias dolores fuga aliquid nisi aperiam officia doloribus reprehenderit vel soluta amet sint ad reiciendis repellendus et deserunt, nemo voluptas. Ipsam quos magnam aspernatur esse aliquam voluptatum dolore earum perspiciatis expedita quod nesciunt praesentium laborum at sunt deleniti temporibus eaque mollitia dolores, placeat nam ipsa obcaecati ullam libero? Quia omnis placeat numquam sed delectus earum esse aperiam, ex expedita doloremque explicabo molestias facilis eaque ad maxime neque, eius cupiditate, quis mollitia dolorem odit dignissimos! Quisquam nesciunt at minima, perferendis similique rerum. Nisi autem numquam dolorem totam quis eligendi doloribus illo dignissimos excepturi, perferendis alias, nostrum a dolores possimus eum. Obcaecati ab assumenda nulla magnam tenetur animi! Maxime, iste commodi illo modi possimus doloribus similique dolorem!
@@ -120,7 +125,7 @@
 
                     <hr class="h-1 bg-[#292929] rounded border-0">
 
-                    <div class="my-4 opacity-75 text-sm">
+                    <div class="mt-4 mb-2 opacity-75 text-sm">
                         <% if(article.subjects.length > 0) { %>
                             <% article.subjects.forEach((sub) => { %>
                                 <span class="bg-[#292929] py-1 rounded-full text-center font-semibold mb-2 inline-block w-full"><%= sub %></span>
@@ -175,6 +180,14 @@
                             <% } %>
                         </button>
 
+                        <button class="mt-2 w-full bg-accent rounded-lg py-2 hover:opacity-75 duration-300" type="button" onclick="location.href='<%= PRIVATE_URL %>'">
+                            <% if(article.details.private) { %>
+                                <i class="fa-solid fa-lock-open opacity-50"></i> Disponibilizar
+                            <% } else { %>
+                                <i class="fa-solid fa-lock opacity-50"></i> Privar
+                            <% } %>
+                        </button>
+
                         <button class="mt-2 w-full bg-[#ED4245]/80 rounded-lg py-2 hover:opacity-75 duration-300" type="button" onclick="location.href='/library/delete/<%= article.id %>'">
                             <i class="fa-solid fa-trash opacity-50"></i> Apagar
                         </button>
@@ -185,3 +198,5 @@
         </div>
     </section>
 </body>
+
+<%- include('../components/Footer') %>

@@ -6,11 +6,13 @@
     const SHOW_AFTER_DAYS = Math.floor(SHOW_AFTER_DISTANCE / (1000 * 60 * 60 * 24));
     const SHOW_AFTER_HOURS = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const SHOW_AFTER_MINUTES = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60 * 60)) / (1000 * 60));
+    const SHOW_AFTER_SECONDS = Math.floor((SHOW_AFTER_DISTANCE % (1000 * 60)) / 1000);
 
     const SHOW_AFTER_COUNTDOWN = `
-    ${SHOW_AFTER_DAYS > 0 ? SHOW_AFTER_DAYS + ` dia${SHOW_AFTER_DAYS > 1 ? 's':''}` : ''} 
-    ${SHOW_AFTER_HOURS > 0 ? SHOW_AFTER_HOURS + ` hora${SHOW_AFTER_HOURS > 1 ? 's':''}` : ''}
+    ${SHOW_AFTER_DAYS > 0 ? SHOW_AFTER_DAYS + `  dia${SHOW_AFTER_DAYS > 1 ? 's':''}` : ''} 
+    ${SHOW_AFTER_HOURS > 0 ? SHOW_AFTER_HOURS + `  hora${SHOW_AFTER_HOURS > 1 ? 's':''}` : ''}
     ${SHOW_AFTER_MINUTES > 0 ? SHOW_AFTER_MINUTES + ` min` : ''}
+    ${(SHOW_AFTER_DAYS + SHOW_AFTER_HOURS + SHOW_AFTER_MINUTES) == 0 ? SHOW_AFTER_SECONDS + `s` : ''}
     `;
 
     const SHOW_AFTER_ACTIVE = article.details.showAfter && SHOW_AFTER_COUNTDOWN && SHOW_AFTER_DISTANCE > 0;
@@ -92,7 +94,7 @@ class="bg-[#292929] rounded-lg p-4 mb-4 shadow hover:outline-[#008251] outline-n
         <div class="text-white/10">
             <!-- DATE -->
             <span class="">
-                <% let ARTICLE_CREATED_AT = new Date(article.createdAt);  %>
+                <% let ARTICLE_CREATED_AT = new Date(article.details.showAfter ?? article.createdAt);  %>
                 <i class="fa-solid fa-calendar"></i> <%= ARTICLE_CREATED_AT.toLocaleDateString('en-GB') %>
             </span>
         </div>
@@ -111,7 +113,7 @@ class="bg-[#292929] rounded-lg p-4 mb-4 shadow hover:outline-[#008251] outline-n
 
             <!-- DOWNVOTES -->
             <button data-tooltip-target="article-downvote-tooltip" data-tooltip-placement="bottom" type="button" class="px-2 cursor-default">
-                <i class="fa-solid fa-caret-up opacity-50"></i> <%= STATS.downvote %>
+                <i class="fa-solid fa-caret-down opacity-50"></i> <%= STATS.downvote %>
             </button>
             <div id="article-downvote-tooltip" role="tooltip" class="hidden md:inline-block absolute invisible z-10 py-2 px-3 bg-[#1d1d1d] rounded-lg shadow-sm opacity-0 tooltip">
                 Downvotes
@@ -120,7 +122,7 @@ class="bg-[#292929] rounded-lg p-4 mb-4 shadow hover:outline-[#008251] outline-n
 
             <!-- FAVORITES -->
             <button data-tooltip-target="article-favorite-tooltip" data-tooltip-placement="bottom" type="button" class="px-2 cursor-default">
-                <i class="fa-solid fa-caret-up opacity-50"></i> <%= STATS.favorite %>
+                <i class="fa-solid fa-star opacity-50"></i> <%= STATS.favorite %>
             </button>
             <div id="article-favorite-tooltip" role="tooltip" class="hidden md:inline-block absolute invisible z-10 py-2 px-2 bg-[#1d1d1d] rounded-lg shadow-sm opacity-0 tooltip">
                 Favoritos
