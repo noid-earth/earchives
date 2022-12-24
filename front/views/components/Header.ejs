@@ -1,6 +1,6 @@
 <div id="HEADER">
   <div class="container mx-auto">
-    <nav class="py-2.5 rounded-lg px-4 md:px-10 2xl:px-0">
+    <nav class="py-2.5 rounded-lg px-4">
         <div class="flex flex-wrap items-center justify-between">
     
           <a href="/">
@@ -18,17 +18,28 @@
                 <a href="/newsletter" class="block py-2 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75">Newsletter</a>
               </li>
               <% if(user) { %>
+                <li>
+                  <a href="/user" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">
+                    Perfil
+                  </a>
+                </li>
                 <% if(user.details.administrator) { %>
                   <li>
-                    <a href="/control" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">Painel de Controle</a>
+                    <a href="/control" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">
+                      Painel de Controle
+                    </a>
                   </li>
                 <% } %>
                 <li>
-                  <a href="/logout" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-[#ED4245]">Logout</a>
+                  <a href="/logout" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-[#ED4245]">
+                    Logout
+                  </a>
                 </li>
               <% } else { %>
                 <li>
-                  <a href="/login" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">Login</a>
+                  <a href="/login" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">
+                    Login
+                  </a>
                 </li>
               <% } %>
               </li>
@@ -36,8 +47,8 @@
           </div>
         </div>
         <div class="h-24 md:h-48 relative text-center md:text-left">
-          <div class="relative md:absolute bottom-0 md:left-4">
-            <h1 class="text-4xl font-bold mt-12 md:mt-0"><%= PAGE_TITLE %></h1>
+          <div class="relative md:absolute bottom-0 md:left-0">
+            <h1 class="text-4xl font-bold mt-12 md:mt-0 relative z-10"><%= PAGE_TITLE %></h1>
 
             <div class="hidden md:inline-block bg-[#1d1d1d] rounded-full px-2">
               <% if(EXTRA_DATA?.ARTICLE_AUTHOR) { %>
