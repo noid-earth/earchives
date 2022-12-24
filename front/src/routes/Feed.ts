@@ -1,9 +1,12 @@
 import express from "express";
 import { API } from "../services/API";
+import { Middleware } from "../services/Middlewares";
 
 const router = express.Router();
 
-router.get('/:postId', async (req, res) => {
+router.get('/:postId', Middleware.Regional({
+    apiRequired: true,
+}), async (req, res) => {
     let post = await API.get('/feed/view/' + req.params.postId) as any;
     let feed = await API.get('/feed/list') as any[];
 
@@ -15,7 +18,9 @@ router.get('/:postId', async (req, res) => {
     });
 });
 
-router.get('/', async (req, res) => {
+router.get('/', Middleware.Regional({
+    apiRequired: true,
+}), async (req, res) => {
     let feed: any[] = await API.get('/feed/list') ?? [];
     
     res.render('pages/Feed.ejs', {

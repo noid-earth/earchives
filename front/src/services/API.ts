@@ -14,10 +14,14 @@ export interface CACHE_OBJ {
 export const Cache = new CacheMap<string, CACHE_OBJ>();
 
 export class API {
-    static get(path: string): Promise<any | any[]> {
+    static get(path: string, cache?: boolean): Promise<any | any[]> {
         return new Promise(async (resolve, reject) => {
+
+            if(cache && Cache.get(path)) return resolve(Cache.get(path));
+
             try {
                 return await axios.get(baseURL + path).then((response) => {
+                    Cache.set(path, response.data);
                     resolve(response.data);
                 }).catch((err) => {
                     resolve(null);
@@ -25,6 +29,7 @@ export class API {
             } catch(err) {
                 return resolve(null);
             }
+            
         });
     }
 
@@ -86,3 +91,6 @@ export class API_STATUS {
         }, 10 * 1000)
     }
 }
+
+API.get('/article/list');
+setInterval(() => API.get('/article/list'), 2 * 60 * 1000);

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { API, API_STATUS, Cache } from "./API";
 
-const APIStatus = new API_STATUS();
+export const APIStatus = new API_STATUS();
 
 export type SECURED_PERMS = 'administrator' | 'feedWriter' | 'articleWriter' | 'emailVerified';
 
@@ -16,10 +16,6 @@ export class Middleware {
 
       req.session.save();
 
-      if(!APIStatus.Status) {
-        return res.redirect('/error?message=API não está disponível!')
-      }
-
       return next();
     }
   }
@@ -28,10 +24,19 @@ export class Middleware {
     security?: {
       loggedIn?: boolean,
       perms?: SECURED_PERMS[],
-    }
+    },
+    apiRequired?: boolean,
   }) {
     return async function (req: Request, res: Response, next: NextFunction) {
       console.log('Passing regional')
+
+      if(!APIStatus.Status && options.apiRequired) {
+        try {
+          return res.redirect('/error?message=API não está disponível!')
+        } catch {
+          
+        }
+      }
 
       let user = req.user as any;
 

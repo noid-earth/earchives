@@ -2,10 +2,13 @@ import express from "express";
 import passport from "passport";
 import querystring from "querystring";
 import { API, Cache } from "../services/API";
+import { Middleware } from "../services/Middlewares";
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', Middleware.Regional({
+    apiRequired: false,
+}), async (req, res) => {
 
     let articles: any[] = await API.get('/article/list');
 

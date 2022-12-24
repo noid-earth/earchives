@@ -7,7 +7,7 @@ import path from "path";
 import morgan from "morgan";
 
 import { API } from "./services/API";
-import { Middleware } from "./services/Middlewares";
+import { APIStatus, Middleware } from "./services/Middlewares";
 
 dotenv.config();
 const app = express();
@@ -54,6 +54,8 @@ const strategy = new Auth0Strategy({
     clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
     callbackURL: process.env.AUTH0_CALLBACK_URL as string,
 }, async function(accessToken, refreshToken, extraParams, profile, done) {
+    if(!APIStatus.Status) return done('API Indisponível!');
+    
     const user = await API.post(`/user/ensure/` + profile.id, {
         provider: profile.provider ?? 'auth0',
         providerId: profile.id,
@@ -82,11 +84,11 @@ import Main from "./routes/Main";
 import Control from "./routes/Control";
 import Feed from "./routes/Feed";
 import Library from "./routes/Library";
+import User from "./routes/User";
 
 
 app.get('/error', (req, res) => {
     res.send(req.query.message);
-    setTimeout(() => res.redirect('/'), 10000);
 });
 
 app.use(Middleware.Global())
@@ -95,6 +97,7 @@ app.use("/", Main);
 app.use("/control", Control);
 app.use("/newsletter", Feed);
 app.use('/library', Library);
+app.use('/user', User);
 
 // Host
 const port = dotenv.config().parsed?.PORT || 80;
