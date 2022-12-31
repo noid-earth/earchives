@@ -23,7 +23,7 @@
                     Perfil
                   </a>
                 </li>
-                <% if(user.details.administrator) { %>
+                <% if(user.details.administrator || user.details.articleWriter || user.details.feedWriter) { %>
                   <li>
                     <a href="/control" class="block py-1 pl-3 pr-4 rounded hover:bg-[#1d1d1d] md:hover:bg-transparent md:border-0 md:px-2 md:p-0 md:hover:opacity-75 text-accent">
                       Painel de Controle

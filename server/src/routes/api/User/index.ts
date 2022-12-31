@@ -75,6 +75,31 @@ router.post('/ensure/:id', async (req, res) => {
     }
 })
 
+router.delete('/delete/:id', async (req, res) => {
+    let r: any = await Users.schema.findOneAndRemove({ 'id': req.params.id });
+    if(r) {
+        return res.send(r.data)
+    } else {
+        return res.send('User not found!')
+    }
+});
+
+router.get('/articleWriter/:id', async (req, res) => {
+    let userId = req.params.id;
+    let user = await (await Users.schema.findOne({ 'data.providerId': userId }) || await Users.schema.findOne({ 'data.id': userId })).data;
+    let db = await (await Util.set(Users, `${userId}.details.articleWriter`, !user.details.articleWriter));
+
+    return res.send(db.data);
+});
+
+router.get('/newsletterWriter/:id', async (req, res) => {
+    let userId = req.params.id;
+    let user = await (await Users.schema.findOne({ 'data.providerId': userId }) || await Users.schema.findOne({ 'data.id': userId })).data;
+    let db = await (await Util.set(Users, `${userId}.details.feedWriter`, !user.details.feedWriter));
+
+    return res.send(db.data);
+});
+
 /**
  * POST /api/user/readlater/:articleId
  */

@@ -4,22 +4,46 @@ import { marked } from "marked";
 import createDomPurify from "dompurify";
 import { JSDOM } from "jsdom";
 
-//import Middlewares from "../services/Middlewares";
+import { Middleware } from "../services/Middlewares";
 
-const dompurify = createDomPurify(new JSDOM().window as any);
+//const dompurify = createDomPurify(new JSDOM().window as any);
 const router = express.Router();
 
-/*
-router.get('/', Middlewares.secured({perms: ['administrator']}), async (req, res) => {
-    let feed: any[] = await API.get('/feed/list') as any;
+router.get('/', Middleware.Regional({
+    security: { loggedIn: true },
+}), async (req, res) => {
 
     res.render('pages/Control.ejs', {
         //@ts-ignore
-        user: req.session?.passport?.user,
-        feed: feed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        user: await API.user(req.user?.id),
+        users: await API.get('/user/list'),
     });
+
 });
 
+
+router.get('/user/:userId/delete', Middleware.Regional({
+    security: { loggedIn: true, perms: ['administrator'] },
+}), async (req, res) => {
+    await API.delete('/user/delete/' + req.params.userId);
+    res.redirect('/control' ?? req.query.redirect);
+});
+
+router.get('/user/:userId/articleWriter', Middleware.Regional({
+    security: { loggedIn: true, perms: ['administrator'] },
+}), async (req, res) => {
+    await API.get('/user/articleWriter/' + req.params.userId);
+    res.redirect('/control' ?? req.query.redirect);
+});
+
+router.get('/user/:userId/newsletterWriter', Middleware.Regional({
+    security: { loggedIn: true, perms: ['administrator'] },
+}), async (req, res) => {
+    await API.get('/user/newsletterWriter/' + req.params.userId);
+    res.redirect('/control' ?? req.query.redirect);
+});
+
+/*
 router.post('/feed/new', Middlewares.secured({perms: ['feedWriter']}), async (req, res) => {
     const data = req.body;
 

@@ -10,187 +10,103 @@
         EXTRA_DATA: {}
     }) %>
 
+    <% 
+    function trimString(string, length) {
+        return string.length > length ? string.substring(0, length) + '...' : string;
+    };
+    %>
+
     <section class="bg-[#292929]">
-        <div class="container mx-auto py-4 px-4 md:px-0">
-            <h1 class="text-2xl text-accent font-bold mt-6">Feed</h1>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 rounded-lg bg-[#1d1d1d] p-4">
-                <% feed.slice(0, 4).forEach((post) => { %>
-                    <%- include('../components/feed/FeedSmallPost', { post, feed, showNewestTag: true }) %>
-                <% }); %>
-            </div>
-                
-            <h1 class="text-2xl text-accent font-bold mt-6">
-                Nova publicação
-            </h1>
-            <div class="bg-[#1d1d1d] p-4 rounded-lg mt-2">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2" id="NEWPOST_BLOCK">
-                    <!-- INPUT -->
-                    <div class="bg-[#292929] p-4 rounded-lg">
-                        <h1 class="text-2xl font-bold">Propriedades</h1>
-                        <form action="/control/feed/new" method="POST" autocomplete="off">
-                            
-                            <div class="mb-3">
-                                <label for="NEWPOST_THUMBNAIL" class="block mb-2 text-sm font-medium text-white">Thumbnail</label>
-                                <input type="url" name="NEWPOST_THUMBNAIL" id="NEWPOST_THUMBNAIL" class="bg-[#1d1d1d] text-sm rounded-lg border-none block w-full p-2.5 " placeholder="https://images.com/image.png" required>
-                            </div>
+        <div class="container mx-auto">
+            <div class="p-4">
+                <h1 class="text-2xl text-accent font-bold mt-6 mb-1 inline-block" id="library">Biblioteca</h1>
+                <% if(user.details.articleWriter) { %>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h1 class="text-xl">
+                                    Novo artigo
+                                </h1>
 
-                            <div class="mb-3">
-                                <label for="NEWPOST_TITLE" class="block mb-2 text-sm font-medium text-white">Título</label>
-                                <input type="text" name="NEWPOST_TITLE" id="NEWPOST_TITLE" class="bg-[#1d1d1d] text-sm rounded-lg border-none block w-full p-2.5 " placeholder="Somente um simples título" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="NEWPOST_TAGS" class="block mb-2 text-sm font-medium text-white">Tags</label>
-                                <input type="text" name="NEWPOST_TAGS" id="NEWPOST_TAGS" class="bg-[#1d1d1d] text-sm rounded-lg border-none block w-full p-2.5 " placeholder="News, 0.0.1, Update" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="NEWPOST_SHORT_DESCRIPTION" class="block mb-2 text-sm font-medium text-white">Descrição Curta <span class="opacity-50">(Max. 256)</span></label>
-                                <input type="text" name="NEWPOST_SHORT_DESCRIPTION" id="NEWPOST_SHORT_DESCRIPTION" class="bg-[#1d1d1d] text-sm rounded-lg border-none block w-full p-2.5 " placeholder="Dê uma pequena descrição sobre o post">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="NEWPOST_DESCRIPTION" class="block mb-2 text-sm font-medium text-white">Descrição <span class="opacity-50">(Max. 1024)</span></label>
-                                <textarea name="NEWPOST_DESCRIPTION" id="NEWPOST_DESCRIPTION" class="bg-[#1d1d1d] text-sm rounded-lg border-none block w-full p-2.5" style="height: 10rem; resize: none;"></textarea>
-                            </div>
-
-                            <div class="mb-3 grid grid-cols-2 gap-4">
-                                <div class="text-center bg-[#1d1d1d] py-2 rounded-lg">
-                                    <label for="NEWPOST_SHOWTHUMBNAIL" class="inline-block text-base font-medium text-white">Mostrar thumbnail no feed</label>
-                                    <input checked name="NEWPOST_SHOWTHUMBNAIL" id="NEWPOST_SHOWTHUMBNAIL" type="checkbox" class="ml-2 w-5 h-5 bg-[#292929] rounded-xl focus:ring-none focus:outline-none inline-block align-middle checked:bg-[#42b883]">
-                                </div>
-                                <div class="text-center bg-[#1d1d1d] py-2 rounded-lg">
-                                    <label for="NEWPOST_PRIVATE" class="inline-block text-base font-medium text-white">Privado</label>
-                                    <input name="NEWPOST_PRIVATE" id="NEWPOST_PRIVATE" type="checkbox" class="ml-2 w-5 h-5 bg-[#292929] rounded-xl focus:ring-none focus:outline-none inline-block align-middle checked:bg-[#42b883]">
+                                <div class="bg-[#292929] rounded-lg p-4">
+                                    <form action="" method="post"></form>
                                 </div>
                             </div>
-
-                            <hr class="h-2 rounded bg-[#1d1d1d] border-0">
-
-                            <div class="mt-3 mb-3">
-                                <label for="NEWPOST_MARKDOWN" class="block mb-2 text-sm font-medium text-white">Corpo <span class="opacity-50">Markdown</span></label>
-                                <textarea name="NEWPOST_MARKDOWN" id="NEWPOST_MARKDOWN" class="bg-[#1d1d1d] text-sm rounded-lg border-none block w-full p-2.5" style="height: 36rem;" required></textarea>
+                            <div>
+                                <h1 class="text-xl">
+                                    Preview
+                                </h1>
                             </div>
-
-                            <button type="submit" class="text-white bg-accent hover:opacity-70 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center transition-opacity duration-150">Submit</button>
-                        </form>
-                    </div>
-                    <!-- PREVIEW -->
-                    <div class="bg-[#292929] p-4 rounded-lg hidden md:block">
-                        <h1 class="text-2xl font-bold">Preview</h1>
-
-                        <div class="grid place-items-center">
-                            <article class="bg-[#1d1d1d] rounded-lg cursor-pointer w-1/2 mt-2 ">
-
-                                <img 
-                                src="/branding/banner.png" alt="Post thumbnail" id="NEWPOST_THUMBNAIL_PREVIEW"
-                                class="w-full h-48 object-cover rounded-lg shadow">
-
-                                <div class="p-4">
-                                    <div class="mt-2" id="NEWPOST_TAGS_PREVIEW">
-                                        <span class="text-accent py-1 px-4 bg-[#292929] mr-2 rounded-full text-xs font-semibold">
-                                            Preview
-                                        </span>
-                                    </div>
-                                    <h1 class="text-3xl hover:text-[#42b883] font-semibold mt-2 duration-150 h-36" id="NEWPOST_TITLE_PREVIEW">Titulo</h1>
-                                    <div class="mt-2 opacity-50 text-sm">
-                                        <% let POST_CREATED_AT = new Date();  %>
-                                        <%= POST_CREATED_AT.toLocaleDateString() %> às <%= POST_CREATED_AT.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}) %>
-                                        <span class="opacity-50">-</span>
-                                        Jürgen
-                                    </div>
-                                    
-                                </div>
-                            </article>
-                        </div>
-
-                        <hr class="mt-32 h-2 rounded bg-[#1d1d1d] border-0">
-
-                        <div class="mt-10" id="NEWPOST_MARKDOWN_PREVIEW">
-                            
                         </div>
                     </div>
-                </div>
+                <% } else { %>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4"><span class="opacity-50 italic">Sem permissão para acessar esta secção.</span></div>
+                <% } %>
+
+                <h1 class="text-2xl text-accent font-bold mt-6" id="newsletter">Newsletter</h1>
+                <% if(user.details.feedWriter) { %>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h1 class="text-xl">
+                                    Nova publicação
+                                </h1>
+
+                                <div class="bg-[#292929] rounded-lg p-4">
+                                    <form action="" method="post"></form>
+                                </div>
+                            </div>
+                            <div>
+                                <h1 class="text-xl">
+                                    Preview
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4"><span class="opacity-50 italic">Sem permissão para acessar esta secção.</span></div>
+                <% } %>
+
+                <h1 class="text-2xl text-accent font-bold mt-6">Administração</h1>
+                <% if(user.details.administrator) { %>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h1 class="text-xl">
+                                    Nova publicação
+                                </h1>
+                            </div>
+                            <div>
+                                <h1 class="text-xl">
+                                    Usuários
+                                </h1>
+
+                                <div class="bg-[#292929] rounded-lg p-4">
+                                    <% (users ?? []).forEach((USER, index) => { %>
+                                        <div class="bg-[#1d1d1d] rounded-lg p-4 <% if(index !== 0) { %> mt-2 <% } %>">
+                                            <span>
+                                                <img src="<%= USER.picture ?? 'https://i.imgur.com/l3sIySm.png' %>" class="rounded-full h-5 inline-block">
+                                                <% let USERNAME = trimString(USER.name?.length > 0 ? USER.name : USER.email.split('@')?.[0], 22) %>
+                                                <span class="pl-2"><%= USERNAME %></span>
+
+                                                <span class="text-right float-right opacity-50">
+                                                    <a href="/control/user/<%= USER.id %>/newsletterWriter"><i class="<% if(USER.details.feedWriter) { %>text-[#ED4245]<% } else { %> text-accent <% } %> fa-solid fa-note-sticky hover:opacity-50 duration-150" title="Editor Newsletter"></i></a>
+                                                    <a href="/control/user/<%= USER.id %>/articleWriter"><i class="<% if(USER.details.articleWriter) { %>text-[#ED4245]<% } else { %> text-accent <% } %> fa-solid fa-feather pl-2 hover:opacity-50 duration-150" title="Editor Biblioteca"></i></a>
+                                                    <a href="/control/user/<%= USER.id %>/delete"><i class="text-[#ED4245] fa-solid fa-trash pl-2 hover:opacity-50 duration-150"></i></a>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="bg-[#1d1d1d] rounded-lg p-4"><span class="opacity-50 italic">Sem permissão para acessar esta secção.</span></div>
+                <% } %>
             </div>
         </div>
     </section>
 
-    <script>
-        let previews = [
-            {
-                id: 'NEWPOST_THUMBNAIL',
-                previewId: 'NEWPOST_THUMBNAIL_PREVIEW',
-                doDefault: false,
-                onChange: (e) => {
-                    let preview = document.getElementById('NEWPOST_THUMBNAIL_PREVIEW');
-                    preview.src = e.target.value;
-                }
-            },
-            {
-                id: 'NEWPOST_TITLE',
-                previewId: 'NEWPOST_TITLE_PREVIEW',
-                doDefault: true,
-                onChange: (e) => {
-                    
-                }
-            },
-            {
-                id: 'NEWPOST_TAGS',
-                previewId: 'NEWPOST_TAGS_PREVIEW',
-                doDefault: false,
-                onChange: (e) => {
-                    let tags = e.target.value.split(', ');
-                    let preview = document.getElementById('NEWPOST_TAGS_PREVIEW');
-    
-                    preview.innerHTML = '';
-    
-                    tags.forEach((t) => {
-                        let span = document.createElement('span');
-                        span.classList = 'text-accent py-1 px-4 bg-[#292929] mr-2 rounded-full text-xs font-semibold';
-                        span.innerText = t;
-    
-                        
-                        preview.appendChild(span);
-                    })
-                }
-            },
-            {
-                id: 'NEWPOST_SHORT_DESCRIPTION',
-                previewId: 'NEWPOST_SHORT_DESCRIPTION_PREVIEW',
-                doDefault: true,
-                onChange: (e) => {
-                    
-                }
-            },
-            {
-                id: 'NEWPOST_MARKDOWN',
-                previewId: 'NEWPOST_MARKDOWN_PREVIEW',
-                doDefault: false,
-                onChange: (e) => {
-                    let preview = document.getElementById('NEWPOST_MARKDOWN_PREVIEW');
-                    preview.innerHTML = DOMPurify.sanitize(marked.parse(e.target.value));
-                }
-            }
-        ]
-    
-        for (let i = 0; i < previews.length; i++) {
-            let preview = previews[i];
-            
-            let el = document.getElementById(preview.id);
-    
-            el.onchange = preview.onChange;
-    
-            if(preview.doDefault) {
-                el.onchange = (e) => {
-                    document.getElementById(preview.previewId).innerText = e.target.value;
-                };
-            }
-        }
-    
-        setInterval(() => {
-            let preview = document.getElementById('NEWPOST_MARKDOWN_PREVIEW');
-            preview.innerHTML = 
-            DOMPurify.sanitize(marked.parse(document.getElementById('NEWPOST_MARKDOWN').value));
-        }, 500);
-    </script>
+    <%- include('../components/Footer') %>
 </body>

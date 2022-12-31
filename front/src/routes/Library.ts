@@ -27,7 +27,7 @@ router.get('/readlater/:articleId/:userId', Middleware.Regional({
         userId: req.params.userId,
         remove: req.query.remove == 'true',
     });
-    res.redirect(`/library/${req.params.articleId}`)
+    res.redirect(`/library/${req.query.redirect ?? req.params.articleId}`)
 });
 
 router.get('/upvote/:articleId', Middleware.Regional({
@@ -37,7 +37,7 @@ router.get('/upvote/:articleId', Middleware.Regional({
         refId: (req.user as any).id,
     });
 
-    res.redirect(`/library/${req.params.articleId}`);
+    res.redirect(`/library/${req.query.redirect ?? req.params.articleId}`)
 });
 
 router.get('/downvote/:articleId', Middleware.Regional({
@@ -47,7 +47,7 @@ router.get('/downvote/:articleId', Middleware.Regional({
         refId: (req.user as any).id,
     });
 
-    res.redirect(`/library/${req.params.articleId}`);
+    res.redirect(`/library/${req.query.redirect ?? req.params.articleId}`)
 });
 
 router.get('/favorite/:articleId', Middleware.Regional({
@@ -64,27 +64,31 @@ router.get('/favorite/:articleId', Middleware.Regional({
         refId: req.params.articleId
     });
 
-    res.redirect(`/library/${req.params.articleId}`);
+    res.redirect(`/library/${req.query.redirect ?? req.params.articleId}`)
 });
 
 router.get('/outdated/:articleId/:value', Middleware.Regional({
     security: { perms: ['articleWriter'] },
     apiRequired: true,
 }), async (req, res) => {
+
     await API.post('/article/outdate/' + req.params.articleId, {
         value: req.params.value === 'true',
     });
-    res.redirect(`/library/${req.params.articleId}`)
+
+   res.redirect(`/library/${req.query.redirect ?? req.params.articleId}`)
 });
 
 router.get('/private/:articleId/:value', Middleware.Regional({
     security: { perms: ['articleWriter'] },
     apiRequired: true,
 }), async (req, res) => {
+
     await API.post('/article/private/' + req.params.articleId, {
         value: req.params.value === 'true',
     });
-    res.redirect(`/library/${req.params.articleId}`)
+
+    res.redirect(`/library/${req.query.redirect ?? req.params.articleId}`)
 });
 
 router.get('/delete/:articleId', Middleware.Regional({
@@ -92,7 +96,7 @@ router.get('/delete/:articleId', Middleware.Regional({
     apiRequired: true,
 }), async (req, res) => {
     await API.delete('/article/delete/' + req.params.articleId);
-    res.redirect(`/library/${req.params.articleId}`)
+    res.redirect(`${req.query.redirect ?? '/'}`)
 });
 
 export default router;
