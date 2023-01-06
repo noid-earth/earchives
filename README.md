@@ -2,6 +2,8 @@
 # eArchives
 earchives.org
 
+![NoidEarthBadge](https://i.imgur.com/UN3oa7x.png)
+
 > Run
 
 ```
