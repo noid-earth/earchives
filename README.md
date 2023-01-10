@@ -1,20 +1,8 @@
-![eArchives Banner](https://i.imgur.com/Jw0WJc1.png?raw=true&width=600)
+![eArchives Banner](/branding/banner.png)
 # eArchives
-earchives.org
+https://earchives.org
 
-![NoidEarthBadge](https://i.imgur.com/UN3oa7x.png)
+This is a project made to help you study for tests and final exams the easiest and most organized way. 😁
 
-> Run
-
-```
-    cd server
-    npm run start
-```
-
-```
-    cd front
-    npm run start
-```
-
-### Mindmap
-[View](https://mm.tt/map/2515470530?t=HDFMRJiYZn)
+---
+![NoidEarthBadge](https://i.imgur.com/26e5uy0.png)
