@@ -10,8 +10,7 @@
 @tailwind utilities;
 
 :root {
-    --old-accent: #42b883;
-    --accent: #008251;
+    --accent: #5865f2;
 }
 
 *:focus {
