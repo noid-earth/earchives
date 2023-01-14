@@ -1,4 +1,4 @@
-![eArchives Banner](/branding/banner.png)
+![eArchives Banner](https://i.imgur.com/bryLjhA.png)
 # eArchives
 https://earchives.org
 
