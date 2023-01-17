@@ -1,3 +1,1 @@
-<template>
-    d
-</template>
+<template>d</template>

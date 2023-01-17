@@ -1,5 +1,7 @@
 ![eArchives Banner](https://i.imgur.com/bryLjhA.png)
+
 # eArchives
+
 https://earchives.org
 
 This is a project made to help you study for tests and final exams the easiest and most organized way. 😁

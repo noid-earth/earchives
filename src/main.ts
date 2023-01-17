@@ -1,4 +1,6 @@
 import { createApp } from 'vue';
+
+import VueCookies from "vue-cookies";
 import App from './App.vue';
 
 import { createRouter, createWebHistory } from 'vue-router';
@@ -17,6 +19,11 @@ const router = createRouter({
             //@ts-ignore
             component: () => import('./views/NewsLetterView.vue'),
         },
+        {
+            path: '/article/:id',
+            name: "Article",
+            component: () => import('./views/HomeView.vue')
+        }
     ],
 });
 
@@ -24,6 +31,9 @@ import './assets/main.css';
 
 const app = createApp(App);
 
+app.use(VueCookies, { expires: "15d" });
+
 app.use(router);
+
 
 app.mount('#app');

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { RouterView } from 'vue-router';
+import LocaleSwitcher from '../utils/LocaleSwitcher.vue';
 
 export default {
     data() {
@@ -9,6 +9,9 @@ export default {
                 { to: '/newsletter', text: 'Newsletter' },
             ],
         };
+    },
+    components: {
+        LocaleSwitcher
     }
 };
 </script>
@@ -37,7 +40,7 @@ export default {
                     </li>
                 </ul>
 
-                <LocaleSwitcher/>
+                <LocaleSwitcher />
             </div>
         </nav>
     </header>
