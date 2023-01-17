@@ -1,0 +1,33 @@
+@font-face {
+    font-family: 'Ginto Nord';
+    font-style: normal;
+    src: url(GintoNord-Regular.woff2);
+}
+
+@font-face {
+    font-family: 'Ginto Nord';
+    font-style: normal;
+    font-weight: bold;
+    src: url(GintoNord-Bold.woff2);
+}
+
+@font-face {
+    font-family: 'Ginto Nord';
+    font-style: normal;
+    font-weight: bolder;
+    src: url(GintoNord-Black.woff2);
+}
+
+@font-face {
+    font-family: 'Ginto Nord';
+    font-style: normal;
+    font-weight: lighter;
+    src: url(GintoNord-Light.woff2);
+}
+
+@font-face {
+    font-family: 'Ginto Nord';
+    font-style: normal;
+    font-weight: 500;
+    src: url(GintoNord-Medium.woff2);
+}
