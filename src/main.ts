@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-import VueCookies from "vue-cookies";
+import VueCookies from 'vue-cookies';
 import App from './App.vue';
 
 import { createRouter, createWebHistory } from 'vue-router';
@@ -21,9 +21,9 @@ const router = createRouter({
         },
         {
             path: '/article/:id',
-            name: "Article",
-            component: () => import('./views/HomeView.vue')
-        }
+            name: 'Article',
+            component: () => import('./views/HomeView.vue'),
+        },
     ],
 });
 
@@ -31,9 +31,8 @@ import './assets/main.css';
 
 const app = createApp(App);
 
-app.use(VueCookies, { expires: "15d" });
+app.use(VueCookies, { expires: '15d' });
 
 app.use(router);
-
 
 app.mount('#app');

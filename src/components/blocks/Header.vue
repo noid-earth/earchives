@@ -5,14 +5,14 @@ export default {
     data() {
         return {
             links: [
-                { to: '/', text: "Home" },
+                { to: '/', text: 'Home' },
                 { to: '/newsletter', text: 'Newsletter' },
             ],
         };
     },
     components: {
-        LocaleSwitcher
-    }
+        LocaleSwitcher,
+    },
 };
 </script>
 
