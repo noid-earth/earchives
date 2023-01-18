@@ -8,7 +8,7 @@ import Header from './components/blocks/Header.vue';
 <template>
     <Header></Header>
 
-    <div class="container mx-auto">
+    <div class="mx-4 md:container md:mx-auto">
         <RouterView />
     </div>
 </template>

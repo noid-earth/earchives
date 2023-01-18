@@ -1,5 +1,6 @@
 <script lang="ts">
 import LocaleSwitcher from '../utils/LocaleSwitcher.vue';
+import Theme from '../utils/Theme.vue';
 
 export default {
     data() {
@@ -11,18 +12,18 @@ export default {
         };
     },
     components: {
-        LocaleSwitcher,
+        LocaleSwitcher, Theme,
     },
 };
 </script>
 
 <template>
-    <header class="container mx-auto">
+    <header class="mx-4 md:container md:mx-auto">
         <nav
-            class="mt-4 flex flex-wrap place-items-center rounded-lg bg-off-white p-4 text-center"
+            class="mt-4 flex flex-wrap place-items-center rounded-lg bg-off-white dark:bg-little-grey p-4 text-center"
         >
             <div class="flex w-screen justify-between">
-                <span class="float-left px-2">
+                <span class="float-left px-2 py-1">
                     <router-link to="/">
                         <span class="font-display font-bold">
                             <span class="text-accent">e</span>Archives
@@ -30,17 +31,17 @@ export default {
                     </router-link>
                 </span>
 
-                <ul class="mx-auto flex space-x-12 px-4">
+                <ul class="mx-auto space-x-12 px-4 hidden md:flex">
                     <li
                         v-for="(link, i) in links"
-                        class="px-2 duration-150 hover:text-accent"
+                        class="px-2 py-1 duration-150 hover:text-accent"
                         v-bind:key="i"
                     >
                         <router-link :to="link.to">{{ link.text }}</router-link>
                     </li>
                 </ul>
 
-                <LocaleSwitcher />
+                <Theme/>
             </div>
         </nav>
     </header>
