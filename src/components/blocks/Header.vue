@@ -11,6 +11,11 @@ export default {
             ],
         };
     },
+    mounted() {
+        if (location.protocol !== 'https:' && location.hostname === 'earchives.noid.earth') {
+            location.replace(`https:${location.href.substring(location.protocol.length)}`);
+        }
+    },
     components: {
         LocaleSwitcher, Theme,
     },
