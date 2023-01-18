@@ -27,7 +27,7 @@ export default {
         class="relative mt-2 rounded-lg bg-off-white dark:bg-little-grey p-4"
     >
         <!-- TITLE-->
-        <h3 class="pb-1 text-xl hover:opacity-75 duration-150">
+        <h3 class="pb-1 text-xl hover:opacity-75 duration-150 transition-opacity">
             <router-link :to="`/article/${article.id}`">
                 <!-- MOBILE TITLE -->
                 <span class="inline-block md:hidden">{{ truncateString(article.title, 28) }}</span>
