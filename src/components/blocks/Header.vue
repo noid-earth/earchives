@@ -46,6 +46,10 @@ export default {
                     </li>
                 </ul>
 
+                <a href="https://github.com/noid-earth/earchives" target="_blank" class="px-3 py-1 mr-2 hidden md:inline-block bg-zinc-200 dark:bg-zinc-700 rounded-lg">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+
                 <Theme/>
             </div>
         </nav>
