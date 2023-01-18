@@ -11,12 +11,17 @@ export default {
             articles: [] as any[],
             cookies: this.$cookies,
             showMore: false,
+            subject: undefined as string | undefined,
+            year: undefined as string | undefined,
         };
     },
     mounted() {
-        axios
-            .get('https://jsonplaceholder.typicode.com/posts')
-            .then((response: any) => (this.articles = response.data));
+
+        axios.get('https://jsonplaceholder.typicode.com/posts')
+        .then((response: any) => (this.articles = response.data));
+            
+        this.subject = this.$route.query.subject as string | undefined;
+        this.year = this.$route.query.year as string | undefined;
     },
     methods: {
         getFirst(n: number) {
@@ -41,9 +46,10 @@ export default {
     </div>
     <main>
         <div>
-            <div>
-                <span class="opacity-75">Pesquisando por</span> História
-                <span class="font-semibold text-accent">/</span> 12º Ano
+            <div v-if="subject || year">
+                <span class="opacity-75">Pesquisando por conteúdos {{ subject ? 'de' : 'do' }}</span> <br class="inline-block md:hidden">
+                {{ subject }}
+                <span class="font-semibold text-accent" v-if="subject && year">/</span> {{ year ? `${year}º Ano` : year }}
             </div>
 
             <div>
@@ -60,7 +66,7 @@ export default {
                     @click="showMore = !showMore"
                     class="rounded-lg bg-accent py-2 px-4 text-white duration-150 hover:text-white/75"
                 >
-                    Show More
+                    Mostrar mais
                 </button>
             </div>
 
