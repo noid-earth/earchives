@@ -28,7 +28,7 @@ export default {
     methods: {
         showMore() {
             this.showAll = true;
-            setTimeout(() => this.showingAll = true, 500);
+            setTimeout(() => (this.showingAll = true), 500);
         },
         getFirst(n: number) {
             return (this.articles as any[])?.slice(0, n);

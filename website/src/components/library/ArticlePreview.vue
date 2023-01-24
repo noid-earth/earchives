@@ -38,11 +38,11 @@ export default {
             </router-link>
         </h3>
         <!-- TAGS -->
-        <div class="pt-1 text-accent">
-            <span class="rounded bg-zinc-200 px-2 dark:bg-not-black">
+        <div class="space-x-1 pt-1 font-semibold text-accent">
+            <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black">
                 🗂️ História
             </span>
-            <span class="ml-1 rounded bg-zinc-200 px-2 dark:bg-not-black">
+            <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black">
                 🗓️ 12º Ano
             </span>
 

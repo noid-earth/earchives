@@ -1,5 +1,6 @@
 <script lang="ts">
 import LocaleSwitcher from '../utils/LocaleSwitcher.vue';
+import BackToTop from '../utils/BackToTop.vue';
 import Theme from '../utils/Theme.vue';
 
 export default {
@@ -24,6 +25,7 @@ export default {
     components: {
         LocaleSwitcher,
         Theme,
+        BackToTop,
     },
 };
 </script>
@@ -64,4 +66,6 @@ export default {
             </div>
         </nav>
     </header>
+
+    <BackToTop />
 </template>

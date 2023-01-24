@@ -20,7 +20,7 @@ const router = createRouter({
             component: () => import('./views/NewsLetterView.vue'),
         },
         {
-            path: '/article/:id',
+            path: '/article/:articleId',
             name: 'Article',
             component: () => import('./views/ArticleView.vue'),
         },
