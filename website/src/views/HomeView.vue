@@ -1,29 +1,35 @@
 <script lang="ts">
 //@ts-ignore
 
-import Article from '../components/library/Article.vue';
+import Article from '../components/library/ArticlePreview.vue';
+import LoadingSpinner from '../components/utils/LoadingSpinner.vue';
 import axios from 'axios';
 
 export default {
-    components: { Article },
+    components: { Article, LoadingSpinner },
     data() {
         return {
             articles: [] as any[],
             cookies: this.$cookies,
-            showMore: false,
+            showAll: false,
+            showingAll: false,
             subject: undefined as string | undefined,
             year: undefined as string | undefined,
         };
     },
     mounted() {
+        axios
+            .get('https://jsonplaceholder.typicode.com/posts')
+            .then((response: any) => (this.articles = response.data));
 
-        axios.get('https://jsonplaceholder.typicode.com/posts')
-        .then((response: any) => (this.articles = response.data));
-            
         this.subject = this.$route.query.subject as string | undefined;
         this.year = this.$route.query.year as string | undefined;
     },
     methods: {
+        showMore() {
+            this.showAll = true;
+            setTimeout(() => (this.showingAll = true), 500);
+        },
         getFirst(n: number) {
             return (this.articles as any[])?.slice(0, n);
         },
@@ -37,7 +43,11 @@ export default {
 <template>
     <div class="my-24">
         <div class="animate">
-            <h1 class="font-display text-4xl font-bold uppercase underline decoration-accent">Conteúdos de estudo</h1>
+            <h1
+                class="font-display text-4xl font-bold uppercase underline decoration-accent"
+            >
+                Conteúdos de estudo
+            </h1>
             <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Consequatur dolores odit similique.
@@ -47,9 +57,15 @@ export default {
     <main>
         <div>
             <div v-if="subject || year">
-                <span class="opacity-75">Pesquisando por conteúdos {{ subject ? 'de' : 'do' }}</span> <br class="inline-block md:hidden">
+                <span class="opacity-75"
+                    >Pesquisando por conteúdos {{ subject ? 'de' : 'do' }}</span
+                >
+                <br class="inline-block md:hidden" />
                 {{ subject }}
-                <span class="font-semibold text-accent" v-if="subject && year">/</span> {{ year ? `${year}º Ano` : year }}
+                <span class="font-semibold text-accent" v-if="subject && year"
+                    >/</span
+                >
+                {{ year ? `${year}º Ano` : year }}
             </div>
 
             <div>
@@ -62,15 +78,17 @@ export default {
 
             <div class="my-4 text-center">
                 <button
-                    v-if="!showMore"
-                    @click="showMore = !showMore"
+                    v-if="!showAll"
+                    @click="showMore"
                     class="rounded-lg bg-accent py-2 px-4 text-white duration-150 hover:text-white/75"
                 >
                     Mostrar mais
                 </button>
+
+                <LoadingSpinner v-if="showAll && !showingAll" />
             </div>
 
-            <div v-if="showMore">
+            <div v-if="showingAll && showAll">
                 <Article
                     :data="article"
                     v-for="article in getExtra(20)"

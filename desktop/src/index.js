@@ -37,7 +37,7 @@ rpc.login({ clientId: '1052358549558280202' }).catch(console.error);
 
 rpc.on('ready', () => {
   rpc.setActivity({
-    details: `earchives.org`,
+    details: `earchives.noid.earth`,
     startTimestamp: new Date(),
     largeImageKey: 'icon',
     largeImageText: `eArchives`,

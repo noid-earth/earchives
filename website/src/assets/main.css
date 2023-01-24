@@ -19,3 +19,7 @@ html {
 .dark {
     color: #fff;
 }
+
+*:focus {
+    outline: none;
+}
