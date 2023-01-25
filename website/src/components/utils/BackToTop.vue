@@ -28,7 +28,7 @@ export default {
     <button
         @click="scrollToTop"
         :class="{ 'go-top': isTop }"
-        class="fixed bottom-4 right-8 hidden h-10 w-10 rounded-full bg-zinc-200 transition duration-300 hover:-translate-y-2 dark:bg-little-grey md:block"
+        class="fixed bottom-4 right-10 z-10 hidden h-10 w-10 rounded-full border-2 border-zinc-400 bg-zinc-200 text-zinc-800 shadow transition duration-300 hover:-translate-y-2 dark:border-zinc-600 dark:bg-little-grey dark:text-zinc-200 md:block 2xl:right-4 2xl:border-none"
     >
         <i class="fa-solid fa-caret-up"></i>
     </button>
