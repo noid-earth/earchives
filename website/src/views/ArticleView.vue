@@ -11,7 +11,7 @@ export default {
 
 <template>
     <!-- BANNER IMAGE BOX -->
-    <div class="mt-12 px-20">
+    <div class="mt-12 md:px-20">
         <img
             class="max-h-80 w-full rounded-xl object-cover"
             src="https://assets-global.website-files.com/5f9072399b2640f14d6a2bf4/63c6e5fc81fbdd4500fa95e2_BackupBlogHeaders_Batch2Artboard%206.png"
@@ -21,7 +21,7 @@ export default {
 
     <!-- BODY -->
     <div
-        class="mt-[-2rem] rounded-xl bg-off-white p-4 px-20 pt-12 dark:bg-little-grey"
+        class="mt-[-2rem] rounded-xl bg-off-white p-4 md:px-20 pt-12 dark:bg-little-grey"
     >
         <!--HEAD-->
         <div>
@@ -39,7 +39,7 @@ export default {
         </div>
 
         <div
-            class="mt-20 border-t-4 border-zinc-200 pt-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200"
+            class="mt-4 md:mt-20 border-t-4 border-zinc-200 pt-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200"
         >
             <p>
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro
