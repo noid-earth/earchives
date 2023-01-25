@@ -39,7 +39,7 @@ export default {
         </div>
 
         <div
-            class="mt-4 md:mt-20 border-t-4 border-zinc-200 pt-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200"
+            class="mt-4 md:mt-20 border-t-4 border-zinc-200 pt-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200 indent-6"
         >
             <p>
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro
