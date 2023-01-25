@@ -1,5 +1,5 @@
 <script lang="ts">
-import LocaleSwitcher from '../utils/LocaleSwitcher.vue';
+
 import BackToTop from '../utils/BackToTop.vue';
 import Theme from '../utils/Theme.vue';
 
