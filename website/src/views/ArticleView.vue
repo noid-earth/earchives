@@ -28,7 +28,7 @@ export default {
             <h3 class="text font-display font-bold uppercase text-accent">
                 <a href="/?subject=História">História</a>
             </h3>
-            <h1 class="mt-0.5 font-display text-5xl font-bold uppercase">
+            <h1 class="mt-0.5 font-display text-4xl md:text-5xlfont-bold uppercase">
                 Guião de Estudos guerra fria
             </h1>
             <div class="mt-2 font-bold text-accent">
