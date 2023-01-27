@@ -23,7 +23,9 @@ export default {
 </script>
 
 <template>
-    <div class="relative mt-2 rounded-lg bg-off-white p-4 dark:bg-little-grey">
+    <div
+        class="relative mt-2 rounded-lg bg-off-white p-4 transition-transform duration-300 dark:bg-little-grey md:hover:-translate-y-1"
+    >
         <!-- TITLE-->
         <h3
             class="pb-1 text-xl transition-opacity duration-150 hover:opacity-75"

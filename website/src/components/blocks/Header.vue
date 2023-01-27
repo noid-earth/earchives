@@ -1,5 +1,4 @@
 <script lang="ts">
-
 import BackToTop from '../utils/BackToTop.vue';
 import Theme from '../utils/Theme.vue';
 
