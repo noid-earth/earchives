@@ -22,7 +22,7 @@ const router = createRouter({
         {
             path: '/article/:articleId',
             name: 'Article',
-            component: () => import('./views/ArticleView.vue'),
+            component: () => import('./views/subpages/ArticleView.vue'),
         },
     ],
 });
