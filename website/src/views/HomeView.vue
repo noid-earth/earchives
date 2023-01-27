@@ -9,32 +9,38 @@ export default {
     components: { Article, LoadingSpinner },
     data() {
         return {
+            articlesAPILoading: true,
             articles: [] as any[],
+            articlesRAW: [] as any[],
+
             cookies: this.$cookies,
-            showAll: false,
-            showingAll: false,
+            showingAllArticles: false,
+
             subject: undefined as string | undefined,
             year: undefined as string | undefined,
         };
     },
-    mounted() {
-        axios
-            .get('https://jsonplaceholder.typicode.com/posts')
-            .then((response: any) => (this.articles = response.data));
+    async mounted() {
+        try {
+            this.articlesRAW = (
+                await axios.get('https://jsonplaceholder.typicode.com/posts')
+            ).data;
+            this.articles = this.getArticles(0, 20);
+            this.articlesAPILoading = false;
+        } catch (err) {
+            console.error(err);
+        }
 
         this.subject = this.$route.query.subject as string | undefined;
         this.year = this.$route.query.year as string | undefined;
     },
     methods: {
         showMore() {
-            this.showAll = true;
-            setTimeout(() => (this.showingAll = true), 500);
+            this.articles = this.getArticles(0, undefined);
+            this.showingAllArticles = true;
         },
-        getFirst(n: number) {
-            return (this.articles as any[])?.slice(0, n);
-        },
-        getExtra(n: number) {
-            return (this.articles as any[])?.slice(n, undefined);
+        getArticles(n1: number, n2: number | undefined) {
+            return (this.articlesRAW as any[])?.slice(n1, n2);
         },
     },
 };
@@ -56,6 +62,7 @@ export default {
     </div>
     <main>
         <div>
+            <!-- SEARCH QUERIES -->
             <div v-if="subject || year">
                 <span class="opacity-75"
                     >Pesquisando por conteúdos {{ subject ? 'de' : 'do' }}</span
@@ -68,32 +75,23 @@ export default {
                 {{ year ? `${year}º Ano` : year }}
             </div>
 
-            <div>
+            <!-- RESULTS/ARTICLES -->
+            <div v-if="!articlesAPILoading">
                 <Article
                     :data="article"
-                    v-for="article in getFirst(20)"
+                    v-for="article in articles"
                     v-bind:key="article.id"
                 />
             </div>
 
             <div class="my-4 text-center">
                 <button
-                    v-if="!showAll"
+                    v-if="!showingAllArticles && !articlesAPILoading"
                     @click="showMore"
                     class="rounded-lg bg-accent py-2 px-4 text-white duration-150 hover:text-white/75"
                 >
                     Mostrar mais
                 </button>
-
-                <LoadingSpinner v-if="showAll && !showingAll" />
-            </div>
-
-            <div v-if="showingAll && showAll">
-                <Article
-                    :data="article"
-                    v-for="article in getExtra(20)"
-                    v-bind:key="article.id"
-                />
             </div>
         </div>
     </main>
