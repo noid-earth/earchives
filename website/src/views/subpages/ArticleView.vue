@@ -8,6 +8,7 @@ export default {
     },
     data() {
         return {
+            documentsAndFonts: [],
             articleId: this.$route.params.articleId,
             viewMode:
                 this.$cookies.get(
@@ -86,14 +87,14 @@ export default {
         </div>
 
         <div
-            class="grid gap-x-4"
-            :class="{ 'grid-cols-3': isOnMode('reading') }"
+            class="grid gap-4"
+            :class="{ 'md:grid-cols-3': isOnMode('reading') }"
         >
             <div
-                class="col-span-2 mt-4 border-t-4 border-zinc-200 pt-6 indent-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200"
+                class="mt-4 border-t-4 border-zinc-200 pt-6 indent-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200 md:col-span-2"
                 :class="{
-                    'text-lg text-black': isOnMode('reading'),
-                    'text-lg text-zinc-800': isOnMode('chill'),
+                    'md:text-lg md:text-black': isOnMode('reading'),
+                    'md:text-lg md:text-zinc-800': isOnMode('chill'),
                 }"
             >
                 <p>
@@ -175,9 +176,11 @@ export default {
 @keyframes ShowArticleBanner {
     0% {
         max-height: 0rem;
+        filter: blur(2px);
     }
     100% {
         max-height: 20rem;
+        filter: blur(0);
     }
 }
 </style>

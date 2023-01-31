@@ -6,7 +6,7 @@ export default {
     data() {
         return {
             links: [
-                { to: '/', text: 'Home' },
+                { to: '/', text: 'Artigos' },
                 { to: '/newsletter', text: 'Newsletter' },
             ],
         };
@@ -34,9 +34,17 @@ export default {
             class="mt-4 flex flex-wrap place-items-center rounded-lg bg-off-white p-4 text-center dark:bg-little-grey"
         >
             <div class="flex w-screen justify-between">
-                <span class="float-left px-2 py-1">
+                <span class="float-left">
                     <router-link to="/">
-                        <span class="font-display font-bold">
+                        <span
+                            class="mr-2 inline-block rounded-lg bg-zinc-200 px-2 py-1 dark:bg-zinc-700 md:hidden"
+                        >
+                            ⬅️
+                        </span>
+
+                        <span
+                            class="inline-block py-1 px-2 font-display font-bold"
+                        >
                             <span class="text-accent">e</span>Archives
                         </span>
                     </router-link>
@@ -55,7 +63,7 @@ export default {
                 <a
                     href="https://github.com/noid-earth/earchives"
                     target="_blank"
-                    class="mr-2 hidden rounded-lg bg-zinc-200 px-3 py-1 dark:bg-zinc-700 md:inline-block"
+                    class="mr-2 hidden rounded-lg bg-zinc-200 px-2.5 py-1 dark:bg-zinc-700 md:inline-block"
                 >
                     <i class="fa-brands fa-github"></i>
                 </a>
