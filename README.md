@@ -2,7 +2,7 @@
 
 # eArchives
 
-https://earchives.org
+https://earchives.noid.earth
 
 This is a project made to help you study for tests and final exams the easiest and most organized way. 😁
 
