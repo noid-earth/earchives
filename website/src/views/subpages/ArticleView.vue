@@ -2,13 +2,21 @@
 type VIEW_MODE = 'default' | 'reading' | 'chill';
 import New from '../../components/utils/New.vue';
 
+import axios from 'axios';
+//@ts-ignore
+import showdown from 'showdown';
+showdown.setFlavor('github');
+
+const converter = new showdown.Converter();
+
 export default {
     components: {
         New,
     },
     data() {
         return {
-            documentsAndFonts: [],
+            article: undefined as any | undefined,
+            articleContent: undefined as any | undefined,
             articleId: this.$route.params.articleId,
             viewMode:
                 this.$cookies.get(
@@ -16,7 +24,17 @@ export default {
                 ) || ('default' as VIEW_MODE),
         };
     },
-    mounted() {},
+    async created() {
+        try {
+            let articles = (await axios.get('http://localhost:3101/articles'))
+                .data;
+            this.article = articles.find((a: any) => a.name === this.articleId);
+            this.articleContent = converter.makeHtml(
+                this.article.markdownContent,
+            );
+        } catch (err) {}
+    },
+    async mounted() {},
     methods: {
         switchMode(mode: VIEW_MODE) {
             this.viewMode = mode;
@@ -47,16 +65,16 @@ export default {
         <!--HEAD-->
         <div>
             <h3 class="font-display text-base font-bold uppercase text-accent">
-                <a href="/?subject=História">História</a>
+                <a :href="`/?subject=${article?.subject}`">{{ article?.subject }}</a>
             </h3>
             <h1
                 class="mt-0.5 font-display text-4xl font-bold uppercase md:text-5xl"
             >
-                Guião de Estudos guerra fria
+                {{ article?.name }}
             </h1>
             <div class="mt-2 text-base font-bold text-accent">
-                <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black">
-                    <a href="/?year=12">12º Ano</a>
+                <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black" v-if="!article.year">
+                    <a :href="`/?year=${article?.year}`">{{ article?.year }}º Ano</a>
                 </span>
             </div>
         </div>
@@ -93,69 +111,16 @@ export default {
             <div
                 class="mt-4 border-t-4 border-zinc-200 pt-6 indent-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200 md:col-span-2"
                 :class="{
-                    'md:text-lg md:text-black': isOnMode('reading'),
-                    'md:text-lg md:text-zinc-800': isOnMode('chill'),
+                    'md:prose-lg': isOnMode('reading'),
+                    'prose-neutral md:prose-lg': isOnMode('chill'),
                 }"
             >
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                </p>
-                <br />
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                </p>
-                <br />
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                </p>
-                <br />
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Porro dolores iste tempore, autem asperiores quibusdam
-                    consequatur, obcaecati incidunt voluptatibus, modi in
-                    tempora placeat maxime labore possimus nam eveniet qui illo.
-                </p>
+                <!-- CONTENT -->
+                <div
+                    v-html="articleContent"
+                    id="article-content"
+                    class="prose prose-stone max-w-none prose-a:font-semibold prose-a:text-accent prose-a:duration-100 hover:prose-a:opacity-80 prose-img:rounded-xl dark:prose-invert"
+                ></div>
             </div>
 
             <div
@@ -167,6 +132,17 @@ export default {
         </div>
     </div>
 </template>
+
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: Ginto Nord, sans-serif;
+}
+</style>
 
 <style scoped>
 #articleBanner {

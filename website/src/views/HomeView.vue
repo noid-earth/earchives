@@ -21,18 +21,20 @@ export default {
         };
     },
     async mounted() {
+        
+        this.subject = this.$route.query.subject as string
+        this.year = this.$route.query.year as string
+
+
         try {
-            this.articlesRAW = (
-                await axios.get('https://jsonplaceholder.typicode.com/posts')
-            ).data;
+            this.articlesRAW =
+                (await axios.get('http://localhost:3101/articles')).data;
             this.articles = this.getArticles(0, 20);
             this.articlesAPILoading = false;
         } catch (err) {
             console.error(err);
         }
 
-        this.subject = this.$route.query.subject as string | undefined;
-        this.year = this.$route.query.year as string | undefined;
     },
     methods: {
         showMore() {
@@ -40,7 +42,16 @@ export default {
             this.showingAllArticles = true;
         },
         getArticles(n1: number, n2: number | undefined) {
-            return (this.articlesRAW as any[])?.slice(n1, n2);
+            console.log(this.year);
+            return (this.articlesRAW as any[]).filter((a) => {
+                if(this.year && a.year !== this.year) {
+                    return false;
+                } 
+                if(this.subject && a.subject !== this.subject) {
+                    return false;
+                }
+                return a;
+            }).slice(n1, n2);
         },
     },
 };
@@ -60,6 +71,7 @@ export default {
             </p>
         </div>
     </div>
+
     <main>
         <div>
             <!-- SEARCH QUERIES -->
@@ -67,6 +79,7 @@ export default {
                 <span class="opacity-75"
                     >Pesquisando por conteúdos {{ subject ? 'de' : 'do' }}</span
                 >
+
                 <br class="inline-block md:hidden" />
                 {{ subject }}
                 <span class="font-semibold text-accent" v-if="subject && year"
@@ -80,13 +93,13 @@ export default {
                 <Article
                     :data="article"
                     v-for="article in articles"
-                    v-bind:key="article.id"
+                    v-bind:key="article.sha"
                 />
             </div>
 
             <div class="my-4 text-center">
                 <button
-                    v-if="!showingAllArticles && !articlesAPILoading"
+                    v-if="!showingAllArticles && !articlesAPILoading && articles.length > 20"
                     @click="showMore"
                     class="rounded-lg bg-accent py-2 px-4 text-white duration-150 hover:text-white/75"
                 >

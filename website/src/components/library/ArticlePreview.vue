@@ -30,22 +30,28 @@ export default {
         <h3
             class="pb-1 text-xl transition-opacity duration-150 hover:opacity-75"
         >
-            <router-link :to="`/article/${article.id}`">
+            <router-link :to="`/article/${article.name}`">
                 <!-- MOBILE TITLE -->
                 <span class="inline-block md:hidden">{{
-                    truncateString(article.title, 28)
+                    truncateString(article.name, 28)
                 }}</span>
                 <!-- DESKTOP TITLE -->
-                <span class="hidden md:inline-block">{{ article.title }}</span>
+                <span class="hidden md:inline-block">{{ article.name }}</span>
             </router-link>
         </h3>
         <!-- TAGS -->
         <div class="space-x-1 pt-1 font-semibold text-accent">
-            <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black">
-                🗂️ História
+            <span
+                class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black"
+                v-if="article.subject"
+            >
+                🗂️ {{ article.subject }}
             </span>
-            <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black">
-                🗓️ 12º Ano
+            <span
+                class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black"
+                v-if="article.year"
+            >
+                🗓️ {{ article.year }}º Ano
             </span>
 
             <!-- HIDDEN (TEST)-->
