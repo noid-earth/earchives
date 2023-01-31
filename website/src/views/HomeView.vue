@@ -27,9 +27,9 @@ export default {
 
 
         try {
-            this.articlesRAW =
-                (await axios.get('http://localhost:3101/articles')).data;
+            this.articlesRAW =(await axios.get('https://api.noid.earth/articles')).data;
             this.articles = this.getArticles(0, 20);
+
             this.articlesAPILoading = false;
         } catch (err) {
             console.error(err);
@@ -42,7 +42,7 @@ export default {
             this.showingAllArticles = true;
         },
         getArticles(n1: number, n2: number | undefined) {
-            console.log(this.year);
+            
             return (this.articlesRAW as any[]).filter((a) => {
                 if(this.year && a.year !== this.year) {
                     return false;

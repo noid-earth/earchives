@@ -24,17 +24,18 @@ export default {
                 ) || ('default' as VIEW_MODE),
         };
     },
-    async created() {
+    async mounted() {
         try {
-            let articles = (await axios.get('http://localhost:3101/articles'))
-                .data;
+            let articles = (await axios.get('https://api.noid.earth/articles')).data;
+
             this.article = articles.find((a: any) => a.name === this.articleId);
             this.articleContent = converter.makeHtml(
                 this.article.markdownContent,
             );
-        } catch (err) {}
+        } catch (err) {
+            console.log(err);
+        }
     },
-    async mounted() {},
     methods: {
         switchMode(mode: VIEW_MODE) {
             this.viewMode = mode;
@@ -73,7 +74,7 @@ export default {
                 {{ article?.name }}
             </h1>
             <div class="mt-2 text-base font-bold text-accent">
-                <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black" v-if="!article.year">
+                <span class="rounded-xl bg-zinc-200 px-4 dark:bg-not-black">
                     <a :href="`/?year=${article?.year}`">{{ article?.year }}º Ano</a>
                 </span>
             </div>
@@ -111,8 +112,8 @@ export default {
             <div
                 class="mt-4 border-t-4 border-zinc-200 pt-6 indent-6 text-[#151a1e] dark:border-not-black dark:text-zinc-200 md:col-span-2"
                 :class="{
-                    'md:prose-lg': isOnMode('reading'),
-                    'prose-neutral md:prose-lg': isOnMode('chill'),
+                    'md:prose-xl': isOnMode('reading'),
+                    'prose-neutral md:prose-xl': isOnMode('chill'),
                 }"
             >
                 <!-- CONTENT -->
@@ -141,22 +142,5 @@ h4,
 h5,
 h6 {
     font-family: Ginto Nord, sans-serif;
-}
-</style>
-
-<style scoped>
-#articleBanner {
-    animation: ShowArticleBanner ease-in 0.8s;
-}
-
-@keyframes ShowArticleBanner {
-    0% {
-        max-height: 0rem;
-        filter: blur(2px);
-    }
-    100% {
-        max-height: 20rem;
-        filter: blur(0);
-    }
 }
 </style>
